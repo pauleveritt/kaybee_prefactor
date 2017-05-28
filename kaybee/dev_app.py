@@ -29,7 +29,7 @@ app = Flask(
     template_folder='./templates'
 )
 app.debug = True
-cms = CMS(sample_site['title'],config={})
+cms = CMS(sample_site['title'], config={})
 
 
 @app.route("/")

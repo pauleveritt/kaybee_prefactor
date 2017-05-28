@@ -1,7 +1,13 @@
 import os
 
-# from kaybee.fake_kaybee_api import Page, Site, Sphinx
 from kaybee import _version as version
+from kaybee.rms import CMS
+from kaybee.sample_data import sample_site
+from kaybee.resources import setup
+
+cms = CMS(sample_site['title'], config={})
+cms.is_sphinx = True
+setup(sample_site['sphinx_config'])
 
 
 def get_path():
@@ -25,9 +31,15 @@ def get_html_templates_path():
 
 def update_context(app, pagename, templatename, context, doctree):
     context['theme_version'] = version.__version__
-    # context['page'] = Page(body=context.get('body'))
-    # context['site'] = Site()
-    # context['sphinx'] = Sphinx(is_sphinx=True)
+
+    resource = sample_site['items'][0]['resource']
+    body = context.get('body')
+
+    context['page'] = cms.render(
+        body,
+        resource
+    )
+    context['site'] = cms
 
 
 def setup(app):

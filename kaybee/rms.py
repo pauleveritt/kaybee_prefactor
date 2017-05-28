@@ -31,7 +31,7 @@ class CMS:
         """ Simulate sphinx's pathto function """
 
         if self.is_sphinx:
-            newfn = fn  ##[1:]  # _static -> ståatic
+            newfn = fn  ##[1:]  # _static -> static
         else:
             newfn = fn[1:]  # _static -> static
         return newfn
