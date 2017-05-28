@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ page.title|striptags|e }} - {{ page.titlesuffix|e }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="{{ site.pathto('_static/basic.bundle.css', 1) }}">
+</head>
+<body>
+
+<nav id="kbt-header"
+     class="navbar navbar-toggleable-md navbar-light">
+    <button class="navbar-toggler navbar-toggler-right" type="button"
+            data-toggle="collapse"
+            data-target="#navbarMenu"
+            aria-controls="navbarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a id="kbt-logo"
+       class="navbar-brand" href="#">
+        <img src="{{ site.pathto('_static/headshot-closeup.jpg', 1) }}"
+             alt="Headshot"
+             class="rounded-circle" height="80" width="99">
+    </a>
+    <a id="kbt-sitename"
+       class="navbar-brand" href="#">Paul Everitt</a>
+
+    <div class="collapse navbar-collapse" id="navbarMenu">
+        <ul class="navbar-nav mr-auto">
+            {% for nav in site.nav_menu %}
+            <li class="nav-item {{ page.active(nav.title) }}">
+                <a class="nav-link" href="{{ nav.url }}">{{ nav.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <input type="text" class="form-control"
+                       id="inlineFormInputGroup" placeholder="Search">
+                <div class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                </div>
+            </div>
+        </form>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>{{ page.title }}</h1>
+        <p class="lead">
+            {% block content %}{% endblock %}
+        </p>
+    </div>
+
+</div><!-- /.container -->
+<script src="{{ site.pathto('_static/manifest.bundle.js', 1) }}"></script>
+<script src="{{ site.pathto('_static/basic.bundle.js', 1) }}"></script>
+</body>
+</html>
