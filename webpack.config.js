@@ -1,63 +1,25 @@
-const webpack = require('webpack')
-const path = require('path')
+const path = require('path');
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const extractCSS = new ExtractTextPlugin('[name].bundle.css')
-
-const config = {
-    context: path.resolve(__dirname, 'kaybee'),
+module.exports = {
     entry: {
-        basic: './app.js'
+        app: './src/kaybee/index.js',
+        kaybee: './src/kaybee/scss/kaybee.scss'
     },
+    devtool: 'inline-source-map',
     output: {
-        path: path.resolve(__dirname, 'kaybee/static'),
-        publicPath: '/static/',
-        filename: '[name].bundle.js'
-    },
-    devServer: {
-        // contentBase: path.resolve(__dirname, './src')
+        filename: '[name].bundle.js',
+        path: path.resolve(__dirname, 'src/kaybee/static')
     },
     module: {
-        rules: [
-            {
-                test: /\.(png|jpg)$/,
-                include: path.resolve(__dirname, 'kaybee'),
-                use: [
-                    {
-                        loader: 'url-loader',
-                        options: {limit: 10000} // Convert images < 10k to base64 strings
-                    }]
-            },
-            {
-                test: /\.scss$/,
-                include: path.resolve(__dirname, 'kaybee'),
-                loader: extractCSS.extract(['css-loader', 'sass-loader'])
-            },
-            {
-                test: /\.js$/,
-                include: path.resolve(__dirname, 'kaybee'),
-                use: [{
-                    loader: 'babel-loader',
-                    options: {presets: ['es2015']}
-                }]
+        rules: [{
+            test: /\.scss$/,
+            use: [{
+                loader: "style-loader" // creates style nodes from JS strings
+            }, {
+                loader: "css-loader" // translates CSS into CommonJS
+            }, {
+                loader: "sass-loader" // compiles Sass to CSS
             }]
-    },
-    plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            names: ['vendor', 'manifest'],
-            minChunks: function (module) {
-                // this assumes your vendor imports exist in the node_modules directory
-                return module.context && module.context.indexOf('node_modules') !== -1
-            }
-        }),
-        extractCSS,
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            'window.jQuery': 'jquery',
-            'Tether': 'tether'
-        })
-    ]
-}
-
-module.exports = config
+        }]
+    }
+};

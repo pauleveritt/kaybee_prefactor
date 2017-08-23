@@ -1,0 +1,10 @@
+// Include Sphinx and Pygments CSS into the bundle
+@import "../static/basic.css";
+@import "../static/pygments.css";
+
+@import "../../../node_modules/bulma/sass/utilities/initial-variables";
+@import "../../../node_modules/bulma/sass/utilities/_all";
+
+@import "../../../node_modules/bulma/bulma";
+@import "_main";
+

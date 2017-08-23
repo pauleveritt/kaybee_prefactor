@@ -1,0 +1,165 @@
+@import "../../../node_modules/bulma/sass/utilities/variables";
+
+// All nav elements should get a grey border when hovered
+.sb-header.hero .hero-head .nav-item:hover {
+  border-bottom: 2px solid $grey;
+}
+
+// For each color scheme, make "active" the invert
+.sb-header.hero.is-primary .hero-head .nav-item.is-active {
+  border-bottom: 2px solid $primary-invert;
+}
+
+.sb-header.hero.is-info .hero-head .nav-item.is-active {
+  border-bottom: 2px solid $info-invert;
+}
+
+.sb-header.hero.is-success .hero-head .nav-item.is-active {
+  border-bottom: 2px solid $success-invert;
+}
+
+.sb-header.hero.is-warning .hero-head .nav-item.is-active {
+  border-bottom: 2px solid $warning-invert;
+}
+
+.sb-header.hero.is-danger .hero-head .nav-item.is-active {
+  border-bottom: 2px solid $danger-invert;
+}
+
+.sb-header.hero.is-light .hero-head .nav-item.is-active {
+  border-bottom: 2px solid $light-invert;
+}
+
+.sb-header.hero.is-dark .hero-head .nav-item.is-active {
+  border-bottom: 2px solid $dark-invert;
+}
+
+.sb-header.hero.is-info .hero-head .nav-item.is-active {
+  border-bottom: 2px solid $info-invert;
+}
+
+.sb-header.header-image {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.49), rgba(0, 0, 0, 0.89)), url('https://images.unsplash.com/1/iphone-4-closeup.jpg?dpr=1&auto=format&crop=middle&fit=crop&w=2000&h=700&q=80');
+}
+
+// Portlets
+.sb-portlet {
+  .panel-block {
+    font-size: $size-small;
+  }
+}
+
+.sb-listing-title a {
+  color: $link;
+}
+
+.sb-listing-synopsis {
+  font-size: $size-small;
+  font-weight: lighter;
+}
+
+.sb-listing-timeago {
+  font-size: $size-small;
+  width: 8rem;
+  text-align: right;
+}
+
+.sb-listing-table {
+  tr {
+    height: 5rem;
+
+    td {
+      border: none;
+    }
+  }
+}
+
+.sb-portlet-primary {
+  .panel-heading {
+    background-color: $primary;
+    color: $primary-invert;
+  }
+}
+
+.sb-portlet-info {
+  .panel-heading {
+    background-color: $info;
+    color: $info-invert;
+  }
+}
+
+.sb-portlet-success {
+  .panel-heading {
+    background-color: $success;
+    color: $success-invert;
+  }
+}
+
+.sb-portlet-warning {
+  .panel-heading {
+    background-color: $warning;
+    color: $warning-invert;
+  }
+}
+
+.sb-portlet-danger {
+  .panel-heading {
+    background-color: $danger;
+    color: $danger-invert;
+  }
+}
+
+.sb-portlet-light {
+  .panel-heading {
+    background-color: $light;
+    color: $light-invert;
+  }
+}
+
+.sb-portlet-dark {
+  .panel-heading {
+    background-color: $dark;
+    color: $dark-invert;
+  }
+}
+
+.sb-portlet-info {
+  .panel-heading {
+    background-color: $info;
+    color: $info-invert;
+  }
+}
+
+.sb_sidenav {
+  font-size: $size-small;
+}
+
+.sb-section-heading {
+  border-bottom: 1px solid gray;
+}
+
+.sb-listing p {
+  margin-bottom: 1rem;
+}
+
+.section .section {
+  // Sphinx generates "section" class which matches Bulma which
+  // adds a bunch of extra space.
+  padding-top: 0;
+}
+
+.sb_body table.highlighttable {
+  // Fix the Pygments/Bulma clash on <td> and <pre>
+  width: auto;
+  pre {
+    padding: 6.5px;
+  }
+  td {
+    padding: 0;
+  }
+}
+
+.sb_sidenav ul {
+  list-style: none;
+  margin: 0;
+}
