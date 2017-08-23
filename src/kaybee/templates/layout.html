@@ -5,6 +5,13 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ title|striptags|e }} - {{ titlesuffix|e }}</title>
+    <script src="{{ pathto('_static/jquery.js', 1) }}"></script>
+    <script src="{{ pathto('_static/underscore.js', 1) }}"></script>
+    <script src="{{ pathto('_static/doctools.js', 1) }}"></script>
+    <script src="{{ pathto('_static/websupport.js', 1) }}"></script>
+    <script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
+    <script src="{{ pathto('_static/kaybee.bundle.js', 1) }}"></script>
+    <script src="{{ pathto('_static/app.bundle.js', 1) }}"></script>
 </head>
 <body>
 
@@ -48,5 +55,7 @@
     </div>
 
 </div>
+{% include "document_settings.html" %}
+<script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
 </body>
 </html>
