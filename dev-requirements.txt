@@ -1,5 +1,0 @@
-flask
-livereload
-sphinx
-MarkupSafe
-reg
