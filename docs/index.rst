@@ -1,13 +1,14 @@
+:kb_template: homepage
+
 Welcome to kaybee's documentation!
 ==================================
 
-xxxxxx
-
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: Contents:
 
-   usage.rst
+    usage.rst
+    blog/index.rst
 
 Indices and tables
 ==================

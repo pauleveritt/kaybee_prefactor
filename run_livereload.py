@@ -8,6 +8,7 @@ server = Server()
 server.watch('docs/*.rst', shell(sphinx))
 server.watch('docs/*/*.rst', shell(sphinx))
 server.watch('src/kaybee/templates/*.html', shell(sphinx))
+server.watch('src/kaybee/*.py', shell(sphinx))
 server.watch('src/kaybee/index.js',
              shell(both, shell="/usr/local/bin/bash"),
              )

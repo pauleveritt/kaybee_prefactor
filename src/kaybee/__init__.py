@@ -33,7 +33,34 @@ def get_html_templates_path():
     return [os.path.join(pkgdir, 'templates')]
 
 
+def kb_template(app, pagename, templatename, context, doctree):
+    config = app.config.html_context
+
+    # Need some info about the "section" of the site
+    if pagename.startswith('blog'):
+        section_style = 'is-bold is-warning'
+    elif pagename.startswith('articles'):
+        section_style = 'is-bold is-info'
+    elif pagename.startswith('tutorials'):
+        section_style = 'is-bold is-light'
+    elif pagename.startswith('about'):
+        section_style = 'is-bold is-success'
+    else:
+        section_style = 'header-image is-medium'
+    context['kb_section_style'] = section_style
+
+    # Find out which kind of page component this is, if meta even exists
+    kb_template = context.get('meta', {}).get('kb_template')
+    context['kb_template'] = kb_template
+
+    if kb_template:
+        # We have RST page with the magic marker at the top. Return
+        # this as the template name. Later, do more sniffing.
+        return kb_template + '.html'
+
+
 def setup(app):
+    app.connect('html-page-context', kb_template)
     return dict(
         version=__version__,
         parallel_read_safe=True

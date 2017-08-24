@@ -1,0 +1,56 @@
+<aside id="sidebarCollapseTarget" class="menu sb_sidenav">
+    <p class="menu-label">
+        Breadcrumbs
+    </p>
+    <ul class="menu-list">
+
+        {%- for parent in parents %}
+            <li><a href="{{ parent.link|e }}">{{ parent.title }}</a>
+        {%- endfor %}
+
+        <li><a>> Grandparent with a long title</a></li>
+        <li><a>>> This could be the long title of a parent
+            that goes on too long</a></li>
+    </ul>
+    <p class="menu-label">
+        Previous
+    </p>
+    <ul class="menu-list">
+        <a href="{{ prev.link|e }}"
+           title="{{ _('previous chapter') }}">{{ prev.title }}</a>
+    </ul>
+    <p class="menu-label">
+        Next
+    </p>
+    <ul class="menu-list">
+        <a href="{{ next.link|e }}"
+           title="{{ _('next chapter') }}">{{ next.title }}</a>
+    </ul>
+
+    <p class="menu-label">
+        Contents
+    </p>
+    <ul class="menu-list">
+        <li><a>Dashboard</a></li>
+        <li><a>This could be the long title of a parent
+            that goes on too long</a></li>
+    </ul>
+
+    <p class="menu-label">
+        Categories
+    </p>
+    <p>
+        <a><span class="tag">html</span></a>
+        <a><span class="tag">html</span></a>
+        <a><span class="tag">html</span></a>
+    </p>
+    <p class="menu-label">
+        Tags
+    </p>
+    <p>
+        <a><span class="tag">xxhtml</span></a>
+        <a><span class="tag">python</span></a>
+        <a><span class="tag">arcade</span></a>
+        <a><span class="tag">config</span></a>
+    </p>
+</aside>
