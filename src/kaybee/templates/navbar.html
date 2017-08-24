@@ -1,0 +1,38 @@
+<nav class="nav">
+    <div class="nav-left">
+        <a class="nav-item" href="/">
+            <img src="{{ logo.img_url }}"
+                 alt="{{ logo.alt }}">
+        </a>
+        {% for nav in global_navigation %}
+            <a class="nav-item is-hidden-mobile"
+               href="{{ nav.href }}">{{ nav.title }}</a>
+        {% endfor %}
+    </div>
+    <span class="nav-toggle" data-target="navCollapseTarget">
+          <span></span>
+          <span></span>
+          <span></span>
+    </span>
+    <div id="navCollapseTarget" class="nav-right nav-menu">
+        <a class="nav-item is-hidden-tablet is-active">Home</a>
+        {% for nav in global_navigation %}
+            <a class="nav-item is-hidden-tablet"
+               href="{{ nav.href }}">{{ nav.title }}</a>
+        {% endfor %}
+        <a class="nav-item"
+           href="https://github.com/{{ social_media.github }}" target="_blank">
+                      <span class="icon" style="color: #333;">
+                        <i class="fa fa-github"></i>
+                      </span>
+        </a>
+
+        <a class="nav-item"
+           href="https://twitter.com/{{ social_media.twitter }}"
+           target="_blank">
+                      <span class="icon" style="color: #55acee;">
+                        <i class="fa fa-twitter"></i>
+                      </span>
+        </a>
+    </div>
+</nav>

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ title|striptags|e }} - {{ titlesuffix|e }}</title>
     <script src="{{ pathto('_static/jquery.js', 1) }}"></script>
     <script src="{{ pathto('_static/underscore.js', 1) }}"></script>
@@ -14,48 +14,21 @@
     <script src="{{ pathto('_static/app.bundle.js', 1) }}"></script>
 </head>
 <body>
-
-<nav id="kbt-header"
-     class="navbar navbar-toggleable-md navbar-light">
-    <button class="navbar-toggler navbar-toggler-right" type="button"
-            data-toggle="collapse"
-            data-target="#navbarMenu"
-            aria-controls="navbarMenu" aria-expanded="false"
-            aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a id="kbt-logo"
-       class="navbar-brand" href="#">
-    </a>
-    <a id="kbt-sitename"
-       class="navbar-brand" href="#">Paul Everitt</a>
-
-    <div class="collapse navbar-collapse" id="navbarMenu">
-        <ul class="navbar-nav mr-auto">
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                <input type="text" class="form-control"
-                       id="inlineFormInputGroup" placeholder="Search">
-                <div class="input-group-addon">
-                    <i class="fa fa-search"></i>
-                </div>
-            </div>
-        </form>
+<section class="sb-header hero {{ 'is-bold is-info ' }} is-small">
+    <div class="hero-head">
+        {% include "navbar.html" %}
     </div>
-</nav>
+    {% block hero %}{% endblock %}
+</section>
 
-<div class="container">
+<section class="section content">
+    {% block body %}{% endblock %}
+</section>
 
-    <div class="starter-template">
-        <h1>{{ title }}</h1>
-        <p class="lead">
-            {% block content %}{% endblock %}
-        </p>
-    </div>
-
-</div>
+{% include "footer.html" %}
 {% include "document_settings.html" %}
-<script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
+    <script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
+
 </body>
 </html>
+

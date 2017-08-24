@@ -151,3 +151,20 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 # intersphinx_mapping = {'https://docs.python.org/': None}
+
+html_context = dict(
+    logo=dict(
+        img_url='http://bulma.io/images/bulma-logo.png',
+        alt='Sphinx Bulma Theme'
+    ),
+    social_media=dict(
+        twitter='paulweveritt',
+        github='pauleveritt'
+    ),
+    global_navigation=[
+        dict(title="Blog", href="/blog/"),
+        dict(title="Articles", href="/articles/"),
+        dict(title="Tutorials", href="/tutorials/"),
+        dict(title="About", href="/about.html"),
+    ]
+)
