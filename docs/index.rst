@@ -7,8 +7,9 @@ Welcome to kaybee's documentation!
     :maxdepth: 2
     :caption: Contents:
 
-    usage.rst
-    blog/index.rst
+    about
+    blog/index
+    articles/index
 
 Indices and tables
 ==================

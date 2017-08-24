@@ -1,5 +1,5 @@
 =====
-Usage
+About
 =====
 
 Changing the Site Title
