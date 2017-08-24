@@ -162,9 +162,13 @@ html_context = dict(
         github='pauleveritt'
     ),
     global_navigation=[
-        dict(title="Blog", href="/blog/"),
-        dict(title="Articles", href="/articles/"),
-        dict(title="Tutorials", href="/tutorials/"),
-        dict(title="About", href="/about.html"),
+        dict(path="blog", title="Blog", href="/blog/",
+             color='warning'),
+        dict(path="articles", title="Articles", href="/articles/",
+             color='info'),
+        dict(path="tutorials", title="Tutorials", href="/tutorials/",
+             color='light'),
+        dict(path="about", title="About", href="/about.html",
+             color='success'),
     ]
 )

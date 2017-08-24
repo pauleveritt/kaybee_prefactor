@@ -33,34 +33,57 @@ def get_html_templates_path():
     return [os.path.join(pkgdir, 'templates')]
 
 
-def kb_template(app, pagename, templatename, context, doctree):
+def choose_layout_info(sections, pagename, kb_template=None):
+    """ Return the section and template for this page """
+
+    result = dict(style='', template='page')
+    if pagename == 'index':
+        # Home page
+        result['style'] = 'header-image is-medium'
+        result['template'] = 'homepage'
+    else:
+        for section in sections:
+            if pagename.startswith(section['path']):
+                # Set the color scheme
+                result['style'] = 'is-bold is-%s' % section['color']
+
+                # Is this the section listing?
+                if pagename == section['path'] + '/index':
+                    # If the config overrides the section template, use it
+                    result['template'] = section.get('sectionpage_template',
+                                                     'sectionpage')
+                else:
+                    # Leaf pages can get template from: config section,
+                    # a default to page.html, or below with the override
+                    result['template'] = section.get('template', 'page')
+
+            # In all cases, if this document has an override at the top,
+            # then use it
+            if kb_template:
+                result['template'] = kb_template
+
+    return result
+
+
+def kb_context(app, pagename, templatename, context, doctree):
     config = app.config.html_context
 
-    # Need some info about the "section" of the site
-    if pagename.startswith('blog'):
-        section_style = 'is-bold is-warning'
-    elif pagename.startswith('articles'):
-        section_style = 'is-bold is-info'
-    elif pagename.startswith('tutorials'):
-        section_style = 'is-bold is-light'
-    elif pagename.startswith('about'):
-        section_style = 'is-bold is-success'
-    else:
-        section_style = 'header-image is-medium'
-    context['kb_section_style'] = section_style
-
     # Find out which kind of page component this is, if meta even exists
-    kb_template = context.get('meta', {}).get('kb_template')
-    context['kb_template'] = kb_template
+    kb_template = context.get('meta', {}).get('kb_context')
+    context['kb_context'] = kb_template
 
-    if kb_template:
-        # We have RST page with the magic marker at the top. Return
-        # this as the template name. Later, do more sniffing.
-        return kb_template + '.html'
+    layout_info = choose_layout_info(config['global_navigation'], pagename,
+                                     kb_template)
+    context['kb_section_style'] = layout_info['style']
+    context['kb_template'] = layout_info['template']
+
+    template = layout_info['template']
+    if template is not None:
+        return template + '.html'
 
 
 def setup(app):
-    app.connect('html-page-context', kb_template)
+    app.connect('html-page-context', kb_context)
     return dict(
         version=__version__,
         parallel_read_safe=True
