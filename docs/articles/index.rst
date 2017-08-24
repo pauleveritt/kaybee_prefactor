@@ -5,7 +5,6 @@ Articles
 
 A list of articles.
 
-
 .. toctree::
     :maxdepth: 1
     :caption: Contents:
