@@ -1,11 +1,17 @@
 from livereload import Server, shell
 
-cmd = ".venv/bin/python3 .venv/bin/sphinx-build -E -b html docs docs/_build"
+sphinx = ".venv/bin/python3 .venv/bin/sphinx-build -E -b html docs docs/_build"
+dist = "/usr/local/bin/npm run dist"
+both = dist + '; ' + sphinx
 
 server = Server()
-delay = 1
-server.watch('docs/*.rst', shell(cmd), delay=delay)
-server.watch('docs/*/*.rst', shell(cmd), delay=delay)
-server.watch('src/kaybee/templates/*.html', shell(cmd), delay=delay)
-server.serve(root='docs/_build')
-
+server.watch('docs/*.rst', shell(sphinx))
+server.watch('docs/*/*.rst', shell(sphinx))
+server.watch('src/kaybee/templates/*.html', shell(sphinx))
+server.watch('src/kaybee/index.js',
+             shell(both, shell="/usr/local/bin/bash"),
+             )
+server.watch('src/kaybee/scss/*.scss',
+             shell(both, shell="/usr/local/bin/bash"),
+             )
+server.serve(root='docs/_build', live_css=False)

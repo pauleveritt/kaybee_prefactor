@@ -5,7 +5,8 @@
   "main": "src/kaybee/index.js",
   "scripts": {
     "start": "webpack-dev-server",
-    "dist": "webpack"
+    "dist": "webpack",
+    "scss": "node-sass src/kaybee/scss/kaybee.scss src/kaybee/static/kaybee.css"
   },
   "repository": {
     "type": "git",
