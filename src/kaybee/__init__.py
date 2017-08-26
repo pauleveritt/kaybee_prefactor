@@ -40,7 +40,7 @@ def choose_layout_info(sections, pagename, kb_template=None):
     if pagename == 'index':
         # Home page
         result['style'] = 'header-image is-medium'
-        result['template'] = 'homepage'
+        result['template'] = kb_template or 'homepage'
     else:
         for section in sections:
             if pagename.startswith(section['path']):
