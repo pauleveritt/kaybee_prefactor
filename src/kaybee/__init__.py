@@ -33,6 +33,23 @@ def get_html_templates_path():
     return [os.path.join(pkgdir, 'templates')]
 
 
+def convert_href(href, pagename):
+    # The config file's sections have an href. It is probably like
+    # '/blog/'. Sphinx page names will be something like 'blog/index'
+    # or 'blog/folder1/somedoc'. Return either None (the pagename is
+    # not in the section, 'index' (the pagename is the index page for the
+    # section, or 'doc' (the pagename is somewhere under the section.
+
+    if not pagename.startswith(href):
+        # This page is not in this section
+        return None
+    else:
+        if pagename == os.path.normpath(href + '/index'):
+            return 'index'
+        else:
+            return 'doc'
+
+
 def choose_layout_info(sections, pagename, kb_template=None):
     """ Return the section and template for this page """
 
@@ -43,24 +60,29 @@ def choose_layout_info(sections, pagename, kb_template=None):
         result['template'] = kb_template or 'homepage'
     else:
         for section in sections:
-            if pagename.startswith(section['path']):
-                # Set the color scheme
-                result['style'] = 'is-bold is-%s' % section['color']
+            page_type = convert_href(section['href'], pagename)
+            if page_type is None:
+                # No match
+                continue
 
-                # Is this the section listing?
-                if pagename == section['path'] + '/index':
-                    # If the config overrides the section template, use it
-                    result['template'] = section.get('sectionpage_template',
-                                                     'sectionpage')
-                else:
-                    # Leaf pages can get template from: config section,
-                    # a default to page.html, or below with the override
-                    result['template'] = section.get('template', 'page')
+            # Set the style, template, and bail out of the loop
+            result['style'] = 'is-bold is-%s' % section['color']
+            if page_type == 'index':
+                # If the config overrides the section template, use it
+                result['template'] = section.get('listing_template',
+                                                 'section')
+            else:
+                # Leaf pages can get template from: config section,
+                # a default to page.html, or below with the override
+                result['template'] = section.get('doc_template', 'page')
 
             # In all cases, if this document has an override at the top,
             # then use it
             if kb_template:
                 result['template'] = kb_template
+
+            # We matched, so bail on for loop and return
+            return result
 
     return result
 
