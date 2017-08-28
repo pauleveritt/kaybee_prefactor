@@ -4,7 +4,7 @@
             <img src="{{ logo.img_url }}"
                  alt="{{ logo.alt }}">
         </a>
-        {% for nav in global_navigation %}
+        {% for nav in kaybee_config.global_navigation %}
             <a class="nav-item is-hidden-mobile"
                href="{{ nav.href }}">{{ nav.title }}</a>
         {% endfor %}
@@ -16,7 +16,7 @@
     </span>
     <div id="navCollapseTarget" class="nav-right nav-menu">
         <a class="nav-item is-hidden-tablet is-active">Home</a>
-        {% for nav in global_navigation %}
+        {% for nav in kaybee_config.global_navigation %}
             <a class="nav-item is-hidden-tablet"
                href="{{ nav.href }}">{{ nav.title }}</a>
         {% endfor %}

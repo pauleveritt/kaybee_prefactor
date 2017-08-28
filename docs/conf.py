@@ -154,10 +154,16 @@ texinfo_documents = [
 
 kaybee_config = dict(
     global_navigation=[
-        dict(title="Blog", href="/blog/", color='warning'),
-        dict(title="Articles", href="/articles/", color='info'),
-        dict(title="Tutorials", href="/tutorials/", color='light'),
-        dict(title="About", href="/about.html", color='success'),
+        dict(title='Blog', href='/blog/'),
+        dict(title='Articles', href='/articles/',
+             listing_template='articles.html'),
+        dict(title='Tutorials', href='/tutorials/'),
+        dict(title='About', href='about.html', color='success'),
+    ],
+    sections=[
+        dict(title='Blog', href='blog/', color='warning'),
+        dict(title='Articles', href='articles/', color='info'),
+        dict(title='Tutorials', href='tutorials/', color='light')
     ]
 )
 

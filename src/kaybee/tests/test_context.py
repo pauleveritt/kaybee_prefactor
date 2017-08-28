@@ -8,8 +8,8 @@ from kaybee import kb_context
 
 class DummyConfig:
     def __init__(self):
-        global_navigation = []
-        kaybee_config = dict(global_navigation=global_navigation)
+        sections = []
+        kaybee_config = dict(sections=sections)
         self.html_context = dict(kaybee_config=kaybee_config)
 
 

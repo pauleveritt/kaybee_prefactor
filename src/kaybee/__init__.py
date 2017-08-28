@@ -94,7 +94,7 @@ def kb_context(app, pagename, templatename, context, doctree):
     kb_template = context.get('meta', {}).get('kb_context')
     context['kb_context'] = kb_template
 
-    layout_info = choose_layout_info(config['global_navigation'], pagename,
+    layout_info = choose_layout_info(config['sections'], pagename,
                                      kb_template)
     context['kb_section_style'] = layout_info['style']
     context['kb_template'] = layout_info['template']
