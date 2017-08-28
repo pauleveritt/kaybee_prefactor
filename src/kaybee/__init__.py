@@ -33,18 +33,18 @@ def get_html_templates_path():
     return [os.path.join(pkgdir, 'templates')]
 
 
-def convert_href(href, pagename):
-    # The config file's sections have an href. It is probably like
+def convert_path(path, pagename):
+    # The config file's sections have an path. It is probably like
     # '/blog/'. Sphinx page names will be something like 'blog/index'
     # or 'blog/folder1/somedoc'. Return either None (the pagename is
     # not in the section, 'index' (the pagename is the index page for the
     # section, or 'doc' (the pagename is somewhere under the section.
 
-    if not pagename.startswith(href):
+    if not pagename.startswith(path):
         # This page is not in this section
         return None
     else:
-        if pagename == os.path.normpath(href + '/index'):
+        if pagename == os.path.normpath(path + '/index'):
             return 'index'
         else:
             return 'doc'
@@ -60,7 +60,7 @@ def choose_layout_info(sections, pagename, kb_template=None):
         result['template'] = kb_template or 'homepage'
     else:
         for section in sections:
-            page_type = convert_href(section['href'], pagename)
+            page_type = convert_path(section['path'], pagename)
             if page_type is None:
                 # No match
                 continue

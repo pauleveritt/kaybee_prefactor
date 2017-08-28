@@ -161,9 +161,9 @@ kaybee_config = dict(
         dict(title='About', href='about.html', color='success'),
     ],
     sections=[
-        dict(title='Blog', href='blog/', color='warning'),
-        dict(title='Articles', href='articles/', color='info'),
-        dict(title='Tutorials', href='tutorials/', color='light')
+        dict(path='blog/', title='Blog', color='warning'),
+        dict(path='articles/',title='Articles',  color='info'),
+        dict(path='tutorials/', title='Tutorials', color='light')
     ]
 )
 

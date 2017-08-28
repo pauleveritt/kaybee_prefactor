@@ -1,22 +1,22 @@
-from kaybee import convert_href
+from kaybee import convert_path
 
 
 def test_outside_section():
-    href = 'blog/'
+    path = 'blog/'
     pagename = 'some/where/else'
-    result = convert_href(href, pagename)
+    result = convert_path(path, pagename)
     assert result is None
 
 
 def test_section_index():
-    href = 'blog/'
+    path = 'blog/'
     pagename = 'blog/index'
-    result = convert_href(href, pagename)
+    result = convert_path(path, pagename)
     assert result is 'index'
 
 
 def test_under_section():
-    href = 'blog/'
+    path = 'blog/'
     pagename = 'blog/some/folder/doc'
-    result = convert_href(href, pagename)
+    result = convert_path(path, pagename)
     assert result is 'doc'

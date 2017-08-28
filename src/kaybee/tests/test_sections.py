@@ -14,12 +14,12 @@ from kaybee import choose_layout_info
 @pytest.fixture
 def sections():
     return [
-        dict(title='Blog', href='blog/', color='warning'),
-        dict(title='Articles', href='articles/',
+        dict(title='Blog', path='blog/', color='warning'),
+        dict(title='Articles', path='articles/',
              listing_template='somelistingtemplate',
              doc_template='somedoctemplate',
              color='warning'),
-        dict(title='About', href='about.html', color='success'),
+        dict(title='About', path='about.html', color='success'),
     ]
 
 
