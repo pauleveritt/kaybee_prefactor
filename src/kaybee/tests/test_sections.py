@@ -1,6 +1,6 @@
 '''
 To do
-- Rename config to be out from html context and into kb.
+- Write tests for kb_context
 - Rename the config to be more section-focused
 - Perhaps have something different for nav
 - Get the homepage style/template into config
