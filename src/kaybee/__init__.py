@@ -73,7 +73,7 @@ def choose_layout_info(sections, pagename, kb_template=None):
 
         if page_type == 'home':
             # The template for the homepage is either:
-            result['template'] = 'homepage'
+            result['template'] = section.get('doc_template', 'homepage')
         elif page_type == 'index':
             # If the config overrides the section template, use it
             result['template'] = section.get('listing_template',

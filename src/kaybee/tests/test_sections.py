@@ -30,6 +30,14 @@ def test_homepage(sections):
     assert li['template'] == 'homepage'
 
 
+def test_homepage_conf_override_template(sections):
+    sections[3]['doc_template'] = 'customhome'
+    pagename = 'index'
+    li = choose_layout_info(sections, pagename)
+    assert li['style'] == 'header-image is-medium'
+    assert li['template'] == 'customhome'
+
+
 def test_homepage_override_template(sections):
     pagename = 'index'
     li = choose_layout_info(sections, pagename, 'customtemplate')
