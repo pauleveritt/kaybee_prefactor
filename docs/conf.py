@@ -152,15 +152,7 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 # intersphinx_mapping = {'https://docs.python.org/': None}
 
-html_context = dict(
-    logo=dict(
-        img_url='http://bulma.io/images/bulma-logo.png',
-        alt='Sphinx Bulma Theme'
-    ),
-    social_media=dict(
-        twitter='paulweveritt',
-        github='pauleveritt'
-    ),
+kaybee_config = dict(
     global_navigation=[
         dict(path="blog", title="Blog", href="/blog/",
              color='warning'),
@@ -171,4 +163,16 @@ html_context = dict(
         dict(path="about", title="About", href="/about.html",
              color='success'),
     ]
+)
+
+html_context = dict(
+    kaybee_config=kaybee_config,
+    logo=dict(
+        img_url='http://bulma.io/images/bulma-logo.png',
+        alt='Sphinx Bulma Theme'
+    ),
+    social_media=dict(
+        twitter='paulweveritt',
+        github='pauleveritt'
+    )
 )

@@ -66,7 +66,7 @@ def choose_layout_info(sections, pagename, kb_template=None):
 
 
 def kb_context(app, pagename, templatename, context, doctree):
-    config = app.config.html_context
+    config = app.config.html_context['kaybee_config']
 
     # Find out which kind of page component this is, if meta even exists
     kb_template = context.get('meta', {}).get('kb_context')
