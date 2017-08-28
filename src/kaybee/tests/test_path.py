@@ -1,6 +1,13 @@
 from kaybee import convert_path
 
 
+def test_homepage():
+    path = 'index'
+    pagename = 'index'
+    result = convert_path(path, pagename)
+    assert result is 'home'
+
+
 def test_outside_section():
     path = 'blog/'
     pagename = 'some/where/else'

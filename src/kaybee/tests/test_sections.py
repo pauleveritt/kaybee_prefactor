@@ -1,6 +1,5 @@
 '''
 To do
-- Perhaps have something different for nav
 - Get the homepage style/template into config
 - Homepage logo into config
 - Fix sectionpage_template vs. template, use listing/doc in the name
@@ -20,6 +19,7 @@ def sections():
              doc_template='somedoctemplate',
              color='warning'),
         dict(title='About', path='about.html', color='success'),
+        dict(title='Home', path='index', image='someimage'),
     ]
 
 
