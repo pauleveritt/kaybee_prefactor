@@ -1,4 +1,5 @@
 import pytest
+from pykwalify.errors import SchemaError
 from resources.base_resource import BaseResource
 
 
@@ -15,6 +16,7 @@ class Node:
 
 class DummyArticle(BaseResource):
     pass
+
 
 @pytest.fixture
 def site():
@@ -42,6 +44,47 @@ def fake_load(content):
 
 def test_import():
     assert BaseResource.__name__ == 'BaseResource'
+
+
+def test_schema_filename():
+    DummyArticle.load = fake_load
+    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    assert br.schema_filename.endswith('resources/tests/dummyarticle')
+
+
+def test_schema():
+    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    assert br.schema['mapping']['level']['enum'][0] == 1
+
+
+def test_props():
+    content = """
+count: 999
+level: 2
+    """
+    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', content)
+    assert br.props['count'] == 999
+    assert br.props['level'] == 2
+
+
+def test_validate_succeed():
+    content = """
+count: 999
+level: 2
+    """
+    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', content)
+    br.validate(br.props, br.schema)
+
+
+def test_validate_fail():
+    content = """
+xlevel: 2
+    """
+    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', content)
+    with pytest.raises(SchemaError) as excinfo:
+        br.validate(br.props, br.schema)
+
+    assert 'xlevel' in str(excinfo.value)
 
 
 def test_instance():
@@ -221,10 +264,3 @@ def test_find_prop_root(site):
     prop = br.findProp(site, 'foo')
     assert prop == 'hello1'
     del site['f1'].props['foo']
-
-
-def test_schema_filename():
-    DummyArticle.load = fake_load
-    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
-    assert br.schema_filename.endswith('resources/tests/dummyarticle')
-

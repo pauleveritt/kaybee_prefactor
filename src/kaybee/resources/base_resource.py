@@ -94,3 +94,14 @@ class BaseResource:
 
         rtype_name = self.__class__.__name__.lower()
         return os.path.join(self.package_dir(), rtype_name)
+
+    @property
+    def schema(self):
+        schema_fn = self.schema_filename + '.yaml'
+        with open(schema_fn) as f:
+            return load(f.read())
+
+    @staticmethod
+    def validate(props, schema):
+        c = Core(source_data=props, schema_data=schema)
+        c.validate(raise_exception=True)
