@@ -1,8 +1,3 @@
-'''
-To do
-- Figure out "active"
-'''
-
 import pytest
 from kaybee import choose_layout_info
 
@@ -16,7 +11,7 @@ def sections():
              doc_template='somedoctemplate',
              color='warning'),
         dict(title='About', path='about.html', color='success'),
-        dict(title='Home', path='index', image='someimage'),
+        dict(title='Home', path='index'),
     ]
 
 

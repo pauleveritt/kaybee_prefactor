@@ -163,7 +163,8 @@ kaybee_config = dict(
     sections=[
         dict(path='blog/', title='Blog', color='warning'),
         dict(path='articles/',title='Articles',  color='info'),
-        dict(path='tutorials/', title='Tutorials', color='light')
+        dict(path='tutorials/', title='Tutorials', color='light'),
+        dict(path='index', title='Home'),
     ]
 )
 
