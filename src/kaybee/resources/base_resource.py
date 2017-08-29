@@ -71,3 +71,15 @@ class BaseResource:
             parents.append(parent)
             parent = site.get(parent.parent)
         return parents
+
+    def findProp(self, site, prop_name):
+        """ Starting with self, walk until you find prop or None """
+
+        lineage = self.parents(site)
+        lineage.insert(0, self)
+        for resource in lineage:
+            v = resource.props.get(prop_name)
+            if v:
+                # This resource has the prop, return it
+                return v
+        return None

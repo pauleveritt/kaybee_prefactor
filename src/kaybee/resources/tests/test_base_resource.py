@@ -4,6 +4,7 @@ from resources.base_resource import BaseResource
 
 class Node:
     parent = None
+    props = {}
 
     def __init__(self, name):
         self.name = name
@@ -177,3 +178,46 @@ def test_f4_about_parents(site):
     br = BaseResource('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
     parents = br.parents(site)
     assert len(parents) == 5
+
+
+def test_find_prop_none(site):
+    BaseResource.load = fake_load
+    br = BaseResource('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    prop = br.findProp(site, 'foo')
+    assert prop is None
+
+
+def test_find_prop_self(site):
+    site['f1/f2/f3/f4'].props['foo'] = 'hello4'
+    BaseResource.load = fake_load
+    br = BaseResource('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    prop = br.findProp(site, 'foo')
+    assert prop == 'hello4'
+    del site['f1/f2/f3/f4'].props['foo']
+
+
+def test_find_prop_parent(site):
+    site['f1/f2/f3'].props['foo'] = 'hello3'
+    BaseResource.load = fake_load
+    br = BaseResource('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    prop = br.findProp(site, 'foo')
+    assert prop == 'hello3'
+    del site['f1/f2/f3'].props['foo']
+
+
+def test_find_prop_grandparent(site):
+    site['f1/f2'].props['foo'] = 'hello2'
+    BaseResource.load = fake_load
+    br = BaseResource('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    prop = br.findProp(site, 'foo')
+    assert prop == 'hello2'
+    del site['f1/f2'].props['foo']
+
+
+def test_find_prop_root(site):
+    site['f1'].props['foo'] = 'hello1'
+    BaseResource.load = fake_load
+    br = BaseResource('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    prop = br.findProp(site, 'foo')
+    assert prop == 'hello1'
+    del site['f1'].props['foo']
