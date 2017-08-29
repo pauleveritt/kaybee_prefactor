@@ -2,8 +2,7 @@
 Test the html context event handler
 """
 
-import pytest
-from kaybee import kb_context
+from kaybee.events import kb_context
 
 
 class DummyConfig:
@@ -19,8 +18,8 @@ class DummyApp:
 
 def test_kb_context(monkeypatch):
     monkeypatch.setattr(
-        'kaybee.choose_layout_info',
-        lambda s, p, kb: dict(style='xzy', template='pdq')
+        'kaybee.events.choose_layout_info',
+        lambda s, p, kb: dict(style='xzy', template='pdq', active='')
     )
     app = DummyApp()
     pagename = 'firstpage'
