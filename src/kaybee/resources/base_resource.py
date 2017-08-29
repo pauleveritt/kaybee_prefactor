@@ -8,17 +8,6 @@ from ruamel.yaml import load
 class BaseResource:
     def __init__(self, pagename, rtype, title, content):
         self.name, self.parent = BaseResource.parse_pagename(pagename)
-        # if pagename[-6:] == '/index':
-        #     # Remove /index from the resource name
-        #     self.name = pagename[:-6]
-        #     self.parent = '/'.join(self.name.split('/')[:-1])
-        # elif pagename == 'index':
-        #     # This is the root of the doctree
-        #     self.name = '/'
-        #     self.parent = None
-        # else:
-        #     self.name = pagename
-        #     self.parent = '/'.join(self.name.split('/')[:-1])
         self.rtype = rtype
         self.title = title
         self.props = BaseResource.load(content)
@@ -55,9 +44,30 @@ class BaseResource:
         elif lineage[-1] == 'index':
             # This is blog/sub/index
             name = '/'.join(lineage[:-1])
-            parent = lineage[-3]
+            parent = '/'.join(lineage[:-2])
         else:
             # This should be blog/sub/about
-            parent = lineage[-2]
+            parent = '/'.join(lineage[:-1])
 
         return name, parent
+
+    @classmethod
+    def package_dir(cls):
+        f = inspect.getfile(cls)
+        return os.path.dirname(f)
+
+    @property  # TODO Re-ify this in some way
+    def template(self):
+        return self.__class__.__name__.lower()
+
+    def parents(self, site):
+        """ Split the path in name and get parents """
+        if self.name == '/':
+            # The root has no parents
+            return []
+        parents = []
+        parent = site.get(self.parent)
+        while parent is not None:
+            parents.append(parent)
+            parent = site.get(parent.parent)
+        return parents

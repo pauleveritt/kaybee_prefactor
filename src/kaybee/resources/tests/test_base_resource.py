@@ -1,4 +1,35 @@
+import pytest
 from resources.base_resource import BaseResource
+
+
+class Node:
+    parent = None
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return self.name
+
+
+@pytest.fixture
+def site():
+    root = Node('root')
+    f1 = Node('f1')
+    f1.parent = '/'
+    f2 = Node('f2')
+    f2.parent = 'f1'
+    f3 = Node('f3')
+    f3.parent = 'f1/f2'
+    f4 = Node('f4')
+    f4.parent = 'f1/f2/f3'
+    return {
+        '/': root,
+        'f1': f1,
+        'f1/f2': f2,
+        'f1/f2/f3': f3,
+        'f1/f2/f3/f4': f4
+    }
 
 
 def fake_load(content):
@@ -52,16 +83,97 @@ def test_blog_sub_index():
 def test_blog_sub_about():
     name, parent = BaseResource.parse_pagename('blog/sub/about')
     assert name == 'blog/sub/about'
-    assert parent == 'sub'
+    assert parent == 'blog/sub'
 
 
 def test_blog_sub_subsub_index():
     name, parent = BaseResource.parse_pagename('blog/sub/subsub/index')
     assert name == 'blog/sub/subsub'
-    assert parent == 'sub'
+    assert parent == 'blog/sub'
 
 
 def test_blog_sub_subsub_about():
     name, parent = BaseResource.parse_pagename('blog/sub/subsub/about')
     assert name == 'blog/sub/subsub/about'
-    assert parent == 'subsub'
+    assert parent == 'blog/sub/subsub'
+
+
+def test_blog_sub_subsub_s3_index():
+    name, parent = BaseResource.parse_pagename('blog/sub/subsub/s3/index')
+    assert name == 'blog/sub/subsub/s3'
+    assert parent == 'blog/sub/subsub'
+
+
+def test_blog_sub_subsub_s3_about():
+    name, parent = BaseResource.parse_pagename('blog/sub/subsub/s3/about')
+    assert name == 'blog/sub/subsub/s3/about'
+    assert parent == 'blog/sub/subsub/s3'
+
+
+def test_package_dir():
+    assert BaseResource.package_dir().endswith('kaybee/resources')
+
+
+def test_template():
+    class Article(BaseResource):
+        pass
+
+    BaseResource.load = fake_load
+    a = Article('index', 'rtype', 'title', 'content')
+    assert a.template == 'article'
+
+
+def test_root_index_parents(site):
+    BaseResource.load = fake_load
+    br = BaseResource('index', 'rtype', 'title', 'content')
+    parents = br.parents(site)
+    assert len(parents) == 0
+
+
+def test_root_about_parents(site):
+    BaseResource.load = fake_load
+    br = BaseResource('about', 'rtype', 'title', 'content')
+    parents = br.parents(site)
+    assert len(parents) == 1
+
+
+def test_f1_index_parents(site):
+    BaseResource.load = fake_load
+    br = BaseResource('f1/f2/index', 'rtype', 'title', 'content')
+    parents = br.parents(site)
+    assert len(parents) == 2
+
+
+def test_f1_about_parents(site):
+    BaseResource.load = fake_load
+    br = BaseResource('f1/about', 'rtype', 'title', 'content')
+    parents = br.parents(site)
+    assert len(parents) == 2
+
+
+def test_f2_index_parents(site):
+    BaseResource.load = fake_load
+    br = BaseResource('f1/f2/index', 'rtype', 'title', 'content')
+    parents = br.parents(site)
+    assert len(parents) == 2
+
+
+def test_f2_about_parents(site):
+    BaseResource.load = fake_load
+    br = BaseResource('f1/f2/about', 'rtype', 'title', 'content')
+    parents = br.parents(site)
+    assert len(parents) == 3
+
+
+def test_f4_index_parents(site):
+    BaseResource.load = fake_load
+    br = BaseResource('f1/f2/f3/f4/index', 'rtype', 'title', 'content')
+    parents = br.parents(site)
+    assert len(parents) == 4
+
+
+def test_f4_about_parents(site):
+    BaseResource.load = fake_load
+    br = BaseResource('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    parents = br.parents(site)
+    assert len(parents) == 5
