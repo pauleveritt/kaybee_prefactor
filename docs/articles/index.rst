@@ -3,7 +3,7 @@
 Articles
 ========
 
-A list of articles...
+A list of articles.
 
 .. toctree::
     :maxdepth: 1

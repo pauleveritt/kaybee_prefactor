@@ -5,7 +5,7 @@
                  alt="{{ logo.alt }}">
         </a>
         {% for nav in kaybee_config.global_navigation %}
-            <a class="nav-item is-hidden-mobile"
+            <a class="nav-item is-hidden-mobile{{ ' is-active' if kb_active_section in nav.href }}"
                href="{{ nav.href }}">{{ nav.title }}</a>
         {% endfor %}
     </div>

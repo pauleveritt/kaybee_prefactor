@@ -1,8 +1,5 @@
 '''
 To do
-- Get the homepage style/template into config
-- Homepage logo into config
-- Fix sectionpage_template vs. template, use listing/doc in the name
 - Figure out "active"
 '''
 
@@ -103,3 +100,9 @@ def test_leaf_sectionoverride_docoverrid(sections):
     li = choose_layout_info(sections, pagename, 'customtemplate')
     assert li['style'] == 'is-bold is-warning'
     assert li['template'] == 'customtemplate'
+
+
+def test_active(sections):
+    pagename = 'blog/firstpost'
+    li = choose_layout_info(sections, pagename, 'customtemplate')
+    assert li['active'] == 'blog'

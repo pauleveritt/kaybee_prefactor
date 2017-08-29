@@ -1,4 +1,5 @@
 import os
+import os
 
 __version__ = "0.0.1"
 
@@ -57,7 +58,7 @@ def convert_path(path, pagename):
 def choose_layout_info(sections, pagename, kb_template=None):
     """ Return the section and template for this page """
 
-    result = dict(style='', template='page')
+    result = dict(style='', template='page', active='')
     for section in sections:
         page_type = convert_path(section['path'], pagename)
         if page_type is None:
@@ -88,7 +89,11 @@ def choose_layout_info(sections, pagename, kb_template=None):
         if kb_template:
             result['template'] = kb_template
 
-        # We matched, so bail on for loop and return
+        # Set this section as the active one, stripping out any
+        # leading/trailing slashes
+        result['active'] = [i for i in section['path'].split('/') if i][0]
+
+        # We matched, bail on for loop and return
         return result
 
     return result
@@ -105,6 +110,7 @@ def kb_context(app, pagename, templatename, context, doctree):
                                      kb_template)
     context['kb_section_style'] = layout_info['style']
     context['kb_template'] = layout_info['template']
+    context['kb_active_section'] = layout_info['active']
 
     template = layout_info['template']
     if template is not None:
