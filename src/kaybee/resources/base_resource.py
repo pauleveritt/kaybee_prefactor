@@ -83,3 +83,14 @@ class BaseResource:
                 # This resource has the prop, return it
                 return v
         return None
+
+    # Schemas and validation
+    @property  # TODO Re-ify this in some way
+    def schema_filename(self):
+        """ This is a policy, lowercase of class name + .yaml
+
+        Override in subclass if you want a different naming.
+        """
+
+        rtype_name = self.__class__.__name__.lower()
+        return os.path.join(self.package_dir(), rtype_name)

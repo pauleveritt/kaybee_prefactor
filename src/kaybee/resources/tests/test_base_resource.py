@@ -13,6 +13,9 @@ class Node:
         return self.name
 
 
+class DummyArticle(BaseResource):
+    pass
+
 @pytest.fixture
 def site():
     root = Node('root')
@@ -116,12 +119,9 @@ def test_package_dir():
 
 
 def test_template():
-    class Article(BaseResource):
-        pass
-
     BaseResource.load = fake_load
-    a = Article('index', 'rtype', 'title', 'content')
-    assert a.template == 'article'
+    a = DummyArticle('index', 'rtype', 'title', 'content')
+    assert a.template == 'dummyarticle'
 
 
 def test_root_index_parents(site):
@@ -221,3 +221,10 @@ def test_find_prop_root(site):
     prop = br.findProp(site, 'foo')
     assert prop == 'hello1'
     del site['f1'].props['foo']
+
+
+def test_schema_filename():
+    DummyArticle.load = fake_load
+    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    assert br.schema_filename.endswith('resources/tests/dummyarticle')
+
