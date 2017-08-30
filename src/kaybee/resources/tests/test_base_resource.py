@@ -1,6 +1,6 @@
 import pytest
 from pykwalify.errors import SchemaError
-from resources.base_resource import BaseResource
+from kaybee.resources.base_resource import BaseResource
 
 
 class Node:

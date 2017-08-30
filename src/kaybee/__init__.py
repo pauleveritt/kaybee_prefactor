@@ -1,6 +1,6 @@
 import os
 
-from events import kb_context
+from kaybee.events import kb_context
 
 __version__ = "0.0.1"
 

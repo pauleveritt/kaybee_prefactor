@@ -1,5 +1,5 @@
 import pytest
-from events import choose_layout_info
+from kaybee.events import choose_layout_info
 
 
 @pytest.fixture

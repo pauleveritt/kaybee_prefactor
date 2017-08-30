@@ -1,4 +1,4 @@
-from events import convert_path
+from kaybee.events import convert_path
 
 
 def test_homepage():
