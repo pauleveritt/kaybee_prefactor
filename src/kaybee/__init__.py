@@ -1,6 +1,7 @@
 import os
 
 from kaybee.events import kb_context
+from kaybee.resources.directives import ResourceDirective
 
 __version__ = "0.0.1"
 
@@ -32,10 +33,16 @@ def get_html_templates_path():
     """
 
     pkgdir = os.path.abspath(os.path.dirname(__file__))
-    return [os.path.join(pkgdir, 'templates')]
+    rtypes = ('article',)
+    types_dir = [os.path.join(pkgdir, 'resources', r) for r in rtypes]
+    templates_dir = [os.path.join(pkgdir, 'templates')]
+    return types_dir + templates_dir
 
 
 def setup(app):
+    app.add_directive('resource', ResourceDirective)
+    app.connect('env-before-read-docs', events.initialize_site)
+    app.connect('env-purge-doc', events.purge_resources)
     app.connect('html-page-context', kb_context)
     return dict(
         version=__version__,

@@ -90,9 +90,20 @@ def kb_context(app, pagename, templatename, context, doctree):
     layout_info = choose_layout_info(config['sections'], pagename,
                                      kb_template)
     context['kb_section_style'] = layout_info['style']
-    context['kb_template'] = layout_info['template']
     context['kb_active_section'] = layout_info['active']
 
     template = layout_info['template']
-    if template is not None:
+
+    site = app.env.site
+    context['site'] = site
+    resource = site.get(pagename)
+
+    if resource:
+        context['resource'] = resource
+        context['parents'] = resource.parents(site)
+        context['kb_template'] = resource.template + '.html'
+        return resource.template + '.html'
+
+    elif template is not None:
+        context['kb_template'] = layout_info['template']
         return template + '.html'

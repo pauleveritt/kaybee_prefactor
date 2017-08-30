@@ -17,4 +17,10 @@
             </p>
         </div>
     </div>
+        <div class="container">
+            <div>Templates: {{ kb_template }}</div>
+            {% if resource %}
+            <div>Resource: {{ resource.name }}</div>
+            {% endif %}
+        </div>
 </footer>

@@ -1,6 +1,9 @@
-:kb_template: article
-
 First Article
 =============
 
-The article body is here.
+.. resource:: article
+
+    count: 999
+    level: 2
+
+The article body is here buddy.
