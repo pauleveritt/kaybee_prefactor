@@ -1,5 +1,19 @@
 import os
 
+from kaybee.site import Site
+
+
+def initialize_site(app, env, docnames):
+    """ Create the Site instance if it is not in the pickle """
+
+    if not hasattr(env, 'site'):
+        env.site = Site()
+
+
+def purge_resources(app, env, docname):
+    if hasattr(env, 'site'):
+        env.site.remove(docname)
+
 
 def convert_path(path, pagename):
     # The config file's sections have an path. It is probably like
