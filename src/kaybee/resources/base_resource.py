@@ -15,6 +15,11 @@ class BaseResource:
     @staticmethod
     def load(content):
         """ Provide a way to stub this in tests """
+
+        # If the string of YAML is empty-ish (new lines, etc.)
+        # then return an empty dict
+        if content.strip() == '':
+            return {}
         return load(content)
 
     @staticmethod
@@ -72,7 +77,7 @@ class BaseResource:
             parent = site.get(parent.parent)
         return parents
 
-    def findProp(self, site, prop_name):
+    def find_prop(self, site, prop_name):
         """ Starting with self, walk until you find prop or None """
 
         lineage = self.parents(site)
