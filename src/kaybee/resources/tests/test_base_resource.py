@@ -54,7 +54,6 @@ def test_instance(monkeypatch):
     assert br.props['flag'] == 9
 
 
-
 def test_index(monkeypatch):
     monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
     name, parent = BaseResource.parse_pagename('index')
@@ -274,5 +273,11 @@ xlevel: 2
 
     assert 'xlevel' in str(excinfo.value)
 
-# def test_empty_yaml_string():
-#     content =
+
+def test_empty_yaml_string():
+    content = """
+    
+    
+    """
+    props = BaseResource.load(content)
+    assert props == {}
