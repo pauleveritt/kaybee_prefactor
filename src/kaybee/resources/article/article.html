@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}{{ resource.title }}{% endblock %}
+{% block content %}
+    <ul>
+        {% for parent in parents | reverse %}
+            <li>{{ parent.title|e }}</li>
+        {% endfor %}
+    </ul>
+    <p>Counter: {{ resource.props.count }}</p>
+    <p>Level: {{ resource.findProp(site, 'level') |e }}</p>
+    <p>{{ body }}</p>
+{% endblock %}
