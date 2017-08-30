@@ -1,0 +1,8 @@
+type: map
+mapping:
+  style:
+    type: str
+  sort:
+    type: int
+  is_home:
+    type: bool

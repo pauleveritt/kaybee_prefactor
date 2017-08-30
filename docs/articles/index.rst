@@ -1,7 +1,11 @@
-:kb_template: articles
-
 Articles
 ========
+
+.. resource:: section
+
+    style: ''
+    sort: 90
+    is_home: True
 
 A list of articles is here.
 

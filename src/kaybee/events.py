@@ -1,3 +1,19 @@
+"""
+Choosing a Template - Precedence Rules
+======================================
+
+1. ``resource.template`` on the instance (in YAML)
+
+2. Resource.template on the class
+
+3. ``doc_template`` or ``listing_template`` in the config.section
+
+4. If on the homepage, ``homepage.html``
+
+5. If on any other page, ``page.html``
+
+"""
+
 import os
 
 from kaybee.site import Site

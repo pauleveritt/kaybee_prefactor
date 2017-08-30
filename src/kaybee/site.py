@@ -1,6 +1,7 @@
 from collections import UserDict
 
 from kaybee.resources.article import Article
+from kaybee.resources.section import Section
 
 
 class Site(UserDict):
@@ -10,7 +11,8 @@ class Site(UserDict):
     def __init__(self):
         super().__init__()
         self.klasses = dict(
-            article=Article
+            article=Article,
+            section=Section
         )
 
     def add(self, resource):

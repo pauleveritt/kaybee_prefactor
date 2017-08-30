@@ -16,6 +16,6 @@ class ResourceDirective(Directive):
         resource = klass(env.docname, rtype, title, block)
 
         # TODO If the config says to validate, validate
-        # resource.validate(resource.props, resource.schema)
+        resource.validate(resource.props, resource.schema)
         env.site.add(resource)
         return []
