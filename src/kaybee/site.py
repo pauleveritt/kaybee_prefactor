@@ -1,4 +1,5 @@
 from collections import UserDict
+from operator import attrgetter
 
 from kaybee.resources.article import Article
 from kaybee.resources.section import Section
@@ -14,6 +15,7 @@ class Site(UserDict):
             article=Article,
             section=Section
         )
+        self._sections = None
 
     def add(self, resource):
         """ Add a resource to the db and do any indexing needed """
@@ -29,3 +31,18 @@ class Site(UserDict):
 
     def get_class(self, klass_name):
         return self.klasses[klass_name]
+
+    @property
+    def sections(self):
+        """ Cached, sorted listing of resources with rtype == section """
+
+        if self._sections:
+            return self._sections
+        sections = [s for s in self.data.values() if s.rtype == 'section']
+
+        # Sort first by title, then by "weight"
+        sections.sort(key=attrgetter('weight', 'title'))
+
+        # Assign to "cache" and return
+        self._sections = sections
+        return self._sections
