@@ -113,7 +113,16 @@ def kb_context(app, pagename, templatename, context, doctree):
 
     site = app.env.site
     context['site'] = site
-    resource = site.get(pagename)
+
+    ########################
+    # Armageddon...this sucks, looks like articles/index as a pagename
+    # and storing at "articles" in the site isn't going to be a good idea
+    ########################
+
+    pname = pagename
+    if pagename.endswith('/index'):
+        pname = pagename[:-6]
+    resource = site.get(pname)
 
     if resource:
         context['resource'] = resource

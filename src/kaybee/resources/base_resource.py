@@ -100,6 +100,11 @@ class BaseResource:
             parent = site.get(parent.parent)
         return parents
 
+    def is_active_section(self, site, nav_href):
+        """ Given  href of nav item, determine if resource is in it """
+
+        return self.name.startswith(nav_href)
+
     def find_prop(self, site, prop_name):
         """ Starting with self, walk until you find prop or None """
 

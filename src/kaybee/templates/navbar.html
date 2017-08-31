@@ -4,9 +4,10 @@
             <img src="{{ logo.img_url }}"
                  alt="{{ logo.alt }}">
         </a>
-        {% for nav in kaybee_config.global_navigation %}
-            <a class="nav-item is-hidden-mobile{{ ' is-active' if kb_active_section in nav.href }}"
-               href="{{ nav.href }}">{{ nav.title }}</a>
+        {% for nav in site.sections %}
+            <a class="nav-item is-hidden-mobile{{ ' is-active' if resource and resource.is_active_section(site, nav.name) }}"
+               href="/{{ nav.name }}">{{ nav.title }}
+            </a>
         {% endfor %}
     </div>
     <span class="nav-toggle" data-target="navCollapseTarget">

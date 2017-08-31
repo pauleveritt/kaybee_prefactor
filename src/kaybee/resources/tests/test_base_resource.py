@@ -220,3 +220,17 @@ def test_section_f1(monkeypatch, site):
     monkeypatch.setattr(LOAD, lambda c: dict())
     br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
     assert br.section(site) == site['f1']
+
+
+@pytest.mark.parametrize('pagename, nav_href, expected', [
+    ('f1/index', 'f1', True),
+    ('f1/index', 'f2', False),
+    ('f1/about', 'f1', True),
+    ('f1/about', 'f2', False),
+    ('f1/f2/index', 'f1', True),
+    ('f1/f2/about', 'f2', False),
+])
+def test_is_active(monkeypatch, site, pagename, nav_href, expected):
+    monkeypatch.setattr(LOAD, lambda c: dict())
+    br = DummyArticle(pagename, 'rtype', 'title', 'content')
+    assert br.is_active_section(site, nav_href) == expected

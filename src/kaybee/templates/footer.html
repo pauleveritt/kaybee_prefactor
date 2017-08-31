@@ -22,6 +22,7 @@
             {% if resource %}
             <div>Resource: {{ resource.name }}</div>
             <div>Style: {{ resource.style(site) }}</div>
+            <div>Is Active: {{ resource.is_active_section(site, 'articles/') }}</div>
             {% endif %}
         </div>
 </footer>

@@ -25,20 +25,20 @@ def test_construction(monkeypatch):
 def test_has_props(monkeypatch):
     content = """
 style: is-medium
-sort: 90
-is_home: True    
+weight: 90
+in_nav: True    
     """
     s = Section(PAGENAME, RTYPE, TITLE, content)
     assert s.props['style'] == 'is-medium'
-    assert s.props['sort'] == 90
-    assert s.props['is_home'] is True
+    assert s.props['weight'] == 90
+    assert s.props['in_nav'] is True
 
 
 def test_is_valid(monkeypatch):
     content = """
 style: is-medium
-sort: 90
-is_home: True    
+weight: 90
+in_nav: True    
     """
     s = Section(PAGENAME, RTYPE, TITLE, content)
     s.validate(s.props, s.schema)

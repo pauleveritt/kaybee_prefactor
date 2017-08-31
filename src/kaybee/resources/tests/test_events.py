@@ -19,7 +19,7 @@ def test_purge_resources():
 
     # Register the klass and add a dummy doc, make sure it's there
     env.site.klasses['dummyresource'] = DummyResource
-    dr = DummyResource('somedoc')
+    dr = DummyResource('somedoc', 'Some Title')
     env.site.add(dr)
     assert env.site.get(dr.name).name == dr.name
 
