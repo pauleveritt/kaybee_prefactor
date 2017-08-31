@@ -1,5 +1,5 @@
 from collections import UserDict
-from operator import attrgetter
+from operator import attrgetter, itemgetter
 
 from kaybee.resources.article import Article
 from kaybee.resources.section import Section
@@ -32,13 +32,25 @@ class Site(UserDict):
     def get_class(self, klass_name):
         return self.klasses[klass_name]
 
+    #
+    # 1) Replace the following with "nav_menu" which gets a
+    # list of all resources and filters them by props['in_nav']
+    # then sorts them on props['nav_weight']
+
     @property
     def sections(self):
+        """ Listing of resources with rtype == section """
+
+        return [s for s in self.data.values() if s.rtype == 'section']
+
+    @property
+    def navmenu(self):
         """ Sorted listing of resources with rtype == section """
 
-        sections = [s for s in self.data.values() if s.rtype == 'section']
+        resources = [r for r in self.data.values() if r.props.get('in_nav')]
 
         # Sort first by title, then by "weight"
-        sections.sort(key=attrgetter('weight', 'title'))
-
-        return sections
+        return sorted(resources,
+                      key=lambda x: (
+                          x.props['weight'], attrgetter('title')(x))
+                      )
