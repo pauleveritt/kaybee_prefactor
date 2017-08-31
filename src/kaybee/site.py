@@ -34,15 +34,11 @@ class Site(UserDict):
 
     @property
     def sections(self):
-        """ Cached, sorted listing of resources with rtype == section """
+        """ Sorted listing of resources with rtype == section """
 
-        if self._sections:
-            return self._sections
         sections = [s for s in self.data.values() if s.rtype == 'section']
 
         # Sort first by title, then by "weight"
         sections.sort(key=attrgetter('weight', 'title'))
 
-        # Assign to "cache" and return
-        self._sections = sections
-        return self._sections
+        return sections

@@ -3,6 +3,8 @@ from kaybee.site import Site
 
 
 class DummyResource:
+    rtype = 'resource'
+
     def __init__(self, name):
         self.name = name
 
@@ -19,11 +21,12 @@ class DummySection:
         return self.name
 
 
-SAMPLE_SECTIONS = (
+SAMPLE_RESOURCES = (
     DummySection('8783', 'The First'),
     DummySection('1343', 'Second should sort ahead of first'),
     DummySection('4675', 'Z Last weights first', -10),
-    DummySection('9856', 'Z Last No Weight')
+    DummySection('9856', 'Z Last No Weight'),
+    DummyResource('4444')
 )
 
 
@@ -68,27 +71,25 @@ def test_remove():
         s[dr.name]
 
 
-def test_sections_empty():
-    s = Site()
-    assert s._sections is None
+def test_section_listing():
+    # Filter out non-sections
+    pass
 
 
-def test_simple_cache():
-    s = Site()
-    s.klasses['dummysection'] = DummySection
-    [s.add(i) for i in SAMPLE_SECTIONS]
-    sections = s.sections
-    assert len(s._sections) == 4
+def test_nav_menu():
+    # Only include things that want to be in the nav menu
+    pass
 
 
-def test_sort():
+def test_section_sorting():
     s = Site()
     s.klasses['dummysection'] = DummySection
-    [s.add(i) for i in SAMPLE_SECTIONS]
+    s.klasses['dummyresource'] = DummyResource
+    [s.add(i) for i in SAMPLE_RESOURCES]
     section_ids = [section.name for section in s.sections]
     assert section_ids == [
-        SAMPLE_SECTIONS[2].name,
-        SAMPLE_SECTIONS[1].name,
-        SAMPLE_SECTIONS[0].name,
-        SAMPLE_SECTIONS[3].name
+        SAMPLE_RESOURCES[2].name,
+        SAMPLE_RESOURCES[1].name,
+        SAMPLE_RESOURCES[0].name,
+        SAMPLE_RESOURCES[3].name
     ]
