@@ -32,11 +32,6 @@ class Site(UserDict):
     def get_class(self, klass_name):
         return self.klasses[klass_name]
 
-    #
-    # 1) Replace the following with "nav_menu" which gets a
-    # list of all resources and filters them by props['in_nav']
-    # then sorts them on props['nav_weight']
-
     @property
     def sections(self):
         """ Listing of resources with rtype == section """
