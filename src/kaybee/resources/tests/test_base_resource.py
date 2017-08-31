@@ -7,18 +7,18 @@ LOAD = 'kaybee.resources.base_resource.BaseResource.load'
 
 class Node:
     parent = None
-    props = {}
     rtype = ''
 
     def __init__(self, name):
         self.name = name
+        self.props = {}
 
     def __repr__(self):
         return self.name
 
 
 class DummyArticle(BaseResource):
-    pass
+    default_style = 'classstyle'
 
 
 @pytest.fixture
@@ -27,6 +27,7 @@ def site():
     f1 = Node('f1')
     f1.parent = '/'
     f1.props['doc_template'] = 'section_doctemplate.html'
+    f1.props['style'] = 'sectionstyle'
     f2 = Node('f2')
     f2.parent = 'f1'
     f3 = Node('f3')
@@ -56,28 +57,45 @@ def test_instance(monkeypatch):
     assert br.props['flag'] == 9
 
 
-@pytest.mark.parametrize('loader, pagename, expected', [
+@pytest.mark.parametrize('loader, expected', [
     # Most specific: The YAML has a template
-    (lambda c: dict(template='yamltemplate.html'), 'index',
-     'yamltemplate.html'),
+    (lambda c: dict(template='yamltemplate.html'), 'yamltemplate.html'),
 
     # Next specific, not in YAML, but in section
-    (lambda c: dict(), 'index', 'section_doctemplate.html'),
+    (lambda c: dict(), 'section_doctemplate.html'),
 
     # Least specific: neither YAML nor section, get from class
-    (lambda c: dict(flag=9), 'index', 'dummyarticle.html')
+    (lambda c: dict(flag=9), 'dummyarticle.html')
 ])
-def test_template_name_class(monkeypatch, site, loader, pagename, expected):
-    # Get a template name when not in YAML
-
+def test_template(monkeypatch, site, loader, expected):
     # In the last case, remove the doc_template from the dummy section
-    # data
+    # props
     if expected == 'dummyarticle.html':
         del site['f1'].props['doc_template']
 
     monkeypatch.setattr(LOAD, loader)
-    a = DummyArticle(pagename, 'rtype', 'title', 'content')
+    a = DummyArticle('f1/f2/f3', 'rtype', 'title', 'content')
     assert a.template(site) == expected
+
+
+@pytest.mark.parametrize('loader, expected', [
+    # Most specific: The YAML has a style
+    (lambda c: dict(style='yamlstyle'), 'yamlstyle'),
+
+    # Next specific, not in YAML, but in parents
+    (lambda c: dict(), 'sectionstyle'),
+
+    # Least specific: neither YAML nor section, get from class
+    (lambda c: dict(), 'classstyle')
+])
+def test_style(monkeypatch, loader, expected):
+    s = site()
+    if expected != 'sectionstyle':
+        del s['f1'].props['style']
+
+    monkeypatch.setattr(LOAD, loader)
+    a = DummyArticle('f1/f2/f3', 'rtype', 'title', 'content')
+    assert a.style(s) == expected
 
 
 @pytest.mark.parametrize('pagename, parents_len, parentname', [
@@ -191,19 +209,13 @@ def test_empty_yaml_string():
     assert props == {}
 
 
-@pytest.mark.parametrize('section', [
-    None,
-])
-def test_section_none(monkeypatch, site, section):
+def test_section_none(monkeypatch, site):
     monkeypatch.setattr(LOAD, lambda c: dict())
     br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
-    assert br.section(site) == section
+    assert br.section(site) is None
 
 
-@pytest.mark.parametrize('section', [
-    None,
-])
-def test_section_f1(monkeypatch, site, section):
+def test_section_f1(monkeypatch, site):
     site['f1'].rtype = 'section'
     monkeypatch.setattr(LOAD, lambda c: dict())
     br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')

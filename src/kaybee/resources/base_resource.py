@@ -6,6 +6,8 @@ from ruamel.yaml import load
 
 
 class BaseResource:
+    default_style = ''
+
     def __init__(self, pagename, rtype, title, content):
         self.name, self.parent = BaseResource.parse_pagename(pagename)
         self.rtype = rtype
@@ -68,6 +70,24 @@ class BaseResource:
             return section_doctemplate
         return self.__class__.__name__.lower() + '.html'
 
+    def section(self, site):
+        """ Which section is this in, if any """
+
+        section = [p for p in self.parents(site) if p.rtype == 'section']
+        if section:
+            return section[0]
+        return None
+
+    def style(self, site):
+        """ Get the style from: YAML, hierarchy, or class """
+
+        custom_style = self.find_prop(site, 'style')
+        if custom_style:
+            return custom_style
+
+        # If the class/instance has style, return it, otherwise none
+        return getattr(self, 'default_style', '')
+
     def parents(self, site):
         """ Split the path in name and get parents """
         if self.name == '/':
@@ -90,14 +110,6 @@ class BaseResource:
             if v:
                 # This resource has the prop, return it
                 return v
-        return None
-
-    def section(self, site):
-        """ Which section is this in, if any """
-
-        section = [p for p in self.parents(site) if p.rtype == 'section']
-        if section:
-            return section[0]
         return None
 
     # Schemas and validation
