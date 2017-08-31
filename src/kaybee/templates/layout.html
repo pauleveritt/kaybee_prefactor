@@ -14,7 +14,7 @@
     <script src="{{ pathto('_static/app.bundle.js', 1) }}"></script>
 </head>
 <body>
-<section class="kb-header hero {{ kb_section_style }}">
+<section class="kb-header hero {{ resource['style'](site) if resource else '' }}">
     <div class="hero-head">
         {% include "navbar.html" %}
     </div>

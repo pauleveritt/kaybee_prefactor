@@ -3,9 +3,9 @@ Articles
 
 .. resource:: section
 
-    style: ''
-    sort: 90
-    is_home: True
+    style: 'is-bold is-info'
+    in_nav: True
+    weight: 10
 
 A list of articles is here.
 

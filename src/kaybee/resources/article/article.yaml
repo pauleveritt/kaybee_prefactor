@@ -9,5 +9,5 @@ mapping:
     type: str
   in_nav:
     type: bool
-  nav_weight:
+  weight:
     type: int

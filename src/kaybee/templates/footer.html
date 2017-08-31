@@ -21,6 +21,7 @@
             <div>Templates: {{ kb_template }}</div>
             {% if resource %}
             <div>Resource: {{ resource.name }}</div>
+            <div>Style: {{ resource.style(site) }}</div>
             {% endif %}
         </div>
 </footer>
