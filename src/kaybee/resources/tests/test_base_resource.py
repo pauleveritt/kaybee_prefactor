@@ -8,6 +8,7 @@ LOAD = 'kaybee.resources.base_resource.BaseResource.load'
 class Node:
     parent = None
     props = {}
+    rtype = ''
 
     def __init__(self, name):
         self.name = name
@@ -188,3 +189,22 @@ def test_empty_yaml_string():
     """
     props = BaseResource.load(content)
     assert props == {}
+
+
+@pytest.mark.parametrize('section', [
+    None,
+])
+def test_section_none(monkeypatch, site, section):
+    monkeypatch.setattr(LOAD, lambda c: dict())
+    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    assert br.section(site) == section
+
+
+@pytest.mark.parametrize('section', [
+    None,
+])
+def test_section_f1(monkeypatch, site, section):
+    site['f1'].rtype = 'section'
+    monkeypatch.setattr(LOAD, lambda c: dict())
+    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
+    assert br.section(site) == site['f1']

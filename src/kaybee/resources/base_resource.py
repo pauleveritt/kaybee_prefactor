@@ -92,8 +92,16 @@ class BaseResource:
                 return v
         return None
 
+    def section(self, site):
+        """ Which section is this in, if any """
+
+        section = [p for p in self.parents(site) if p.rtype == 'section']
+        if section:
+            return section[0]
+        return None
+
     # Schemas and validation
-    @property  # TODO Re-ify this in some way
+    @property
     def schema_filename(self):
         """ This is a policy, lowercase of class name + .yaml
 
