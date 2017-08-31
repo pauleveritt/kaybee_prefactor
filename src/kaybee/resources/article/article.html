@@ -10,7 +10,7 @@
                     {% endfor %}
                 </ul>
                 <p>Counter: {{ resource.props.count }}</p>
-                <p>Level: {{ resource.findProp(site, 'level') |e }}</p>
+                <p>Level: {{ resource.find_prop(site, 'level') |e }}</p>
 
 
                 {{ body }}

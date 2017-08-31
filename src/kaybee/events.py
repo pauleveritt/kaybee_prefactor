@@ -98,45 +98,29 @@ def choose_layout_info(sections, pagename, kb_template=None):
 
 def kb_context(app, pagename, templatename, context, doctree):
 
+    config = app.config.html_context['kaybee_config']
+
+    # Find out which kind of page component this is, if meta even exists
+    kb_template = context.get('meta', {}).get('kb_context')
+    context['kb_context'] = kb_template
+
+    layout_info = choose_layout_info(config['sections'], pagename,
+                                     kb_template)
+    context['kb_section_style'] = layout_info['style']
+    context['kb_active_section'] = layout_info['active']
+
+    template = layout_info['template']
+
     site = app.env.site
+    context['site'] = site
+    resource = site.get(pagename)
 
-    # Get the current section
-    context['']
+    if resource:
+        context['resource'] = resource
+        context['parents'] = resource.parents(site)
+        context['kb_template'] = resource.template(site)
+        return resource.template(site)
 
-    # Get the current resource
-
-
-    # Choose the template
-
-
-    current_template = ''
-
-    return current_template
-
-
-    # config = app.config.html_context['kaybee_config']
-    #
-    # # Find out which kind of page component this is, if meta even exists
-    # kb_template = context.get('meta', {}).get('kb_context')
-    # context['kb_context'] = kb_template
-    #
-    # layout_info = choose_layout_info(config['sections'], pagename,
-    #                                  kb_template)
-    # context['kb_section_style'] = layout_info['style']
-    # context['kb_active_section'] = layout_info['active']
-    #
-    # template = layout_info['template']
-    #
-    # site = app.env.site
-    # context['site'] = site
-    # resource = site.get(pagename)
-    #
-    # if resource:
-    #     context['resource'] = resource
-    #     context['parents'] = resource.parents(site)
-    #     context['kb_template'] = resource.template + '.html'
-    #     return resource.template + '.html'
-    #
-    # elif template is not None:
-    #     context['kb_template'] = layout_info['template']
-    #     return template + '.html'
+    elif template is not None:
+        context['kb_template'] = layout_info['template']
+        return template + '.html'
