@@ -22,9 +22,10 @@ class DummyArticle(BaseResource):
 
 @pytest.fixture
 def site():
-    root = Node('root')
+    this_site = Node('site')
     f1 = Node('f1')
     f1.parent = '/'
+    f1.props['doc_template'] = 'section_doctemplate'
     f2 = Node('f2')
     f2.parent = 'f1'
     f3 = Node('f3')
@@ -32,7 +33,7 @@ def site():
     f4 = Node('f4')
     f4.parent = 'f1/f2/f3'
     return {
-        '/': root,
+        '/': this_site,
         'f1': f1,
         'f1/f2': f2,
         'f1/f2/f3': f3,
@@ -54,140 +55,68 @@ def test_instance(monkeypatch):
     assert br.props['flag'] == 9
 
 
-def test_index(monkeypatch):
+def test_template_name_class(monkeypatch, site):
+    # Get a template name when not in YAML
     monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    name, parent = BaseResource.parse_pagename('index')
-    assert name == '/'
-    assert parent is None
+    a = DummyArticle('index', 'rtype', 'title', 'content')
+    assert a.template(site) == 'dummyarticle.html'
 
 
-def test_about(monkeypatch):
+def test_template_name_from_yaml(monkeypatch, site):
+    # Get a template name when the resource YAML overrides
+    monkeypatch.setattr(LOAD, lambda c: dict(template='customtemplate.html'))
+    a = DummyArticle('index', 'rtype', 'title', 'content')
+    assert a.template(site) == 'customtemplate.html'
+
+
+def test_template_name_from_section(monkeypatch, site):
+    # Get a template name from a section
+    monkeypatch.setattr(LOAD, lambda c: dict())
+    a = DummyArticle('f1/f2/f3/index', 'rtype', 'title', 'content')
+    assert a.template(site) == 'section_doctemplate'
+
+
+@pytest.mark.parametrize('pagename, expected', [
+    ('/', 0),
+    ('index', 0),  ### This needs to be 1
+    ('about', 1),
+    ('f1/index', 1),
+    ('f1/about', 2),
+    ('f1/f2/index', 2),
+    ('f1/f2/about', 3),
+    ('f1/f2/f3/index', 3),
+    ('f1/f2/f3/about', 4),
+])
+def test_root_parents(monkeypatch, site, pagename, expected):
     monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    name, parent = BaseResource.parse_pagename('about')
-    assert name == 'about'
-    assert parent == '/'
+    br = BaseResource(pagename, 'rtype', 'title', 'content')
+    parents = br.parents(site)
+    assert len(parents) == expected
 
 
-def test_blog_index(monkeypatch):
+@pytest.mark.parametrize('pagename, name, parent', [
+    ('index', '/', None),
+    ('about', 'about', '/'),
+    ('blog/index', 'blog', '/'),
+    ('blog/about', 'blog/about', 'blog'),
+    ('blog/s1/index', 'blog/s1', 'blog'),
+    ('blog/s1/about', 'blog/s1/about', 'blog/s1'),
+    ('blog/s1/s2/index', 'blog/s1/s2', 'blog/s1'),
+    ('blog/s1/s2/about', 'blog/s1/s2/about', 'blog/s1/s2'),
+    ('blog/s1/s2/s3/index', 'blog/s1/s2/s3', 'blog/s1/s2'),
+    ('blog/s1/s2/s3/about', 'blog/s1/s2/s3/about', 'blog/s1/s2/s3'),
+])
+def test_name_parent(monkeypatch, site, pagename, name, parent):
     monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    name, parent = BaseResource.parse_pagename('blog/index')
-    assert name == 'blog'
-    assert parent == '/'
+    this_name, this_parent = BaseResource.parse_pagename(pagename)
+    assert this_name == name
+    assert this_parent == parent
 
 
-def test_blog_about(monkeypatch):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    name, parent = BaseResource.parse_pagename('blog/about')
-    assert name == 'blog/about'
-    assert parent == 'blog'
-
-
-def test_blog_sub_index(monkeypatch):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    name, parent = BaseResource.parse_pagename('blog/sub/index')
-    assert name == 'blog/sub'
-    assert parent == 'blog'
-
-
-def test_blog_sub_about(monkeypatch):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    name, parent = BaseResource.parse_pagename('blog/sub/about')
-    assert name == 'blog/sub/about'
-    assert parent == 'blog/sub'
-
-
-def test_blog_sub_subsub_index(monkeypatch):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    name, parent = BaseResource.parse_pagename('blog/sub/subsub/index')
-    assert name == 'blog/sub/subsub'
-    assert parent == 'blog/sub'
-
-
-def test_blog_sub_subsub_about(monkeypatch):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    name, parent = BaseResource.parse_pagename('blog/sub/subsub/about')
-    assert name == 'blog/sub/subsub/about'
-    assert parent == 'blog/sub/subsub'
-
-
-def test_blog_sub_subsub_s3_index(monkeypatch):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    name, parent = BaseResource.parse_pagename('blog/sub/subsub/s3/index')
-    assert name == 'blog/sub/subsub/s3'
-    assert parent == 'blog/sub/subsub'
-
-
-def test_blog_sub_subsub_s3_about(monkeypatch):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    name, parent = BaseResource.parse_pagename('blog/sub/subsub/s3/about')
-    assert name == 'blog/sub/subsub/s3/about'
-    assert parent == 'blog/sub/subsub/s3'
-
+###
 
 def test_package_dir():
     assert BaseResource.package_dir().endswith('kaybee/resources')
-
-
-def test_template(monkeypatch):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    a = DummyArticle('index', 'rtype', 'title', 'content')
-    assert a.template == 'dummyarticle'
-
-
-def test_root_index_parents(monkeypatch, site):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    br = BaseResource('index', 'rtype', 'title', 'content')
-    parents = br.parents(site)
-    assert len(parents) == 0
-
-
-def test_root_about_parents(monkeypatch, site):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    br = BaseResource('about', 'rtype', 'title', 'content')
-    parents = br.parents(site)
-    assert len(parents) == 1
-
-
-def test_f1_index_parents(monkeypatch, site):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    br = BaseResource('f1/f2/index', 'rtype', 'title', 'content')
-    parents = br.parents(site)
-    assert len(parents) == 2
-
-
-def test_f1_about_parents(monkeypatch, site):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    br = BaseResource('f1/about', 'rtype', 'title', 'content')
-    parents = br.parents(site)
-    assert len(parents) == 2
-
-
-def test_f2_index_parents(monkeypatch, site):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    br = BaseResource('f1/f2/index', 'rtype', 'title', 'content')
-    parents = br.parents(site)
-    assert len(parents) == 2
-
-
-def test_f2_about_parents(monkeypatch, site):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    br = BaseResource('f1/f2/about', 'rtype', 'title', 'content')
-    parents = br.parents(site)
-    assert len(parents) == 3
-
-
-def test_f4_index_parents(monkeypatch, site):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    br = BaseResource('f1/f2/f3/f4/index', 'rtype', 'title', 'content')
-    parents = br.parents(site)
-    assert len(parents) == 4
-
-
-def test_f4_about_parents(monkeypatch, site):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    br = BaseResource('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
-    parents = br.parents(site)
-    assert len(parents) == 5
 
 
 def test_find_prop_none(monkeypatch, site):

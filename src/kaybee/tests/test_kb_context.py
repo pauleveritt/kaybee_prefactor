@@ -18,7 +18,6 @@ class DummyResource:
         return []
 
 
-
 class DummyConfig:
     def __init__(self):
         sections = []
@@ -40,15 +39,22 @@ class DummyApp:
         self.env = DummyEnv()
 
 
-def test_kb_context(monkeypatch):
-    monkeypatch.setattr(
-        'kaybee.events.choose_layout_info',
-        lambda s, p, kb: dict(style='xzy', template='pdq', active='')
-    )
-    app = DummyApp()
-    pagename = FIRSTPAGE
-    templatename = ''
-    context = dict(meta=dict(kb_context=[]))
-    doctree = None
-    result = kb_context(app, pagename, templatename, context, doctree)
-    assert result == DummyResource.template + '.html'
+def test_import():
+    assert kb_context.__name__ == 'kb_context'
+
+def test_context_get_site():
+    pass
+
+
+# def test_kb_context(monkeypatch):
+#     monkeypatch.setattr(
+#         'kaybee.events.choose_layout_info',
+#         lambda s, p, kb: dict(style='xzy', template='pdq', active='')
+#     )
+#     app = DummyApp()
+#     pagename = FIRSTPAGE
+#     templatename = ''
+#     context = dict(meta=dict(kb_context=[]))
+#     doctree = None
+#     result = kb_context(app, pagename, templatename, context, doctree)
+#     assert result == DummyResource.template + '.html'

@@ -61,9 +61,15 @@ class BaseResource:
         f = inspect.getfile(cls)
         return os.path.dirname(f)
 
-    @property  # TODO Re-ify this in some way
-    def template(self):
-        return self.__class__.__name__.lower()
+    def template(self, site):
+        """ Template can come from YAML, section, or class """
+        custom_template = self.props.get('template')
+        if custom_template:
+            return custom_template
+        section_doctemplate = self.find_prop(site, 'doc_template')
+        if section_doctemplate:
+            return section_doctemplate
+        return self.__class__.__name__.lower() + '.html'
 
     def parents(self, site):
         """ Split the path in name and get parents """
