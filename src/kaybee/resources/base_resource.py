@@ -33,11 +33,8 @@ class BaseResource:
         name = pagename
         parent = None
 
-        if pagename == 'index':
-            # This is the root of the doctree
-            name = '/'
-        elif lineage_count == 1:
-            # This is a doc in the root e.g. about
+        if lineage_count == 1:
+            # This is a doc in the root e.g. index or about
             parent = '/'
         elif lineage_count == 2 and lineage[-1] == 'index':
             # This is blog/index, parent is the root
