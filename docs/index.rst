@@ -1,7 +1,9 @@
-:kb_template: homepage
-
 Welcome to kaybee's documentation!
 ==================================
+
+.. resource:: homepage
+
+    in_nav: False
 
 .. toctree::
     :maxdepth: 2

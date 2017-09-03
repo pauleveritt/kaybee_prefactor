@@ -2,6 +2,7 @@ from collections import UserDict
 from operator import attrgetter, itemgetter
 
 from kaybee.resources.article import Article
+from kaybee.resources.homepage import Homepage
 from kaybee.resources.section import Section
 
 
@@ -14,7 +15,8 @@ class Site(UserDict):
         self.config = config
         self.klasses = dict(
             article=Article,
-            section=Section
+            section=Section,
+            homepage=Homepage
         )
         self._sections = None
 

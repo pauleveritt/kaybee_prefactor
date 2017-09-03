@@ -1,0 +1,8 @@
+type: map
+mapping:
+  style:
+    type: str
+  in_nav:
+    type: bool
+  weight:
+    type: int
