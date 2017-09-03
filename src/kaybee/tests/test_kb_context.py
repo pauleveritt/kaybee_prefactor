@@ -42,9 +42,9 @@ class DummyApp:
 def test_import():
     assert kb_context.__name__ == 'kb_context'
 
+
 def test_context_get_site():
     pass
-
 
 # def test_kb_context(monkeypatch):
 #     monkeypatch.setattr(

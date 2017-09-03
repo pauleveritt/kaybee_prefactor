@@ -17,12 +17,13 @@
             </p>
         </div>
     </div>
-        <div class="container">
-            <div>Templates: {{ kb_template }}</div>
-            {% if resource %}
+    <div class="container">
+        {% if resource %}
+            <div>Template: {{ resource.template }}</div>
             <div>Resource: {{ resource.name }}</div>
             <div>Style: {{ resource.style(site) }}</div>
-            <div>Is Active: {{ resource.is_active_section(site, 'articles/') }}</div>
-            {% endif %}
-        </div>
+            <div>Is
+                Active: {{ resource.is_active_section(site, 'articles/') }}</div>
+        {% endif %}
+    </div>
 </footer>

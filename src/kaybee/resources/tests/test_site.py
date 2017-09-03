@@ -44,18 +44,18 @@ def test_import():
 
 
 def test_get_succeeds():
-    s = Site()
+    s = Site(dict())
     assert s.get_class('article').__name__ == 'Article'
 
 
 def test_get_fails():
-    s = Site()
+    s = Site(dict())
     with pytest.raises(KeyError):
         s.get_class('xx')
 
 
 def test_add_succeeds():
-    s = Site()
+    s = Site(dict())
     s.klasses['dummyresource'] = DummyResource
     dr = DummyResource('someresource', 'Some Resource')
     s.add(dr)
@@ -63,14 +63,14 @@ def test_add_succeeds():
 
 
 def test_add_bad_class():
-    s = Site()
+    s = Site(dict())
     dr = DummyResource('someresource', 'Some Resource')
     with pytest.raises(AssertionError):
         s.add(dr)
 
 
 def test_remove():
-    s = Site()
+    s = Site(dict())
     s.klasses['dummyresource'] = DummyResource
     dr = DummyResource('someresource', 'Some Resource')
     s.add(dr)
@@ -82,7 +82,7 @@ def test_remove():
 
 def test_section_listing():
     # Filter out non-sections
-    s = Site()
+    s = Site(dict())
     s.klasses['dummysection'] = DummySection
     s.klasses['dummyresource'] = DummyResource
     [s.add(i) for i in SAMPLE_RESOURCES]
@@ -103,7 +103,7 @@ def test_nav_menu():
     # Only include things that want to be in the nav menu,
     # sorted by weight then by title
 
-    s = Site()
+    s = Site(dict())
     s.klasses['dummysection'] = DummySection
     s.klasses['dummyresource'] = DummyResource
     [s.add(i) for i in SAMPLE_RESOURCES2]

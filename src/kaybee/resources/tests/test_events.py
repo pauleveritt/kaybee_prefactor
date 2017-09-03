@@ -3,19 +3,33 @@ from kaybee.resources.tests.test_site import DummyResource
 from kaybee.site import Site
 
 
+class DummyConfig:
+    def __init__(self):
+        self.html_context = dict(
+            kaybee_config=dict()
+        )
+
+
+class DummyApp:
+    def __init__(self):
+        self.config = DummyConfig()
+
+
 class DummyEnv:
     pass
 
 
 def test_initialize_site():
+    app = DummyApp()
     env = DummyEnv()
-    initialize_site(None, env, None)
+    initialize_site(app, env, None)
     assert env.site.__class__.__name__ == 'Site'
 
 
 def test_purge_resources():
+    app = DummyApp()
     env = DummyEnv()
-    env.site = Site()
+    env.site = Site(dict())
 
     # Register the klass and add a dummy doc, make sure it's there
     env.site.klasses['dummyresource'] = DummyResource

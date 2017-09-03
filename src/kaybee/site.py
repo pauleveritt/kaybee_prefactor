@@ -9,8 +9,9 @@ class Site(UserDict):
     # TODO Make this pluggable, so that outside packages can add
     # to it, perhaps via conf.py.
 
-    def __init__(self):
+    def __init__(self, config):
         super().__init__()
+        self.config = config
         self.klasses = dict(
             article=Article,
             section=Section
