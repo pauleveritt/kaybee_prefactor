@@ -2,6 +2,12 @@
 About
 =====
 
+.. resource:: article
+
+    style: ''
+    in_nav: True
+    weight: 100
+
 Changing the Site Title
 =======================
 

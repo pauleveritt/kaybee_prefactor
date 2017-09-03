@@ -2,4 +2,6 @@ from kaybee.resources.base_resource import BaseResource
 
 
 class Article(BaseResource):
-    pass
+    @property
+    def navmenu_href(self):
+        return self.name + '.html'

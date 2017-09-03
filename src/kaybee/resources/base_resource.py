@@ -117,6 +117,17 @@ class BaseResource:
                 return v
         return None
 
+    @property
+    def navmenu_href(self):
+        """ Add .html if needed for links in navmenu """
+
+        # Sections don't need the .html as you point to the container.
+        # But if you put a leaf (e.g. an article) in the nav menu,
+        # its template needs the href with .html on the end. By default,
+        # assume container. Leaf types will override this.
+
+        return self.name
+
     # Schemas and validation
     @property
     def schema_filename(self):

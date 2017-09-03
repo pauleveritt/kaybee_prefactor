@@ -4,9 +4,9 @@
             <img src="{{ logo.img_url }}"
                  alt="{{ logo.alt }}">
         </a>
-        {% for nav in site.sections %}
+        {% for nav in site.navmenu %}
             <a class="nav-item is-hidden-mobile{{ ' is-active' if resource and resource.is_active_section(site, nav.name) }}"
-               href="/{{ nav.name }}">{{ nav.title }}
+               href="/{{ nav.navmenu_href }}">{{ nav.title }}
             </a>
         {% endfor %}
     </div>
