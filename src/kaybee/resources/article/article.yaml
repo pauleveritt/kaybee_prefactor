@@ -1,10 +1,5 @@
 type: map
 mapping:
-  count:
-    type: int
-  level:
-    type: int
-    enum: [1, 2, 3]
   style:
     type: str
   in_nav:

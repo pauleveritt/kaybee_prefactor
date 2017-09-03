@@ -19,7 +19,7 @@
     </div>
     <div class="container">
         {% if resource %}
-            <div>Template: {{ resource.template }}</div>
+            <div>Template: {{ resource.template(site) }}</div>
             <div>Resource: {{ resource.name }}</div>
             <div>Style: {{ resource.style(site) }}</div>
             <div>Is
