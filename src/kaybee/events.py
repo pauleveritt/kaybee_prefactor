@@ -51,5 +51,8 @@ def kb_context(app, pagename, templatename, context, doctree):
         # We return a custom template
         context['resource'] = resource
         context['parents'] = resource.parents(site)
-        context['kb_template'] = resource.template(site)
+        context['template'] = resource.template(site)
         return resource.template(site)
+
+    else:
+        return templatename
