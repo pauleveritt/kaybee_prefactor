@@ -34,8 +34,8 @@ SAMPLE_RESOURCES = (
     DummySection('8783', 'The First', in_nav=True),
     DummySection('1343', 'Second should sort ahead of first'),
     DummySection('4675', 'Z Last weights first', in_nav=True),
-    DummySection('9856', 'Q Not Last No Weight', in_nav=True),
-    DummyResource('4444', 'About', in_nav=True)
+    DummySection('9856', 'Q Not Last No Weight', in_nav=True, weight=-10),
+    DummyResource('4444', 'About', in_nav=True, weight=20)
 )
 
 
@@ -90,23 +90,37 @@ def test_section_listing():
     assert len(s.sections) == len(SAMPLE_RESOURCES) - 1
 
 
-def test_all_resources():
-    # Filter out non-sections
+@pytest.mark.parametrize('filter_key, filter_value, expected', [
+    (None, 'resource', 'About'),
+    ('rtype', 'resource', 'About'),
+    ('sort_value', 'title', 'About'),
+    ('sort_value', 'weight', 'Q Not Last No Weight'),
+    ('order', -1, 'Z Last weights first')
+])
+def test_filter_resources(filter_key, filter_value, expected):
+    # No filter applied
     s = Site(dict())
     s.klasses['dummysection'] = DummySection
     s.klasses['dummyresource'] = DummyResource
     [s.add(i) for i in SAMPLE_RESOURCES]
 
-    assert len(s.all_resources) == len(SAMPLE_RESOURCES)
+    if filter_key is None:
+        kw = {}
+    else:
+        kw = {filter_key: filter_value}
+    results = s.filter_resources(**kw)
+    assert results[0].title == expected
 
 
-SAMPLE_RESOURCES2 = (
-    DummySection('8783', 'The First', in_nav=True),
-    DummySection('1343', 'Second should sort ahead of first'),
-    DummySection('4675', 'Z Last weights first', in_nav=True),
-    DummySection('9856', 'Q Not Last No Weight', in_nav=True, weight=-10),
-    DummyResource('4444', 'About', in_nav=True, weight=20)
-)
+def test_filter_resources_limit():
+    # No filter applied
+    s = Site(dict())
+    s.klasses['dummysection'] = DummySection
+    s.klasses['dummyresource'] = DummyResource
+    [s.add(i) for i in SAMPLE_RESOURCES]
+
+    results = s.filter_resources(limit=2)
+    assert len(results) == 2
 
 
 def test_nav_menu():
@@ -116,9 +130,9 @@ def test_nav_menu():
     s = Site(dict())
     s.klasses['dummysection'] = DummySection
     s.klasses['dummyresource'] = DummyResource
-    [s.add(i) for i in SAMPLE_RESOURCES2]
+    [s.add(i) for i in SAMPLE_RESOURCES]
     navmenu_ids = [navmenu.name for navmenu in s.navmenu]
-    assert navmenu_ids[0] == SAMPLE_RESOURCES2[3].name
-    assert navmenu_ids[1] == SAMPLE_RESOURCES2[0].name
-    assert navmenu_ids[2] == SAMPLE_RESOURCES2[2].name
-    assert navmenu_ids[3] == SAMPLE_RESOURCES2[4].name
+    assert navmenu_ids[0] == SAMPLE_RESOURCES[3].name
+    assert navmenu_ids[1] == SAMPLE_RESOURCES[0].name
+    assert navmenu_ids[2] == SAMPLE_RESOURCES[2].name
+    assert navmenu_ids[3] == SAMPLE_RESOURCES[4].name

@@ -35,9 +35,38 @@ class Site(UserDict):
     def get_class(self, klass_name):
         return self.klasses[klass_name]
 
-    @property
-    def all_resources(self):
-        return self.data.values()
+    def filter_resources(self, rtype=None, sort_value='title',
+                         order=1, limit=5):
+        if rtype:
+            r1 = [r for r in self.data.values() if r.rtype == rtype]
+        else:
+            r1 = self.data.values()
+
+        # Now sorting
+        if sort_value:
+            if sort_value == 'title':
+                # Special case, everything else is in props
+                r2 = sorted(
+                    r1,
+                    key=attrgetter('title')
+                )
+            else:
+                r2 = sorted(
+                    r1,
+                    key=lambda x: x.props.get(sort_value)
+                )
+        else:
+            r2 = r1
+
+        # Reverse if needed
+        if order == -1:
+            r2.reverse()
+
+        # Return a limited number
+        if limit:
+            r2 = r2[:limit]
+
+        return r2
 
     @property
     def sections(self):
