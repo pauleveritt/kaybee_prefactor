@@ -1,4 +1,4 @@
-from kaybee.resources.directives import ResourceDirective
+from kaybee.directives import ResourceDirective
 
 
 def test_import():
