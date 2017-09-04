@@ -36,6 +36,10 @@ class Site(UserDict):
         return self.klasses[klass_name]
 
     @property
+    def all_resources(self):
+        return self.data.values()
+
+    @property
     def sections(self):
         """ Listing of resources with rtype == section """
 

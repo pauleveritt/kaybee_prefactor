@@ -14,8 +14,6 @@ Choosing a Template - Precedence Rules
 
 """
 
-import os
-
 from kaybee.site import Site
 
 

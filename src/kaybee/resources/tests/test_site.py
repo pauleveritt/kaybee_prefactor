@@ -90,6 +90,16 @@ def test_section_listing():
     assert len(s.sections) == len(SAMPLE_RESOURCES) - 1
 
 
+def test_all_resources():
+    # Filter out non-sections
+    s = Site(dict())
+    s.klasses['dummysection'] = DummySection
+    s.klasses['dummyresource'] = DummyResource
+    [s.add(i) for i in SAMPLE_RESOURCES]
+
+    assert len(s.all_resources) == len(SAMPLE_RESOURCES)
+
+
 SAMPLE_RESOURCES2 = (
     DummySection('8783', 'The First', in_nav=True),
     DummySection('1343', 'Second should sort ahead of first'),

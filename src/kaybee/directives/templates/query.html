@@ -1,1 +1,6 @@
-<h2>New place</h2>
+<h2>Query Results</h2>
+<ul>
+    {% for qr in query_results %}
+    <li>name: {{ qr.name }}</li>
+    {%  endfor %}
+</ul>

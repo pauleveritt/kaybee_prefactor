@@ -1,4 +1,4 @@
-from kaybee.directives.query import QueryNode, Query, process_query_nodes
+from kaybee.directives.query import QueryNode, QueryDirective, process_query_nodes
 from kaybee.directives.resource import ResourceDirective
 
 
@@ -8,5 +8,5 @@ def setup(app):
 
     # Query support
     app.add_node(QueryNode)
-    app.add_directive('query', Query)
+    app.add_directive('query', QueryDirective)
     app.connect('doctree-resolved', process_query_nodes)
