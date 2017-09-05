@@ -6,7 +6,6 @@ verify_ssl = true
 Sphinx = "*"
 livereload = "*"
 pytest = "*"
-sphinx-testing = "*"
 
 [packages.pykwalify]
 extras = [ "ruamel",]
