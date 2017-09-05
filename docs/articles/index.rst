@@ -12,9 +12,7 @@ A list of articles is here.
 
 .. query::
 
-    style: 'is-bold is-info'
-    in_nav: True
-    weight: 10
+    rtype: section
 
 
 .. toctree::

@@ -1,15 +1,25 @@
 from typing import List
 
 from docutils import nodes
-from docutils.parsers.rst import Directive, directives
+from docutils.parsers.rst import Directive
+from ruamel.yaml import load
 from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.util import logging
 
-from ruamel.yaml import load
-
 logger = logging.getLogger(__name__)
 
+
+#
+# To do items
+# - sphinx-testing
+# - portlet box with sequence of portlets
+# - get the correct HTML for the boxes
+# - another kind of directive for the section listing with pagination
+# - something for the featured portlet box
+# -
+#
+#
 
 class QueryNode(nodes.General, nodes.Element):
     @staticmethod
@@ -38,20 +48,18 @@ class QueryDirective(Directive):
 
 
 def process_query_nodes(app: Sphinx, doctree, fromdocname):
-
     # Setup a template and context
     builder: StandaloneHTMLBuilder = app.builder
     ctx = builder.globalcontext.copy()
     templatename = 'query.html'
 
     for node in doctree.traverse(QueryNode):
-
         # Get the YAML string, parse/validate it
         content = node.children[0].rawsource
         props = node.load(content)
 
         # Query the "database" based on props in the YAML
-        resources = app.env.site.all_resources
+        resources = app.env.site.filter_resources(**props)
         ctx['query_results'] = resources
 
         # Pass the results into Jinja2
