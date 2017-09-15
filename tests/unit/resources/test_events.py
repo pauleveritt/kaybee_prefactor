@@ -1,6 +1,6 @@
 from kaybee.events import initialize_site, purge_resources
-from kaybee.resources.tests.test_site import DummyResource
 from kaybee.site import Site
+from tests.unit.resources.test_site import DummyResource
 
 
 class DummyConfig:

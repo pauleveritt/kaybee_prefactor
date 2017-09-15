@@ -162,7 +162,7 @@ def test_package_dir():
 def test_schema_filename(monkeypatch):
     monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
     br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
-    assert br.schema_filename.endswith('resources/tests/dummyarticle')
+    assert br.schema_filename.endswith('tests/unit/resources/dummyarticle')
 
 
 def test_schema():
