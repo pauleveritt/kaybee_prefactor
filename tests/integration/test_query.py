@@ -1,8 +1,17 @@
 import pytest
 
 
-@pytest.mark.sphinx('html', testroot='queries')
-def test_title(app):
+@pytest.fixture()
+def content(app):
     app.build()
-    content = (app.outdir / 'index.html').text()
-    assert '>Test Queries' in content
+    yield app
+
+
+@pytest.fixture()
+def homepage(content):
+    yield (content.outdir / 'index.html').text()
+
+
+@pytest.mark.sphinx('html', testroot='queries')
+def test_title(homepage):
+    assert '>Test Queries' in homepage

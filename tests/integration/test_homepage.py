@@ -1,38 +1,32 @@
 import pytest
 
 
-@pytest.mark.sphinx('html', testroot='homepage')
 @pytest.fixture()
 def content(app):
     app.build()
-    homepage = (app.outdir / 'index.html').text()
-    yield homepage
+    yield app
+
+
+@pytest.fixture()
+def homepage(content):
+    yield (content.outdir / 'index.html').text()
 
 
 @pytest.mark.sphinx('html', testroot='homepage')
-def test_title(app, content):
-    # app.build()
-    # content = (app.outdir / 'index.html').text()
-    # assert 'title>Test Homepage' in content
-    assert 'title>Test Homepage' in content
+def test_title(homepage):
+    assert 'title>Test Homepage' in homepage
 
-#
-# @pytest.mark.sphinx('html', testroot='homepage')
-# def test_not_in_nav(app):
-#     app.build()
-#     content = (app.outdir / 'index.html').text()
-#     assert content.count('Test Homepage') == 1
-#
-#
-# @pytest.mark.sphinx('html', testroot='homepage')
-# def test_has_hero_style(app):
-#     app.build()
-#     content = (app.outdir / 'index.html').text()
-#     assert 'hero-body' in content
-#
-#
-# @pytest.mark.sphinx('html', testroot='homepage')
-# def test_not_has_body(app):
-#     app.build()
-#     content = (app.outdir / 'index.html').text()
-#     assert 'Content after YAML' not in content
+
+@pytest.mark.sphinx('html', testroot='homepage')
+def test_not_in_nav(homepage):
+    assert homepage.count('Test Homepage') == 1
+
+
+@pytest.mark.sphinx('html', testroot='homepage')
+def test_has_hero_style(homepage):
+    assert 'hero-body' in homepage
+
+
+@pytest.mark.sphinx('html', testroot='homepage')
+def test_not_has_body(homepage):
+    assert 'Content after YAML' not in homepage

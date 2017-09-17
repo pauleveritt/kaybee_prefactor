@@ -1,19 +1,26 @@
 import pytest
 
 
-@pytest.mark.sphinx('html', testroot='plain-document')
-def test_title(app):
+@pytest.fixture()
+def content(app):
     app.build()
-    content = (app.outdir / 'index.html').text()
-    assert '<title>Test Plain Document' in content
+    yield app
+
+
+@pytest.fixture()
+def plainpage(content):
+    yield (content.outdir / 'index.html').text()
 
 
 @pytest.mark.sphinx('html', testroot='plain-document')
-def test_logo(app):
-    app.build()
-    content = (app.outdir / 'index.html').text()
-    assert 'Kaybee Logo Alt' in content
-    assert 'fake_image.png' in content
+def test_title(plainpage):
+    assert '<title>Test Plain Document' in plainpage
+
+
+@pytest.mark.sphinx('html', testroot='plain-document')
+def test_logo(plainpage):
+    assert 'Kaybee Logo Alt' in plainpage
+    assert 'fake_image.png' in plainpage
 
 #
 # TODO Need a test that gets the body content inserted, which means
