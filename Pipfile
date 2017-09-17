@@ -7,5 +7,9 @@ Sphinx = "*"
 livereload = "*"
 pytest = "*"
 
+[dev-packages]
+beautifulsoup4 = "*"
+html5lib = "*"
+
 [packages.pykwalify]
 extras = [ "ruamel",]
