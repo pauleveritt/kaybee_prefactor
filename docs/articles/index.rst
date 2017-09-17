@@ -9,6 +9,10 @@ Articles
 
 A list of articles is here.
 
+.. query::
+
+    rtype: section
+
 .. toctree::
     :maxdepth: 1
     :caption: Contents:

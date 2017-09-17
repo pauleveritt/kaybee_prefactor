@@ -1,4 +1,4 @@
-from kaybee.directives import QueryDirective, QueryNode
+from kaybee.directives import QueryDirective, query
 
 LOAD = 'kaybee.directives.QueryDirective.load'
 
@@ -8,11 +8,11 @@ def test_qd_import():
 
 
 def test_qn_import():
-    assert QueryNode.__name__ == 'QueryNode'
+    assert query.__name__ == 'QueryNode'
 
 
 def test_qn_construction():
-    qn = QueryNode()
+    qn = query()
     assert qn.__class__.__name__ == 'QueryNode'
 
 

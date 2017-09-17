@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 #
 #
 
-class QueryNode(nodes.General, nodes.Element):
+class query(nodes.General, nodes.Element):
     pass
 
 
@@ -67,8 +67,8 @@ class QueryDirective(Directive):
         c = Core(source_data=props, schema_data=schema)
         c.validate(raise_exception=True)
 
-    def run(self) -> List[QueryNode]:
-        query_node = QueryNode('\n'.join(self.content))
+    def run(self) -> List[query]:
+        query_node = query('\n'.join(self.content))
         self.state.nested_parse(self.content, self.content_offset, query_node)
         return [query_node]
 
@@ -80,7 +80,7 @@ def process_query_nodes(app: Sphinx, doctree, fromdocname):
     ctx = builder.globalcontext.copy()
     templatename = 'query.html'
 
-    for node in doctree.traverse(QueryNode):
+    for node in doctree.traverse(query):
         # Get the YAML string, parse/validate it
         content = node.children[0].rawsource
         props = node.load(content)
