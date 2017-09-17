@@ -50,6 +50,9 @@ def kb_context(app, pagename, templatename, context, doctree):
         context['resource'] = resource
         context['parents'] = resource.parents(site)
         context['template'] = resource.template(site)
+
+        # Also, replace sphinx "title" with the title from this resource
+        context['title'] = resource.title
         return resource.template(site)
 
     else:

@@ -7,10 +7,11 @@ Articles
     in_nav: True
     weight: 10
 
-A list of articles is here.
+Content after YAML.
+
 
 .. toctree::
     :maxdepth: 1
     :caption: Contents:
 
-    first_article
+    article1

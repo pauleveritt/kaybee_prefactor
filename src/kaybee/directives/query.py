@@ -1,7 +1,10 @@
+import inspect
+import os
 from typing import List
 
 from docutils import nodes
 from docutils.parsers.rst import Directive
+from pykwalify.core import Core
 from ruamel.yaml import load
 from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
@@ -12,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 #
 # To do items
-# - sphinx-testing
 # - portlet box with sequence of portlets
 # - get the correct HTML for the boxes
 # - another kind of directive for the section listing with pagination
@@ -22,6 +24,12 @@ logger = logging.getLogger(__name__)
 #
 
 class QueryNode(nodes.General, nodes.Element):
+    pass
+
+
+class QueryDirective(Directive):
+    has_content = True
+
     @staticmethod
     def load(content):
         """ Provide a way to stub this in tests """
@@ -32,14 +40,32 @@ class QueryNode(nodes.General, nodes.Element):
             return {}
         return load(content)
 
+    # Schemas and validation
+    @classmethod
+    def package_dir(cls):
+        f = inspect.getfile(cls)
+        return os.path.dirname(f)
 
-class QueryDirective(Directive):
-    has_content = True
+    @property
+    def schema_filename(self):
+        """ This is a policy, lowercase of class name + .yaml
 
-    # option_specs = dict(
-    #     rtype=directives.unicode_code,
-    #     limit=directives.positive_int
-    # )
+        Override in subclass if you want a different naming.
+        """
+
+        rtype_name = self.__class__.__name__.lower()
+        return os.path.join(self.package_dir(), rtype_name)
+
+    @property
+    def schema(self):
+        schema_fn = self.schema_filename + '.yaml'
+        with open(schema_fn) as f:
+            return load(f.read())
+
+    @staticmethod
+    def validate(props, schema):
+        c = Core(source_data=props, schema_data=schema)
+        c.validate(raise_exception=True)
 
     def run(self) -> List[QueryNode]:
         query_node = QueryNode('\n'.join(self.content))
@@ -47,6 +73,7 @@ class QueryDirective(Directive):
         return [query_node]
 
 
+# Callback registered with Sphinx's doctree-resolved event
 def process_query_nodes(app: Sphinx, doctree, fromdocname):
     # Setup a template and context
     builder: StandaloneHTMLBuilder = app.builder
