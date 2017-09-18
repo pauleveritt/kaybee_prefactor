@@ -1,9 +1,10 @@
 import pytest
 
-pagepaths = ['index.html']
+pytestmark = pytest.mark.sphinx('html', testroot='queries')
 
 
-@pytest.mark.sphinx('html', testroot='queries')
-def test_title(pages):
-    content = pages['index.html'].find('title').contents[0]
-    assert content == 'Test Queries'
+@pytest.mark.parametrize('page', ['index.html', ], indirect=True)
+class TestHomepage:
+    def test_title(self, page):
+        content = page.find('title').contents[0]
+        assert content == 'Test Queries'

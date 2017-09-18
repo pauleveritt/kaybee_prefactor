@@ -27,9 +27,7 @@ def content(app):
 
 
 @pytest.fixture()
-def pages(content, request):
-    all_pages = {}
-    for pn in request.module.pagepaths:
-        c = (content.outdir / pn).text()
-        all_pages[pn] = BeautifulSoup(c, 'html5lib')
-    yield all_pages
+def page(content, request):
+    pagename = request.param
+    c = (content.outdir / pagename).text()
+    yield BeautifulSoup(c, 'html5lib')
