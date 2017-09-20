@@ -9,4 +9,4 @@ def setup(app):
     # Query support
     app.add_node(query)
     app.add_directive('query', QueryDirective)
-    app.connect('doctree-resolved', process_query_nodes)
+    # app.connect('doctree-resolved', process_query_nodes)

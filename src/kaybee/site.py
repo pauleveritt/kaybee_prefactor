@@ -85,3 +85,8 @@ class Site(UserDict):
                       key=lambda x: (
                           x.props['weight'], attrgetter('title')(x))
                       )
+
+    # Schemas and validations
+    schemas = {}
+    validators = {}
+

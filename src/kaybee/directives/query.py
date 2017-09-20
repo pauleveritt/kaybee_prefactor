@@ -13,22 +13,16 @@ from sphinx.util import logging
 logger = logging.getLogger(__name__)
 
 
-#
-# To do items
-# - portlet box with sequence of portlets
-# - get the correct HTML for the boxes
-# - another kind of directive for the section listing with pagination
-# - something for the featured portlet box
-# -
-#
-#
-
 class query(nodes.General, nodes.Element):
     pass
 
 
-class QueryDirective(Directive):
-    has_content = True
+class ResourceQuery:
+    """ Model stored in the site with the data for this query """
+
+    def __init__(self, name, content):
+        self.name = name
+        self.props = self.load(content)
 
     @staticmethod
     def load(content):
@@ -48,13 +42,10 @@ class QueryDirective(Directive):
 
     @property
     def schema_filename(self):
-        """ This is a policy, lowercase of class name + .yaml
+        """ This is a policy, lowercase of class name + .yaml """
 
-        Override in subclass if you want a different naming.
-        """
-
-        rtype_name = self.__class__.__name__.lower()
-        return os.path.join(self.package_dir(), rtype_name)
+        schema_name = self.__class__.__name__.lower()
+        return os.path.join(self.package_dir(), schema_name)
 
     @property
     def schema(self):
@@ -67,11 +58,20 @@ class QueryDirective(Directive):
         c = Core(source_data=props, schema_data=schema)
         c.validate(raise_exception=True)
 
+
+class QueryDirective(Directive):
+    has_content = True
+
     def run(self) -> List[query]:
+        # Insert a docutils node so that we can later (doctree-resolved)
+        # come back and process them
         query_node = query('\n'.join(self.content))
         self.state.nested_parse(self.content, self.content_offset, query_node)
-        return [query_node]
 
+        # Now add this to site.queries instead of site.resources
+
+
+        return [query_node]
 
 # Callback registered with Sphinx's doctree-resolved event
 def process_query_nodes(app: Sphinx, doctree, fromdocname):
