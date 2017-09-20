@@ -1,4 +1,4 @@
-from kaybee.directives.query import query, QueryDirective, process_query_nodes
+from kaybee.directives.query import query, QueryDirective
 from kaybee.directives.resource import ResourceDirective
 
 

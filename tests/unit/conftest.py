@@ -65,14 +65,14 @@ def dummy_resource(SAMPLE_RESOURCES):
 
 
 @pytest.fixture()
-def Validators():
-    from kaybee.validators import Validators
-    yield Validators
+def Validator():
+    from kaybee.validators import Validator
+    yield Validator
 
 
 @pytest.fixture()
-def validators(Validators):
-    yield Validators()
+def validator(Validator):
+    yield Validator()
 
 
 @pytest.fixture()

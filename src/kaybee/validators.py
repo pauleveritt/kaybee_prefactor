@@ -7,7 +7,7 @@ import os
 from pykwalify.core import Core
 
 
-class Validators:
+class Validator:
     @classmethod
     def validate(cls, resource):
         """ Given a resource with props, validate it against the schema

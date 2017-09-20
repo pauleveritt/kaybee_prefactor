@@ -78,4 +78,4 @@ def test_nav_menu(site, SAMPLE_RESOURCES):
 
 
 def test_validator_exists(site):
-    assert site.validators.__class__.__name__ == 'Validators'
+    assert site.validator.__class__.__name__ == 'Validator'

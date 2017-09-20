@@ -4,7 +4,7 @@ from operator import attrgetter
 from kaybee.resources.article import Article
 from kaybee.resources.homepage import Homepage
 from kaybee.resources.section import Section
-from kaybee.validators import Validators
+from kaybee.validators import Validator
 
 
 class Site(UserDict):
@@ -20,7 +20,7 @@ class Site(UserDict):
             homepage=Homepage
         )
         self._sections = None
-        self.validators = Validators()
+        self.validator = Validator()
 
     def add(self, resource):
         """ Add a resource to the db and do any indexing needed """
@@ -87,8 +87,4 @@ class Site(UserDict):
                       key=lambda x: (
                           x.props['weight'], attrgetter('title')(x))
                       )
-
-    # Schemas and validations
-    schemas = {}
-    validators = {}
 
