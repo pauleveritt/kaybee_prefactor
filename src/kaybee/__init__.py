@@ -33,7 +33,7 @@ def get_html_templates_path():
     """
 
     pkgdir = os.path.abspath(os.path.dirname(__file__))
-    rtypes = ('article', 'section', 'homepage')
+    rtypes = ('article', 'section', 'homepage', 'query')
     types_dir = [os.path.join(pkgdir, 'resources', r) for r in rtypes]
     templates_dir = [
         os.path.join(pkgdir, 'templates'),
