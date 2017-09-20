@@ -1,42 +1,15 @@
 from kaybee.events import initialize_site, purge_resources
-from kaybee.site import Site
-from tests.unit.resources.test_site import DummyResource
 
 
-class DummyConfig:
-    def __init__(self):
-        self.html_context = dict(
-            kaybee_config=dict()
-        )
-
-
-class DummyApp:
-    def __init__(self):
-        self.config = DummyConfig()
-
-
-class DummyEnv:
-    pass
-
-
-def test_initialize_site():
-    app = DummyApp()
-    env = DummyEnv()
+def test_initialize_site(app, env):
     initialize_site(app, env, None)
     assert env.site.__class__.__name__ == 'Site'
 
 
-def test_purge_resources():
-    app = DummyApp()
-    env = DummyEnv()
-    env.site = Site(dict())
-
+def test_purge_resources(app, env, dummy_resource):
     # Register the klass and add a dummy doc, make sure it's there
-    env.site.klasses['dummyresource'] = DummyResource
-    dr = DummyResource('somedoc', 'Some Title')
-    env.site.add(dr)
-    assert env.site.get(dr.name).name == dr.name
+    assert env.site.get(dummy_resource.name) == dummy_resource
 
     # Remove it, make sure it's gone
-    purge_resources(None, env, dr.name)
-    assert env.site.get(dr.name) is None
+    purge_resources(None, env, dummy_resource.name)
+    assert env.site.get(dummy_resource.name) is None
