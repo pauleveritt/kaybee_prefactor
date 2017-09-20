@@ -75,3 +75,7 @@ def test_nav_menu(site, SAMPLE_RESOURCES):
     assert navmenu_ids[1] == SAMPLE_RESOURCES[0].name
     assert navmenu_ids[2] == SAMPLE_RESOURCES[2].name
     assert navmenu_ids[3] == SAMPLE_RESOURCES[4].name
+
+
+def test_validator_exists(site):
+    assert site.validators.__class__.__name__ == 'Validators'
