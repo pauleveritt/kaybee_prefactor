@@ -2,13 +2,9 @@
 Manage a cache of schemas and validators, then do validation
 """
 import inspect
-from typing import Dict, List
-
 import os
-from pykwalify.core import Core
 
-Schema = Dict[any, any]
-Schemas = Dict[str, Schema]
+from pykwalify.core import Core
 
 
 class Validators:
