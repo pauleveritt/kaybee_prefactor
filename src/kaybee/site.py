@@ -37,6 +37,18 @@ class Site:
         """ Remove a resource from the site and do any unindexing """
         self.resources.pop(name, None)
 
+    def add_widget(self, widget):
+        """ Add a widget to the db and do any indexing needed """
+
+        # Make sure the resource's class has been registered
+        klassname = widget.__class__.__name__.lower()
+        assert klassname in self.klasses
+        self.widgets[widget.name] = widget
+
+    def remove_widget(self, name):
+        """ Remove a widget from the site and do any unindexing """
+        self.widgets.pop(name, None)
+
     def get_class(self, klass_name):
         return self.klasses[klass_name]
 

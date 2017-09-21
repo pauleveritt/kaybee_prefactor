@@ -50,6 +50,13 @@ class DummyResource:
         )
 
 
+class DummyQuery:
+
+    def __init__(self, name, props):
+        self.name = name
+        self.props = props
+
+
 @pytest.fixture(name='SAMPLE_RESOURCES')
 def sample_resources():
     yield (
@@ -64,6 +71,22 @@ def sample_resources():
 @pytest.fixture()
 def dummy_resource(SAMPLE_RESOURCES):
     yield SAMPLE_RESOURCES[4]
+
+
+@pytest.fixture(name='SAMPLE_WIDGETS')
+def sample_widgets():
+    props = dict(template='query1.html', rtype='section')
+    dq = DummyQuery('query1', props)
+    yield (
+        dq,
+        dq
+        # DummyQuery(dict(template='query1.html', rtype='section'))
+    )
+
+
+@pytest.fixture()
+def dummy_widget(SAMPLE_WIDGETS):
+    yield SAMPLE_WIDGETS[0]
 
 
 @pytest.fixture()
@@ -96,15 +119,17 @@ def site_config():
 
 
 @pytest.fixture()
-def site(site_config, SAMPLE_RESOURCES):
+def site(site_config, SAMPLE_RESOURCES, SAMPLE_WIDGETS):
     s = Site(site_config)
 
     # Register classes
     s.klasses['dummyresource'] = DummyResource
     s.klasses['dummysection'] = DummySection
+    s.klasses['dummyquery'] = DummyQuery
 
     # Add some sample data
-    [s.add_resource(i) for i in SAMPLE_RESOURCES]
+    [s.add_resource(sr) for sr in SAMPLE_RESOURCES]
+    [s.add_widget(sw) for sw in SAMPLE_WIDGETS]
     yield s
 
 

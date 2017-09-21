@@ -79,3 +79,23 @@ def test_nav_menu(site, SAMPLE_RESOURCES):
 
 def test_validator_exists(site):
     assert site.validator.__class__.__name__ == 'Validator'
+
+
+def test_add_widget_succeeds(site, dummy_widget):
+    site.add_widget(dummy_widget)
+    assert site.widgets.get(dummy_widget.name) == dummy_widget
+
+
+def test_add_widget_fails(site, dummy_widget):
+    # Remove the registered class first
+    del site.klasses['dummyquery']
+    with pytest.raises(AssertionError):
+        site.add_widget(dummy_widget)
+
+
+def test_remove_widget(site, dummy_widget):
+    site.add_widget(dummy_widget)
+    site.remove_widget(dummy_widget.name)
+    assert site.widgets.get(dummy_widget.name, None) is None
+
+
