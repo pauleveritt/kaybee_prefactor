@@ -4,8 +4,6 @@ from sphinx.util import logging
 
 from kaybee.widgets.query import Query
 
-logger = logging.getLogger(__name__)
-
 
 class query(nodes.General, nodes.Element):
     @property
