@@ -1,5 +1,5 @@
 from kaybee.widgets import BaseWidget
 
 
-class Query(BaseWidget):
+class QueryList(BaseWidget):
     pass

@@ -2,7 +2,7 @@ from docutils import nodes
 from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
 
-from kaybee.directives.query import query
+from kaybee.directives.querylist import querylist
 
 
 def process_query_nodes(app: Sphinx, doctree, fromdocname):
@@ -11,7 +11,7 @@ def process_query_nodes(app: Sphinx, doctree, fromdocname):
     builder: StandaloneHTMLBuilder = app.builder
     site = app.env.site
 
-    for node in doctree.traverse(query):
+    for node in doctree.traverse(querylist):
         # Render the output
         widget = site.widgets.get(node.name)
         context = builder.globalcontext.copy()

@@ -1,11 +1,10 @@
 from docutils import nodes
 from docutils.parsers.rst import Directive
-from sphinx.util import logging
 
-from kaybee.widgets.query import Query
+from kaybee.widgets.querylist import QueryList
 
 
-class query(nodes.General, nodes.Element):
+class querylist(nodes.General, nodes.Element):
     @property
     def name(self):
         n = self.get('names')
@@ -14,13 +13,13 @@ class query(nodes.General, nodes.Element):
         return None
 
 
-class QueryDirective(Directive):
+class QueryListDirective(Directive):
     has_content = True
 
     def run(self):
         # Get the info from this directive and make instance
         content = '\n'.join(self.content)
-        this_query = Query(content)
+        this_query = QueryList(content)
 
         # TODO If the config says to validate, validate
         site = self.state.document.settings.env.site
@@ -28,6 +27,6 @@ class QueryDirective(Directive):
         site.add_widget(this_query)
 
         # Now add the node to the doctree
-        query_node = query()
+        query_node = querylist()
         query_node.update_basic_atts(dict(names=[this_query.name]))
         return [query_node]

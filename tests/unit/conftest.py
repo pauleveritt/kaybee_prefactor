@@ -2,7 +2,7 @@ import pytest
 
 from kaybee.site import Site
 from kaybee.widgets import BaseWidget
-from kaybee.widgets.query import Query
+from kaybee.widgets.querylist import QueryList
 
 
 class DummyConfig:
@@ -164,4 +164,4 @@ def dummy_query():
 template: query1.html
 rtype: section    
     """
-    yield Query(content)
+    yield QueryList(content)

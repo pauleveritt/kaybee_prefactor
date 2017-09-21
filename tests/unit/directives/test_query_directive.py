@@ -1,9 +1,9 @@
-from kaybee.directives.query import QueryDirective
+from kaybee.directives.querylist import QueryListDirective
 
 
 def test_import():
-    assert QueryDirective.__name__ == 'QueryDirective'
+    assert QueryListDirective.__name__ == 'QueryListDirective'
 
 
 def test_class_defaults():
-    assert QueryDirective.has_content is True
+    assert QueryListDirective.has_content is True

@@ -1,10 +1,10 @@
-from kaybee.widgets.query import Query
+from kaybee.widgets.querylist import QueryList
 
-LOAD = 'kaybee.widgets.query.Query.load'
+LOAD = 'kaybee.widgets.querylist.QueryList.load'
 
 
 def test_import():
-    assert Query.__name__ == 'Query'
+    assert QueryList.__name__ == 'QueryList'
 
 
 def test_instance(query):

@@ -9,9 +9,9 @@ Articles
 
 Content after YAML.
 
-.. query::
+.. querylist::
 
-    template: query.html
+    template: querylist.html
     rtype: section
 
 

@@ -1,5 +1,5 @@
-from kaybee.directives.query import query
+from kaybee.directives.querylist import querylist
 
 
 def test_import():
-    assert query.__name__ == 'query'
+    assert querylist.__name__ == 'querylist'

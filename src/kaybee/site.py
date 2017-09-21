@@ -5,7 +5,7 @@ from kaybee.resources.article import Article
 from kaybee.resources.homepage import Homepage
 from kaybee.resources.section import Section
 from kaybee.validators import Validator
-from kaybee.widgets.query import Query
+from kaybee.widgets.querylist import QueryList
 
 
 class Site:
@@ -20,7 +20,7 @@ class Site:
             article=Article,
             section=Section,
             homepage=Homepage,
-            query=Query
+            querylist=QueryList
         )
         self._sections = None
         self.validator = Validator()
