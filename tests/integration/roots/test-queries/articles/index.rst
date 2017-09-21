@@ -9,10 +9,15 @@ Articles
 
 Content after YAML.
 
+
 .. querylist::
 
     template: querylist.html
-    rtype: section
+    queries:
+        - rtype: section
+          limit: 5
+        - rtype: section
+          limit: 5
 
 
 .. toctree::

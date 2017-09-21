@@ -1,4 +1,3 @@
-from collections import UserDict
 from operator import attrgetter
 
 from kaybee.resources.article import Article

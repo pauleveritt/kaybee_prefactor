@@ -1,6 +1,9 @@
 <h2>Query Results</h2>
-<ul>
-    {% for qr in results %}
-    <li>name: {{ qr.name }}</li>
-    {%  endfor %}
-</ul>
+{% for result_set in result_sets %}
+    <h6>Another runs</h6>
+    <ul>
+        {% for result in result_set %}
+            <li>name: {{ result.title }}</li>
+        {% endfor %}
+    </ul>
+{% endfor %}

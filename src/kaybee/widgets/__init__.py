@@ -47,6 +47,20 @@ class BaseWidget:
         context['site'] = site
         props = self.props.copy()
         del props['template']
-        context['results'] = site.filter_resources(**props)
+
+        # Build up some results to put in the context, for each of the
+        # nested queries
+        result_sets = []
+        for query in self.props['queries']:
+            rtype = query.get('rtype')
+            sort_value = query.get('sort_value')
+            limit = query.get('limit')
+            order = query.get('order')
+            q = dict(rtype=rtype, sort_value=sort_value, limit=limit,
+                     order=order)
+            results = site.filter_resources(**q)
+            result_sets.append(results)
+
+        context['result_sets'] = result_sets
         html = builder.templates.render(self.template, context)
         return html

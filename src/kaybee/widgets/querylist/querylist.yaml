@@ -3,5 +3,12 @@ mapping:
   template:
     type: str
     required: True
-  rtype:
-    type: str
+  queries:
+    type: seq
+    sequence:
+        - type: map
+          mapping:
+            rtype:
+                type: str
+            limit:
+                type: int

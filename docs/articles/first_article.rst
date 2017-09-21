@@ -4,4 +4,4 @@ First Article
 .. resource:: article
 
 
-The article body is here buddy.
+The article body is here.
