@@ -10,6 +10,8 @@ mapping:
           mapping:
             label:
                 type: str
+            style:
+                type: str
             rtype:
                 type: str
             limit:

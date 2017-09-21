@@ -9,7 +9,10 @@ class QueryList(BaseWidget):
         # nested queries
         result_sets = []
         for query in self.props['queries']:
-            result_set = dict(label=query.get('label'))
+            result_set = dict(
+                label=query.get('label'),
+                style=query.get('style'),
+            )
             rtype = query.get('rtype')
             sort_value = query.get('sort_value')
             limit = query.get('limit')

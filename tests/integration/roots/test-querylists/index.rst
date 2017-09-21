@@ -1,22 +1,12 @@
-Welcome to kaybee's documentation!
-==================================
+============
+Test Queries
+============
 
 .. resource:: homepage
 
     in_nav: False
 
-
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
-    :caption: Contents:
-
-    about
-    blog/index
-    articles/index
-    features
-
+Content after title.
 
 .. querylist::
 
@@ -35,11 +25,6 @@ Welcome to kaybee's documentation!
           rtype: article
           limit: 5
 
+.. toctree::
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    articles/index

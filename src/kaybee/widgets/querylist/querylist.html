@@ -1,9 +1,29 @@
-<h2>Query Results</h2>
-{% for result_set in result_sets %}
-    <h6>{{ result_set.label }}</h6>
-    <ul>
-        {% for result in result_set.results %}
-            <li>name: {{ result.title }}</li>
+<div class="row">
+    <div class="columns">
+        {% for result_set in result_sets %}
+            <div class="column">
+                <nav class="panel kb-portlet kb-portlet-{{ result_set.style }}">
+                    <p class="panel-heading">
+                        {{ result_set.label }}
+                    </p>
+                    {% for result in result_set.results %}
+                        <a class="panel-block">
+                            {{ result.title }}
+                        </a>
+                    {% endfor %}
+                    <div class="panel-block">
+                        <button class="button is-small is-white is-fullwidth">
+                            Prev
+                        </button>
+                        <button class="button is-small is-white is-fullwidth">
+                            Next
+                        </button>
+                        <button class="button is-small is-white is-fullwidth">
+                            All
+                        </button>
+                    </div>
+                </nav>
+            </div>
         {% endfor %}
-    </ul>
-{% endfor %}
+    </div>
+</div>
