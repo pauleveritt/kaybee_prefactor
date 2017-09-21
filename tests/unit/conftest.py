@@ -39,6 +39,7 @@ class DummySection:
 
 
 class DummyResource:
+    parent = None
     rtype = 'resource'
 
     def __init__(self, name, title, in_nav=False, weight=0):

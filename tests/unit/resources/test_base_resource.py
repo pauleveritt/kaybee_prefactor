@@ -5,6 +5,11 @@ from kaybee.resources.base_resource import BaseResource
 LOAD = 'kaybee.resources.base_resource.BaseResource.load'
 
 
+class Site:
+    def __init__(self):
+        self.resources = {}
+
+
 class Node:
     parent = None
     rtype = ''
@@ -34,13 +39,15 @@ def site():
     f3.parent = 'f1/f2'
     f4 = Node('f4')
     f4.parent = 'f1/f2/f3'
-    return {
+    s = Site()
+    s.resources = {
         '/': this_site,
         'f1': f1,
         'f1/f2': f2,
         'f1/f2/f3': f3,
         'f1/f2/f3/f4': f4
     }
+    yield s
 
 
 def test_import():
@@ -71,7 +78,7 @@ def test_template(monkeypatch, site, loader, expected):
     # In the last case, remove the doc_template from the dummy section
     # props
     if expected == 'dummyarticle.html':
-        del site['f1'].props['doc_template']
+        del site.resources['f1'].props['doc_template']
 
     monkeypatch.setattr(LOAD, loader)
     a = DummyArticle('f1/f2/f3', 'rtype', 'title', 'content')
@@ -88,14 +95,13 @@ def test_template(monkeypatch, site, loader, expected):
     # Least specific: neither YAML nor section, get from class
     (lambda c: dict(), 'classstyle')
 ])
-def test_style(monkeypatch, loader, expected):
-    s = site()
+def test_style(monkeypatch, site, loader, expected):
     if expected != 'sectionstyle':
-        del s['f1'].props['style']
+        del site.resources['f1'].props['style']
 
     monkeypatch.setattr(LOAD, loader)
     a = DummyArticle('f1/f2/f3', 'rtype', 'title', 'content')
-    assert a.style(s) == expected
+    assert a.style(site) == expected
 
 
 @pytest.mark.parametrize('pagename, parents_len, parentname', [
@@ -146,13 +152,13 @@ def test_name_parent(monkeypatch, site, pagename, name, parent):
 ])
 def test_find_prop_none(monkeypatch, site, parentname, propvalue):
     if parentname is not None:
-        site[parentname].props['foo'] = propvalue
+        site.resources[parentname].props['foo'] = propvalue
     monkeypatch.setattr(LOAD, lambda c: dict())
     br = BaseResource('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
     prop = br.find_prop(site, 'foo')
     assert prop == propvalue
     if parentname is not None:
-        del site[parentname].props['foo']
+        del site.resources[parentname].props['foo']
 
 
 def test_package_dir():
@@ -216,10 +222,10 @@ def test_section_none(monkeypatch, site):
 
 
 def test_section_f1(monkeypatch, site):
-    site['f1'].rtype = 'section'
+    site.resources['f1'].rtype = 'section'
     monkeypatch.setattr(LOAD, lambda c: dict())
     br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
-    assert br.section(site) == site['f1']
+    assert br.section(site) == site.resources['f1']
 
 
 @pytest.mark.parametrize('pagename, nav_href, expected', [
