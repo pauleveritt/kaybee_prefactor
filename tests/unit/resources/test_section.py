@@ -2,7 +2,7 @@ from pykwalify.errors import SchemaError
 import pytest
 from kaybee.resources.section import Section
 
-LOAD = 'kaybee.resources.base_resource.BaseResource.load'
+LOAD = 'kaybee.resources.BaseResource.load'
 PAGENAME = 'tutorials/index'
 RTYPE = 'section'
 TITLE = 'These Are Tutorials'

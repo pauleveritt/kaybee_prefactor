@@ -1,8 +1,8 @@
 import pytest
 from pykwalify.errors import SchemaError
-from kaybee.resources.base_resource import BaseResource
+from kaybee.resources import BaseResource
 
-LOAD = 'kaybee.resources.base_resource.BaseResource.load'
+LOAD = 'kaybee.resources.BaseResource.load'
 
 
 class Site:
@@ -160,6 +160,7 @@ def test_find_prop_none(monkeypatch, site, parentname, propvalue):
     if parentname is not None:
         del site.resources[parentname].props['foo']
 
+###
 
 def test_package_dir():
     assert BaseResource.package_dir().endswith('kaybee/resources')

@@ -1,4 +1,4 @@
-from kaybee.resources.base_resource import BaseResource
+from kaybee.resources import BaseResource
 
 
 class Article(BaseResource):
