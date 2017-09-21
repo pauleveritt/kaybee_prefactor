@@ -18,20 +18,18 @@ class query(nodes.General, nodes.Element):
 
 class QueryDirective(Directive):
     has_content = True
-    required_arguments = 1
 
     def run(self):
         # Get the info from this directive and make instance
-        name = self.arguments[0]
         content = '\n'.join(self.content)
-        this_query = Query(name, content)
+        this_query = Query(content)
 
         # TODO If the config says to validate, validate
         site = self.state.document.settings.env.site
         site.validator.validate(this_query)
-        site.add(this_query)
+        site.add_query(this_query)
 
         # Now add the node to the doctree
         query_node = query()
-        query_node.update_basic_atts(dict(names=[name]))
+        query_node.update_basic_atts(dict(names=[this_query.name]))
         return [query_node]

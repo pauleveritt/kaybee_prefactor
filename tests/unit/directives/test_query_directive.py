@@ -7,4 +7,3 @@ def test_import():
 
 def test_class_defaults():
     assert QueryDirective.has_content is True
-    assert QueryDirective.required_arguments == 1
