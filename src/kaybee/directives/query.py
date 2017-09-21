@@ -2,7 +2,7 @@ from docutils import nodes
 from docutils.parsers.rst import Directive
 from sphinx.util import logging
 
-from kaybee.resources.query import Query
+from kaybee.widgets.query import Query
 
 logger = logging.getLogger(__name__)
 

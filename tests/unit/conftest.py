@@ -1,7 +1,7 @@
 import pytest
 
-from kaybee.resources.query import Query
 from kaybee.site import Site
+from kaybee.widgets.query import Query
 
 
 class DummyConfig:
@@ -120,15 +120,3 @@ def app(config):
 @pytest.fixture()
 def env(site):
     yield DummyEnv(site)
-
-
-@pytest.fixture()
-def query_props():
-    yield dict(flag=9)
-
-
-@pytest.fixture()
-def query(monkeypatch, query_props):
-    LOAD = 'kaybee.resources.query.Query.load'
-    monkeypatch.setattr(LOAD, lambda c: query_props)
-    yield Query('query1', '')

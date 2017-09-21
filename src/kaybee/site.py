@@ -3,9 +3,9 @@ from operator import attrgetter
 
 from kaybee.resources.article import Article
 from kaybee.resources.homepage import Homepage
-from kaybee.resources.query import Query
 from kaybee.resources.section import Section
 from kaybee.validators import Validator
+from kaybee.widgets.query import Query
 
 
 class Site(UserDict):

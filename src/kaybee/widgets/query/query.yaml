@@ -1,0 +1,7 @@
+type: map
+mapping:
+  template:
+    type: str
+    required: True
+  rtype:
+    type: str
