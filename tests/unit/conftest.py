@@ -1,6 +1,7 @@
 import pytest
 
 from kaybee.site import Site
+from kaybee.widgets import BaseWidget
 from kaybee.widgets.query import Query
 
 
@@ -103,7 +104,7 @@ def site(site_config, SAMPLE_RESOURCES):
     s.klasses['dummysection'] = DummySection
 
     # Add some sample data
-    [s.add(i) for i in SAMPLE_RESOURCES]
+    [s.add_resource(i) for i in SAMPLE_RESOURCES]
     yield s
 
 
@@ -120,3 +121,21 @@ def app(config):
 @pytest.fixture()
 def env(site):
     yield DummyEnv(site)
+
+
+@pytest.fixture(name='base_widget')
+def dummy_base_widget():
+    content = """
+template: widget1.html
+rtype: section    
+    """
+    yield BaseWidget(content)
+
+
+@pytest.fixture(name='query')
+def dummy_query():
+    content = """
+template: query1.html
+rtype: section    
+    """
+    yield Query(content)

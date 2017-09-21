@@ -8,8 +8,8 @@ from pykwalify.core import Core
 
 
 class Validator:
-    @classmethod
-    def validate(cls, resource):
+    @staticmethod
+    def validate(resource):
         """ Given a resource with props, validate it against the schema
          name registered on this class """
 

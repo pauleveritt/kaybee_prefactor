@@ -22,21 +22,21 @@ def test_get_class_fails(site):
 
 
 def test_add_resource_succeeds(site, dummy_resource):
-    site.add(dummy_resource)
-    assert site.get(dummy_resource.name) == dummy_resource
+    site.add_resource(dummy_resource)
+    assert site.resources.get(dummy_resource.name) == dummy_resource
 
 
 def test_add_resource_fails(site, dummy_resource):
     # Remove the registered class first
     del site.klasses['dummyresource']
     with pytest.raises(AssertionError):
-        site.add(dummy_resource)
+        site.add_resource(dummy_resource)
 
 
 def test_remove_resource(site, dummy_resource):
-    site.add(dummy_resource)
-    site.remove(dummy_resource.name)
-    assert site.get(dummy_resource.name, None) is None
+    site.add_resource(dummy_resource)
+    site.remove_resource(dummy_resource.name)
+    assert site.resources.get(dummy_resource.name, None) is None
 
 
 def test_section_listing(site, SAMPLE_RESOURCES):

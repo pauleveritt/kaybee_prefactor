@@ -17,5 +17,5 @@ class ResourceDirective(Directive):
 
         # TODO If the config says to validate, validate
         resource.validate(resource.props, resource.schema)
-        env.site.add(resource)
+        env.site.add_resource(resource)
         return []

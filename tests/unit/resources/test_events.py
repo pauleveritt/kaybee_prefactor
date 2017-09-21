@@ -8,8 +8,8 @@ def test_initialize_site(app, env):
 
 def test_purge_resources(app, env, dummy_resource):
     # Register the klass and add a dummy doc, make sure it's there
-    assert env.site.get(dummy_resource.name) == dummy_resource
+    assert env.site.resources.get(dummy_resource.name) == dummy_resource
 
     # Remove it, make sure it's gone
     purge_resources(None, env, dummy_resource.name)
-    assert env.site.get(dummy_resource.name) is None
+    assert env.site.resources.get(dummy_resource.name) is None

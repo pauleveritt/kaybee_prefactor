@@ -8,12 +8,13 @@ from kaybee.validators import Validator
 from kaybee.widgets.query import Query
 
 
-class Site(UserDict):
+class Site:
     # TODO Make this pluggable, so that outside packages can add
     # to it, perhaps via conf.py.
 
     def __init__(self, config):
-        super().__init__()
+        self.resources = {}
+        self.widgets = {}
         self.config = config
         self.klasses = dict(
             article=Article,
@@ -24,17 +25,17 @@ class Site(UserDict):
         self._sections = None
         self.validator = Validator()
 
-    def add(self, resource):
+    def add_resource(self, resource):
         """ Add a resource to the db and do any indexing needed """
 
         # Make sure the resource's class has been registered
         klassname = resource.__class__.__name__.lower()
         assert klassname in self.klasses
-        self[resource.name] = resource
+        self.resources[resource.name] = resource
 
-    def remove(self, name):
+    def remove_resource(self, name):
         """ Remove a resource from the site and do any unindexing """
-        self.pop(name, None)
+        self.resources.pop(name, None)
 
     def get_class(self, klass_name):
         return self.klasses[klass_name]
@@ -42,9 +43,9 @@ class Site(UserDict):
     def filter_resources(self, rtype=None, sort_value='title',
                          order=1, limit=5):
         if rtype:
-            r1 = [r for r in self.data.values() if r.rtype == rtype]
+            r1 = [r for r in self.resources.values() if r.rtype == rtype]
         else:
-            r1 = self.data.values()
+            r1 = self.resources.values()
 
         # Now sorting
         if sort_value:
@@ -76,17 +77,17 @@ class Site(UserDict):
     def sections(self):
         """ Listing of resources with rtype == section """
 
-        return [s for s in self.data.values() if s.rtype == 'section']
+        return [s for s in self.resources.values() if s.rtype == 'section']
 
     @property
     def navmenu(self):
         """ Sorted listing of resources with rtype == section """
 
-        resources = [r for r in self.data.values() if r.props.get('in_nav')]
+        resources = [r for r in self.resources.values() if
+                     r.props.get('in_nav')]
 
         # Sort first by title, then by "weight"
         return sorted(resources,
                       key=lambda x: (
                           x.props['weight'], attrgetter('title')(x))
                       )
-

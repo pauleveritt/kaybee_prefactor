@@ -27,7 +27,8 @@ def initialize_site(app, env, docnames):
 
 def purge_resources(app, env, docname):
     if hasattr(env, 'site'):
-        env.site.remove(docname)
+        # TODO need to remove widgets when the document has one
+        env.site.remove_resource(docname)
 
 
 def kb_context(app, pagename, templatename, context, doctree):
