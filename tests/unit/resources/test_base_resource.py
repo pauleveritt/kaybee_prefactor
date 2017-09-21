@@ -160,22 +160,6 @@ def test_find_prop_none(monkeypatch, site, parentname, propvalue):
     if parentname is not None:
         del site.resources[parentname].props['foo']
 
-###
-
-def test_package_dir():
-    assert BaseResource.package_dir().endswith('kaybee/resources')
-
-
-def test_schema_filename(monkeypatch):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
-    assert br.schema_filename.endswith('tests/unit/resources/dummyarticle')
-
-
-def test_schema():
-    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
-    assert br.schema['mapping']['level']['enum'][0] == 1
-
 
 def test_props():
     content = """
@@ -185,26 +169,6 @@ level: 2
     br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', content)
     assert br.props['count'] == 999
     assert br.props['level'] == 2
-
-
-def test_validate_succeed():
-    content = """
-count: 999
-level: 2
-    """
-    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', content)
-    br.validate(br.props, br.schema)
-
-
-def test_validate_fail():
-    content = """
-xlevel: 2
-    """
-    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', content)
-    with pytest.raises(SchemaError) as excinfo:
-        br.validate(br.props, br.schema)
-
-    assert 'xlevel' in str(excinfo.value)
 
 
 def test_empty_yaml_string():

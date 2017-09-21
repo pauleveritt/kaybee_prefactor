@@ -127,25 +127,3 @@ class BaseResource:
         # assume container. Leaf types will override this.
 
         return self.name
-
-    # Schemas and validation
-    @property
-    def schema_filename(self):
-        """ This is a policy, lowercase of class name + .yaml
-
-        Override in subclass if you want a different naming.
-        """
-
-        rtype_name = self.__class__.__name__.lower()
-        return os.path.join(self.package_dir(), rtype_name)
-
-    @property
-    def schema(self):
-        schema_fn = self.schema_filename + '.yaml'
-        with open(schema_fn) as f:
-            return load(f.read())
-
-    @staticmethod
-    def validate(props, schema):
-        c = Core(source_data=props, schema_data=schema)
-        c.validate(raise_exception=True)
