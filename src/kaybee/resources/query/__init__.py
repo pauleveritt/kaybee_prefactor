@@ -1,13 +1,11 @@
-from docutils import nodes
 from ruamel.yaml import load
-from sphinx.application import Sphinx
-from sphinx.builders.html import StandaloneHTMLBuilder
-
-from kaybee.directives import query
 
 
 class Query:
     """ Model stored in the site with the parameters for this query """
+
+    template = 'query.html'
+    rtype = 'query'  # TODO get rid of this
 
     def __init__(self, name, content):
         self.name = name  # This should be a unique ID
@@ -23,27 +21,11 @@ class Query:
             return {}
         return load(content)
 
+    def render(self, builder, context):
+        """ Given a Sphinx builder and context with site in it,
+         generate HTML """
 
-    @staticmethod
-    def process_query_nodes(app: Sphinx, doctree, fromdocname):
-        """ Callback registered with Sphinx's doctree-resolved event """
-        # Setup a template and context
-        builder: StandaloneHTMLBuilder = app.builder
-        ctx = builder.globalcontext.copy()
-        templatename = 'query.html'
-
-        for node in doctree.traverse(query):
-            # Get the YAML string, parse/validate it
-            content = node.children[0].rawsource
-            props = node.load(content)
-
-            # Query the "database" based on props in the YAML
-            resources = app.env.site.filter_resources(**props)
-            ctx['query_results'] = resources
-
-            # Pass the results into Jinja2
-            output = builder.templates.render(templatename, ctx)
-
-            # Replace the rendered node contents with raw HTML
-            listing = [nodes.raw('', output, format='html')]
-            node.replace_self(listing)
+        site = context['site']
+        context['results'] = site.filter_resources(**self.props)
+        html = builder.templates.render(self.template, context)
+        return html

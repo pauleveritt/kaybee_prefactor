@@ -1,0 +1,4 @@
+type: map
+mapping:
+  rtype:
+    type: str

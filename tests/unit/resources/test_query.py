@@ -10,3 +10,13 @@ def test_import():
 def test_instance(query, query_props):
     assert query.name == 'query1'
     assert query.props['flag'] == query_props['flag']
+
+
+def test_load():
+    y = """
+rtype: section    
+    """
+    props = Query.load(y)
+    assert props['rtype'] == 'section'
+
+

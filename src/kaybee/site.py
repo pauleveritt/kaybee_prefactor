@@ -3,6 +3,7 @@ from operator import attrgetter
 
 from kaybee.resources.article import Article
 from kaybee.resources.homepage import Homepage
+from kaybee.resources.query import Query
 from kaybee.resources.section import Section
 from kaybee.validators import Validator
 
@@ -17,7 +18,8 @@ class Site(UserDict):
         self.klasses = dict(
             article=Article,
             section=Section,
-            homepage=Homepage
+            homepage=Homepage,
+            query=Query
         )
         self._sections = None
         self.validator = Validator()

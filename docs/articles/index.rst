@@ -9,6 +9,11 @@ Articles
 
 A list of articles is here.
 
+.. query:: query1
+
+    rtype: article
+
+
 .. toctree::
     :maxdepth: 1
     :caption: Contents:
