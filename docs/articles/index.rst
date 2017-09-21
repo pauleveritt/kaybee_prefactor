@@ -9,8 +9,9 @@ Articles
 
 A list of articles is here.
 
-.. query:: query1
+.. query::
 
+    template: query1.html
     rtype: article
 
 
