@@ -44,7 +44,7 @@ def kb_context(app, pagename, templatename, context, doctree):
     pname = pagename
     if pagename.endswith('/index'):
         pname = pagename[:-6]
-    resource = site.get(pname)
+    resource = site.resources.get(pname)
 
     if resource:
         # We return a custom template

@@ -14,10 +14,10 @@ def process_query_nodes(app: Sphinx, doctree, fromdocname):
 
     for node in doctree.traverse(query):
         # Render the output
-        widget = site.get(node.name)
+        widget = site.widgets.get(node.name)
         context = builder.globalcontext.copy()
         context['site'] = site
-        output = widget.render(builder, context)
+        output = widget.render(builder, context, site)
 
         # Put the output into the node contents
         listing = [nodes.raw('', output, format='html')]

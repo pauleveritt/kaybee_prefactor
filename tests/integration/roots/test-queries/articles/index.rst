@@ -9,6 +9,11 @@ Articles
 
 Content after YAML.
 
+.. query::
+
+    template: query.html
+    rtype: section
+
 
 .. toctree::
     :maxdepth: 1

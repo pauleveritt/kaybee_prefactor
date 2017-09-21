@@ -27,7 +27,7 @@ class QueryDirective(Directive):
         # TODO If the config says to validate, validate
         site = self.state.document.settings.env.site
         site.validator.validate(this_query)
-        site.add_query(this_query)
+        site.add_widget(this_query)
 
         # Now add the node to the doctree
         query_node = query()

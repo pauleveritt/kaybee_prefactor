@@ -94,10 +94,10 @@ class BaseResource:
             # The root has no parents
             return []
         parents = []
-        parent = site.get(self.parent)
+        parent = site.resources.get(self.parent)
         while parent is not None:
             parents.append(parent)
-            parent = site.get(parent.parent)
+            parent = site.resources.get(parent.parent)
         return parents
 
     def is_active_section(self, site, nav_href):

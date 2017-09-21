@@ -33,13 +33,15 @@ def get_html_templates_path():
     """
 
     pkgdir = os.path.abspath(os.path.dirname(__file__))
-    rtypes = ('article', 'section', 'homepage', 'query')
-    types_dir = [os.path.join(pkgdir, 'resources', r) for r in rtypes]
+    rtypes = ('article', 'section', 'homepage')
+    widgets = ('query',)
+    types_dirs = [os.path.join(pkgdir, 'resources', r) for r in rtypes]
+    widgets_dirs = [os.path.join(pkgdir, 'widgets', r) for r in widgets]
     templates_dir = [
         os.path.join(pkgdir, 'templates'),
         os.path.join(pkgdir, 'directives/templates'),
     ]
-    return templates_dir + types_dir
+    return templates_dir + types_dirs + widgets_dirs
 
 
 def setup(app):

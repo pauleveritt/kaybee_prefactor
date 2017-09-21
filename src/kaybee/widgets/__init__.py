@@ -45,6 +45,8 @@ class BaseWidget:
          generate HTML """
 
         context['site'] = site
-        context['results'] = site.filter_resources(**self.props)
+        props = self.props.copy()
+        del props['template']
+        context['results'] = site.filter_resources(**props)
         html = builder.templates.render(self.template, context)
         return html
