@@ -13,9 +13,11 @@ A list of articles is here.
 
     template: querylist.html
     queries:
-        - rtype: section
+        - label: Recent Sections
+          rtype: section
           limit: 5
-        - rtype: article
+        - label: Recent Articles
+          rtype: article
           limit: 5
 
 

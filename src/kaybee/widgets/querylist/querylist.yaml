@@ -8,6 +8,8 @@ mapping:
     sequence:
         - type: map
           mapping:
+            label:
+                type: str
             rtype:
                 type: str
             limit:

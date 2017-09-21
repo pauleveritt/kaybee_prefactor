@@ -9,6 +9,7 @@ class QueryList(BaseWidget):
         # nested queries
         result_sets = []
         for query in self.props['queries']:
+            result_set = dict(label=query.get('label'))
             rtype = query.get('rtype')
             sort_value = query.get('sort_value')
             limit = query.get('limit')
@@ -16,6 +17,7 @@ class QueryList(BaseWidget):
             q = dict(rtype=rtype, sort_value=sort_value, limit=limit,
                      order=order)
             results = site.filter_resources(**q)
-            result_sets.append(results)
+            result_set['results'] = results
+            result_sets.append(result_set)
 
         context['result_sets'] = result_sets
