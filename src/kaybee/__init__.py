@@ -1,5 +1,7 @@
 import os
 
+from sphinx.jinja2glue import SphinxFileSystemLoader
+
 from kaybee.events import kb_context
 from kaybee import directives
 
@@ -44,7 +46,21 @@ def get_html_templates_path():
     return templates_dir + types_dirs + widgets_dirs
 
 
+def add_templates_paths(app):
+    """ Add the kaybee template directories
+
+     Using Sphinx's conf.py support for registering new template
+     directories is both cumbersome and, for us, wrong. We don't
+     want to do it at import time.
+     """
+    template_paths = get_html_templates_path()
+    template_bridge = app.builder.templates
+    template_bridge.loaders += [SphinxFileSystemLoader(x) for x in
+                                template_paths]
+
+
 def setup(app):
+    app.connect('builder-inited', add_templates_paths)
     app.connect('env-before-read-docs', events.initialize_site)
     app.connect('env-purge-doc', events.purge_resources)
     app.connect('html-page-context', kb_context)
