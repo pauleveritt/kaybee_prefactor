@@ -1,11 +1,15 @@
+import inspect
 import os
 
 import dectate
+import importscan
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
+import kaybee
+from kaybee import directives
+from kaybee import resources, widgets
 from kaybee.decorators import kb
 from kaybee.events import kb_context
-from kaybee import directives
 
 __version__ = "0.0.1"
 
@@ -29,39 +33,30 @@ def get_path():
     return os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 
-def get_html_templates_path():
-    """Return path to theme's template folder.
-
-    Used by the doc project's config.py to hook into the template
-    setup where templates are under the project root.
-    """
-
-    pkgdir = os.path.abspath(os.path.dirname(__file__))
-    rtypes = ('article', 'section', 'homepage')
-    widgets = ('querylist',)
-    types_dirs = [os.path.join(pkgdir, 'resources', r) for r in rtypes]
-    widgets_dirs = [os.path.join(pkgdir, 'widgets', r) for r in widgets]
-    templates_dir = [
-        os.path.join(pkgdir, 'templates'),
-        os.path.join(pkgdir, 'directives/templates'),
-    ]
-    return templates_dir + types_dirs + widgets_dirs
-
-
 def add_templates_paths(app):
     """ Add the kaybee template directories
 
      Using Sphinx's conf.py support for registering new template
      directories is both cumbersome and, for us, wrong. We don't
-     want to do it at import time.
+     want to do it at import time. Instead, we want to do it at
+     Dectate-configure time.
      """
-    template_paths = get_html_templates_path()
+
     template_bridge = app.builder.templates
-    template_bridge.loaders += [SphinxFileSystemLoader(x) for x in
-                                template_paths]
+
+    # Add the root of kaybee, then add the widgets and resources
+    f = os.path.join(os.path.dirname(inspect.getfile(kaybee)), 'templates')
+    template_bridge.loaders.append(SphinxFileSystemLoader(f))
+    items = sorted(kb.config.widgets.items()) + \
+            sorted(kb.config.resources.items())
+    for k, v in items:
+        f = os.path.dirname(inspect.getfile(v))
+        template_bridge.loaders.append(SphinxFileSystemLoader(f))
 
 
 def setup(app):
+    importscan.scan(resources)
+    importscan.scan(widgets)
     dectate.commit(kb)
     app.connect('builder-inited', add_templates_paths)
     app.connect('env-before-read-docs', events.initialize_site)

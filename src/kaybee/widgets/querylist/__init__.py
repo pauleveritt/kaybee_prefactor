@@ -1,6 +1,8 @@
+from kaybee.decorators import kb
 from kaybee.widgets import BaseWidget
 
 
+@kb.widget('querylist')
 class QueryList(BaseWidget):
     def make_context(self, context, site):
         """ Put information into the context for rendering """

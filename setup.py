@@ -26,7 +26,8 @@ CLASSIFIERS = [
 ]
 INSTALL_REQUIRES = [
     'sphinx',
-    'dectate'
+    'dectate',
+    'importscan'
 ]
 
 ENTRY_POINTS = {

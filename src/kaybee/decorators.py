@@ -29,29 +29,29 @@ class WidgetAction(dectate.Action):
         super().__init__()
         self.name = name
 
-    def identifier(self, widget):
+    def identifier(self, widgets):
         return self.name
 
-    def perform(self, obj, widget):
-        widget[self.name] = obj
+    def perform(self, obj, widgets):
+        widgets[self.name] = obj
 
 
 class ResourceAction(dectate.Action):
     config = {
-        'resource_types': dict
+        'resources': dict
     }
 
     def __init__(self, name):
         super().__init__()
         self.name = name
 
-    def identifier(self, resource_types):
+    def identifier(self, resources):
         return self.name
 
-    def perform(self, obj, resource_types):
-        resource_types[self.name] = obj
+    def perform(self, obj, resources):
+        resources[self.name] = obj
 
 
 class kb(dectate.App):
     widget = dectate.directive(WidgetAction)
-    resource_type = dectate.directive(ResourceAction)
+    resource = dectate.directive(ResourceAction)
