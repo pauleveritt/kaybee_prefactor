@@ -1,15 +1,12 @@
-import inspect
 import os
 
 import dectate
 import importscan
-from sphinx.jinja2glue import SphinxFileSystemLoader
 
 import kaybee
-from kaybee import directives
 from kaybee import resources, widgets
 from kaybee.decorators import kb
-from kaybee.events import kb_context
+from kaybee.events import kb_context, add_templates_paths
 
 __version__ = "0.0.1"
 
@@ -33,27 +30,6 @@ def get_path():
     return os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 
-def add_templates_paths(app):
-    """ Add the kaybee template directories
-
-     Using Sphinx's conf.py support for registering new template
-     directories is both cumbersome and, for us, wrong. We don't
-     want to do it at import time. Instead, we want to do it at
-     Dectate-configure time.
-     """
-
-    template_bridge = app.builder.templates
-
-    # Add the root of kaybee, then add the widgets and resources
-    f = os.path.join(os.path.dirname(inspect.getfile(kaybee)), 'templates')
-    template_bridge.loaders.append(SphinxFileSystemLoader(f))
-    values = list(kb.config.widgets.values()) + \
-             list(kb.config.resources.values())
-    for v in values:
-        f = os.path.dirname(inspect.getfile(v))
-        template_bridge.loaders.append(SphinxFileSystemLoader(f))
-
-
 def setup(app):
     importscan.scan(resources)
     importscan.scan(widgets)
@@ -64,7 +40,7 @@ def setup(app):
     app.connect('html-page-context', kb_context)
 
     # Delegate directive registration
-    directives.setup(app)
+    resources.setup(app)
     widgets.setup(app)
 
     return dict(

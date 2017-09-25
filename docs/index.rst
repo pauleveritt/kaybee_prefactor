@@ -1,7 +1,7 @@
 Welcome to kaybee's documentation!
 ==================================
 
-.. resource:: homepage
+.. homepage::
 
     in_nav: False
 

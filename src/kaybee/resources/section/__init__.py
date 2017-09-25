@@ -4,4 +4,4 @@ from kaybee.resources import BaseResource
 
 @kb.resource('section')
 class Section(BaseResource):
-    pass
+    directive_name = 'section'

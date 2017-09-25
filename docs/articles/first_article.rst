@@ -1,7 +1,7 @@
 First Article
 =============
 
-.. resource:: article
+.. article::
 
 
 The article body is here.

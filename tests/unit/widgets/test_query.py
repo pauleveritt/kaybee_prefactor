@@ -39,13 +39,3 @@ flag: 9
         bw = BaseWidget(content)
         assert bw.content == content
         assert bw.props['flag'] == 9
-
-# def test_import():
-#     assert QueryList.__name__ == 'QueryList'
-#
-#
-# def test_instance(query):
-#     expected = '{"rtype": "section", "template": "query1.html"}'
-#     assert query.name == expected
-#     assert query.props['template'] == 'query1.html'
-#     assert query.props['rtype'] == 'section'

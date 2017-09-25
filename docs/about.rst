@@ -2,7 +2,7 @@
 About
 =====
 
-.. resource:: article
+.. article::
 
     style: ''
     in_nav: True

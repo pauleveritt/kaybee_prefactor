@@ -4,9 +4,6 @@ from kaybee.validators import Validator
 
 
 class Site:
-    # TODO Make this pluggable, so that outside packages can add
-    # to it, perhaps via conf.py.
-
     def __init__(self, config):
         self.resources = {}
         self.widgets = {}

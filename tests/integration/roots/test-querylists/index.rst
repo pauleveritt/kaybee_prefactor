@@ -2,7 +2,7 @@
 Test Queries
 ============
 
-.. resource:: homepage
+.. homepage::
 
     in_nav: False
 

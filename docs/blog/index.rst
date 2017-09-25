@@ -1,7 +1,7 @@
 The Blog
 ========
 
-.. resource:: section
+.. section::
 
     style: 'is-bold is-warning'
     in_nav: True

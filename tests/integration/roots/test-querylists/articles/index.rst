@@ -1,7 +1,7 @@
 Articles
 ========
 
-.. resource:: section
+.. section::
 
     style: 'is-bold is-info'
     in_nav: True

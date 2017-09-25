@@ -2,7 +2,7 @@
 Features
 ========
 
-.. resource:: article
+.. article::
 
 - A resource can specify a template in YAML, inherit it from the section,
   or fall back on getting it from the class name

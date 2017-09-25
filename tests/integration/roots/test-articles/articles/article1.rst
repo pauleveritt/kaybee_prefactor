@@ -2,7 +2,7 @@
 Article 1
 =========
 
-.. resource:: article
+.. article::
 
 
 Content after YAML.

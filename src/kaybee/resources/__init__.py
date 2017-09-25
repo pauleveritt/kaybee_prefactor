@@ -1,8 +1,45 @@
 import inspect
 import os
 
-from pykwalify.core import Core
+from docutils.parsers.rst import Directive
 from ruamel.yaml import load
+
+from kaybee.decorators import kb
+
+
+class BaseDirective(Directive):
+    has_content = True
+
+    def run(self):
+        """ Run at parse time.
+
+        When the documents are initially being scanned, this method runs
+        and does two things: (a) creates an instance that is added to
+        the site's widgets, and (b) leaves behind a placeholder docutils
+        node that can later be processed after the docs are resolved.
+        The latter needs enough information to retrieve the former.
+
+        """
+
+        env = self.state.document.settings.env
+
+        # Get the info from this directive and make instance
+        resource_directive = self.name
+        title = self.state.parent.parent.children[0].children[0].rawsource
+        resource_content = '\n'.join(self.content)
+        resource_class = kb.config.resources[resource_directive]
+        this_resource = resource_class(env.docname, resource_directive,
+                                       title, resource_content)
+
+        # Validate the properties against the schema for this
+        # widget type
+        site = self.state.document.settings.env.site
+        site.validator.validate(this_resource)
+        site.add_resource(this_resource)
+
+        # Don't need to return a resource "node", the
+        # document is the node
+        return []
 
 
 class BaseResource:
@@ -127,3 +164,10 @@ class BaseResource:
         # assume container. Leaf types will override this.
 
         return self.name
+
+
+def setup(app):
+    # Loop through the registered resources and add a directive
+    # for each
+    for r in kb.config.resources.values():
+        app.add_directive(r.directive_name, BaseDirective)

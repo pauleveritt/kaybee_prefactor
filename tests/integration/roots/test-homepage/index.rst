@@ -2,7 +2,7 @@
 Test Homepage
 =============
 
-.. resource:: homepage
+.. homepage::
 
     in_nav: False
 

@@ -14,6 +14,13 @@ Choosing a Template - Precedence Rules
 
 """
 
+import inspect
+import os
+
+from sphinx.jinja2glue import SphinxFileSystemLoader
+
+import kaybee
+from kaybee.decorators import kb
 from kaybee.site import Site
 
 
@@ -32,7 +39,6 @@ def purge_resources(app, env, docname):
 
 
 def kb_context(app, pagename, templatename, context, doctree):
-
     site = app.env.site
     context['site'] = site
 
@@ -58,3 +64,24 @@ def kb_context(app, pagename, templatename, context, doctree):
 
     else:
         return templatename
+
+
+def add_templates_paths(app):
+    """ Add the kaybee template directories
+
+     Using Sphinx's conf.py support for registering new template
+     directories is both cumbersome and, for us, wrong. We don't
+     want to do it at import time. Instead, we want to do it at
+     Dectate-configure time.
+     """
+
+    template_bridge = app.builder.templates
+
+    # Add the root of kaybee, then add the widgets and resources
+    f = os.path.join(os.path.dirname(inspect.getfile(kaybee)), 'templates')
+    template_bridge.loaders.append(SphinxFileSystemLoader(f))
+    values = list(kb.config.widgets.values()) + \
+             list(kb.config.resources.values())
+    for v in values:
+        f = os.path.dirname(inspect.getfile(v))
+        template_bridge.loaders.append(SphinxFileSystemLoader(f))
