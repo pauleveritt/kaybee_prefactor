@@ -2,8 +2,6 @@ from docutils import nodes
 from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
 
-from kaybee.directives.querylist import querylist
-
 
 def process_query_nodes(app: Sphinx, doctree, fromdocname):
     """ Callback registered with Sphinx's doctree-resolved event """
@@ -11,9 +9,11 @@ def process_query_nodes(app: Sphinx, doctree, fromdocname):
     builder: StandaloneHTMLBuilder = app.builder
     site = app.env.site
 
-    for node in doctree.traverse(querylist):
+    from kaybee.widgets import widget
+
+    for node in doctree.traverse(widget):
         # Render the output
-        widget = site.widgets.get(node.name)
+        widget = site.widgets.get(node.widget_name)
         context = builder.globalcontext.copy()
         context['site'] = site
         output = widget.render(builder, context, site)

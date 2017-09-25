@@ -2,7 +2,6 @@ import pytest
 
 from kaybee.site import Site
 from kaybee.widgets import BaseWidget
-from kaybee.widgets.querylist import QueryList
 
 
 class DummyConfig:
@@ -157,11 +156,3 @@ rtype: section
     """
     yield BaseWidget(content)
 
-
-@pytest.fixture(name='query')
-def dummy_query():
-    content = """
-template: query1.html
-rtype: section    
-    """
-    yield QueryList(content)

@@ -65,6 +65,7 @@ def setup(app):
 
     # Delegate directive registration
     directives.setup(app)
+    widgets.setup(app)
 
     return dict(
         version=__version__,
