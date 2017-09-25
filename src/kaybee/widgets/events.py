@@ -13,7 +13,7 @@ def process_widget_nodes(app: Sphinx, doctree, fromdocname):
 
     for node in doctree.traverse(widget):
         # Render the output
-        widget = site.widgets.get(node.widget_name)
+        widget = site.widgets.get(node.name)
         context = builder.globalcontext.copy()
         context['site'] = site
         output = widget.render(builder, context, site)

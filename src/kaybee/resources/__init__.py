@@ -51,6 +51,18 @@ class BaseResource:
         self.title = title
         self.props = BaseResource.load(content)
 
+    @classmethod
+    def set_rtype(cls, rtype):
+        """ Stamp the rtype on the class at config time.
+
+         The kb decorator has the name of the directive. The
+         resource class needs to know the name of that directive
+         to register itself. Help dectate registration to
+         stamp the rtype on the class.
+         """
+
+        cls.rtype = rtype
+
     @staticmethod
     def load(content):
         """ Provide a way to stub this in tests """
@@ -170,4 +182,4 @@ def setup(app):
     # Loop through the registered resources and add a directive
     # for each
     for r in kb.config.resources.values():
-        app.add_directive(r.directive_name, BaseDirective)
+        app.add_directive(r.rtype, BaseDirective)

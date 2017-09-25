@@ -22,13 +22,13 @@ class widget(nodes.General, nodes.Element):
      """
 
     @property
-    def widget_name(self):
+    def name(self):
         """ This is the identifier for this node """
 
         return self['ids'][0]
 
     @property
-    def widget_directive(self):
+    def wtype(self):
         """ The directive used, which finds the class needed
 
          If our RST has ``.. querylist::``
@@ -55,10 +55,11 @@ class BaseDirective(Directive):
         """
 
         # Get the info from this directive and make instance
-        widget_directive = self.name
+        wtype = self.name
         widget_content = '\n'.join(self.content)
-        widget_class = kb.config.widgets[widget_directive]
+        widget_class = kb.config.widgets[wtype]
         this_widget = widget_class(widget_content)
+        this_widget.wtype = wtype
 
         # Validate the properties against the schema for this
         # widget type
@@ -68,15 +69,29 @@ class BaseDirective(Directive):
 
         # Now add the node to the doctree
         widget_node = widget()
-        attrs = dict(ids=[this_widget.name], names=[widget_directive])
+        attrs = dict(ids=[this_widget.name], names=[wtype])
         widget_node.update_basic_atts(attrs)
         return [widget_node]
 
 
 class BaseWidget:
+    wtype = None
+
     def __init__(self, content):
         self.content = content
         self.props = self.load(content)
+
+    @classmethod
+    def set_wtype(cls, wtype):
+        """ Stamp the wtype on the class at config time.
+
+         The kb decorator has the name of the directive. The
+         widget class needs to know the name of that directive
+         to register itself. Help dectate registration to
+         stamp the wtype on the class.
+         """
+
+        cls.wtype = wtype
 
     @staticmethod
     def load(content):
@@ -129,6 +144,6 @@ def setup(app):
     # for each
     app.add_node(widget)
     for w in kb.config.widgets.values():
-        app.add_directive(w.directive_name, BaseDirective)
+        app.add_directive(w.wtype, BaseDirective)
 
     app.connect('doctree-resolved', process_widget_nodes)

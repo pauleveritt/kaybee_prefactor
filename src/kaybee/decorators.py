@@ -34,6 +34,8 @@ class WidgetAction(dectate.Action):
 
     def perform(self, obj, widgets):
         widgets[self.name] = obj
+        # Tell the class the name from the decorator
+        obj.set_wtype(self.name)
 
 
 class ResourceAction(dectate.Action):
@@ -50,6 +52,8 @@ class ResourceAction(dectate.Action):
 
     def perform(self, obj, resources):
         resources[self.name] = obj
+        # Tell the class the name from the decorator
+        obj.set_rtype(self.name)
 
 
 class kb(dectate.App):
