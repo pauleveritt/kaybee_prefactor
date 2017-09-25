@@ -1,7 +1,9 @@
 import os
 
+import dectate
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
+from kaybee.decorators import kb
 from kaybee.events import kb_context
 from kaybee import directives
 
@@ -60,6 +62,7 @@ def add_templates_paths(app):
 
 
 def setup(app):
+    dectate.commit(kb)
     app.connect('builder-inited', add_templates_paths)
     app.connect('env-before-read-docs', events.initialize_site)
     app.connect('env-purge-doc', events.purge_resources)

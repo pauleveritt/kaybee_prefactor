@@ -25,7 +25,8 @@ CLASSIFIERS = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 INSTALL_REQUIRES = [
-    'sphinx'
+    'sphinx',
+    'dectate'
 ]
 
 ENTRY_POINTS = {
