@@ -1,4 +1,15 @@
+import pytest
+
 from kaybee.widgets import BaseWidget
+
+
+@pytest.fixture(name='base_widget')
+def dummy_base_widget():
+    content = """
+template: widget1.html
+rtype: section
+    """
+    yield BaseWidget(content)
 
 
 def test_import():

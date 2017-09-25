@@ -6,10 +6,7 @@ from docutils.parsers.rst import Directive
 from ruamel.yaml import load
 
 from kaybee.decorators import kb
-
-# from kaybee.widgets.events import process_query_nodes
-# from kaybee.widgets.querylist import QueryList
-from kaybee.widgets.events import process_query_nodes
+from kaybee.widgets.events import process_widget_nodes
 
 
 class widget(nodes.General, nodes.Element):
@@ -76,26 +73,6 @@ class BaseDirective(Directive):
         return [widget_node]
 
 
-# class QueryListDirective(Directive):
-#     has_content = True
-#
-#     def run(self):
-#         # Get the info from this directive and make instance
-#
-#         content = '\n'.join(self.content)
-#         this_query = QueryList(content)
-#
-#         # TODO If the config says to validate, validate
-#         site = self.state.document.settings.env.site
-#         site.validator.validate(this_query)
-#         site.add_widget(this_query)
-#
-#         # Now add the node to the doctree
-#         widget_node = widget()
-#         widget_node.update_basic_atts(dict(names=[this_query.name]))
-#         return [widget_node]
-#
-
 class BaseWidget:
     def __init__(self, content):
         self.content = content
@@ -148,14 +125,10 @@ class BaseWidget:
 
 
 def setup(app):
-    # Query support
-    # app.add_node(querylist)
-    # app.add_directive('querylist', QueryListDirective)
-    # app.connect('doctree-resolved', process_query_nodes)
-
     # Loop through the registered widgets and add a directive
     # for each
     app.add_node(widget)
     for w in kb.config.widgets.values():
         app.add_directive(w.directive_name, BaseDirective)
-    app.connect('doctree-resolved', process_query_nodes)
+
+    app.connect('doctree-resolved', process_widget_nodes)

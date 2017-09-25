@@ -3,7 +3,7 @@ from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
 
 
-def process_query_nodes(app: Sphinx, doctree, fromdocname):
+def process_widget_nodes(app: Sphinx, doctree, fromdocname):
     """ Callback registered with Sphinx's doctree-resolved event """
     # Setup a template and context
     builder: StandaloneHTMLBuilder = app.builder
