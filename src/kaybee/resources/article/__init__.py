@@ -2,7 +2,7 @@ from kaybee.decorators import kb
 from kaybee.resources import BaseResource
 
 
-@kb.widget('article')
+@kb.resource('article')
 class Article(BaseResource):
     @property
     def navmenu_href(self):

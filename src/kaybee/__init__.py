@@ -47,9 +47,9 @@ def add_templates_paths(app):
     # Add the root of kaybee, then add the widgets and resources
     f = os.path.join(os.path.dirname(inspect.getfile(kaybee)), 'templates')
     template_bridge.loaders.append(SphinxFileSystemLoader(f))
-    items = sorted(kb.config.widgets.items()) + \
-            sorted(kb.config.resources.items())
-    for k, v in items:
+    values = list(kb.config.widgets.values()) + \
+             list(kb.config.resources.values())
+    for v in values:
         f = os.path.dirname(inspect.getfile(v))
         template_bridge.loaders.append(SphinxFileSystemLoader(f))
 

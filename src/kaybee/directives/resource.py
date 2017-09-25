@@ -1,5 +1,6 @@
 from docutils.parsers.rst import Directive
 
+from kaybee.decorators import kb
 
 class ResourceDirective(Directive):
     has_content = True
@@ -14,7 +15,7 @@ class ResourceDirective(Directive):
         # the directive be placed after the rst title
         title = self.state.parent.parent.children[0].children[0].rawsource
         block = '\n'.join(self.content)
-        klass = site.get_class(rtype)
+        klass = kb.config.resources[rtype]
         this_resource = klass(env.docname, rtype, title, block)
 
         # TODO If the config says to validate, validate

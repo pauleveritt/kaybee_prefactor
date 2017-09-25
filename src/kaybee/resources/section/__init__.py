@@ -2,6 +2,6 @@ from kaybee.decorators import kb
 from kaybee.resources import BaseResource
 
 
-@kb.widget('section')
+@kb.resource('section')
 class Section(BaseResource):
     pass

@@ -3,7 +3,6 @@
 import kaybee
 
 extensions = [kaybee.__title__]
-templates_path = ['_templates'] + kaybee.get_html_templates_path()
 
 master_doc = 'index'
 html_theme = 'kaybee'

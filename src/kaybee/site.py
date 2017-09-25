@@ -1,10 +1,6 @@
 from operator import attrgetter
 
-from kaybee.resources.article import Article
-from kaybee.resources.homepage import Homepage
-from kaybee.resources.section import Section
 from kaybee.validators import Validator
-from kaybee.widgets.querylist import QueryList
 
 
 class Site:
@@ -15,21 +11,11 @@ class Site:
         self.resources = {}
         self.widgets = {}
         self.config = config
-        self.klasses = dict(
-            article=Article,
-            section=Section,
-            homepage=Homepage,
-            querylist=QueryList
-        )
-        self._sections = None
         self.validator = Validator()
 
     def add_resource(self, resource):
         """ Add a resource to the db and do any indexing needed """
 
-        # Make sure the resource's class has been registered
-        klassname = resource.__class__.__name__.lower()
-        assert klassname in self.klasses
         self.resources[resource.name] = resource
 
     def remove_resource(self, name):
@@ -39,17 +25,12 @@ class Site:
     def add_widget(self, widget):
         """ Add a widget to the db and do any indexing needed """
 
-        # Make sure the resource's class has been registered
-        klassname = widget.__class__.__name__.lower()
-        assert klassname in self.klasses
         self.widgets[widget.name] = widget
 
     def remove_widget(self, name):
         """ Remove a widget from the site and do any unindexing """
-        self.widgets.pop(name, None)
 
-    def get_class(self, klass_name):
-        return self.klasses[klass_name]
+        self.widgets.pop(name, None)
 
     def filter_resources(self, rtype=None, sort_value='title',
                          order=1, limit=5):
