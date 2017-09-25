@@ -9,8 +9,11 @@ Articles
 
 A list of articles is here.
 
+.. sectionquery::
+
+    template: sectionquery.html
+
 .. toctree::
-    :maxdepth: 1
-    :caption: Contents:
+    :hidden:
 
     first_article

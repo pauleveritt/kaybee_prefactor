@@ -1,0 +1,50 @@
+<div class="container ">
+    <div class="columns">
+        <div class="column is-10">
+            <nav class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <h1 class="title">Articles</h1>
+                    </div>
+                </div>
+
+                <div class="level-right">
+                    <div class="level-item">
+                        <p class="subtitle">
+                            <strong>{{ result_count }}</strong> published
+                        </p>
+                    </div>
+                </div>
+            </nav>
+            <table class="table kb-listing-table">
+                <tbody>
+                {%  for result in results %}
+                <tr>
+                    <td>
+                        <div class="kb-listing-title">
+                            <a href="{{ '/' + result.name + '.html' }}">{{ result.title }}</a>
+                        </div>
+                        <p class="kb-listing-synopsis">
+                            The synopses that goes with it. The synopses
+                            might
+                            be
+                            long.
+                            The synopses that goes with it. The synopses
+                            might
+                            be
+                            long.
+                            The synopses that goes with it. The synopses
+                            might
+                            be
+                            long.
+                        </p>
+                    </td>
+                    <td class="kb-listing-timeago">an hour ago</td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

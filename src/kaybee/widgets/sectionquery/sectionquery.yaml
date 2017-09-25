@@ -1,0 +1,11 @@
+type: map
+mapping:
+  template:
+    type: str
+  query:
+    type: map
+    mapping:
+        rtype:
+            type: str
+        limit:
+            type: int
