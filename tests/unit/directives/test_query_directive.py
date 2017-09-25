@@ -1,7 +1,11 @@
-from kaybee.directives.querylist import QueryListDirective
+from kaybee.directives.querylist import QueryListDirective, querylist
 
 
-def test_import():
+def test_import_node():
+    assert querylist.__name__ == 'querylist'
+
+
+def test_import_directive():
     assert QueryListDirective.__name__ == 'QueryListDirective'
 
 
