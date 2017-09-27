@@ -1,10 +1,9 @@
 =========
-Article 1
+Article 2
 =========
 
 .. article::
     in_nav: True
     weight: 10
 
-
-Content after YAML.
+This article should appear in the navmenu.

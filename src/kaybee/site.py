@@ -70,7 +70,7 @@ class Site:
 
     @property
     def navmenu(self):
-        """ Sorted listing of resources with rtype == section """
+        """ Sorted listing of resources with in_nav set to true """
 
         resources = [r for r in self.resources.values() if
                      r.props.get('in_nav')]
@@ -78,5 +78,5 @@ class Site:
         # Sort first by title, then by "weight"
         return sorted(resources,
                       key=lambda x: (
-                          x.props['weight'], attrgetter('title')(x))
+                          x.props.get('weight', 0), attrgetter('title')(x))
                       )

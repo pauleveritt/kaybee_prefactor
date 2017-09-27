@@ -6,7 +6,7 @@ import importscan
 import kaybee
 from kaybee import resources, widgets
 from kaybee.decorators import kb
-from kaybee.events import kb_context, add_templates_paths
+from kaybee.events import kb_context, add_templates_paths, initialize_site
 
 __version__ = "0.0.1"
 
@@ -35,7 +35,7 @@ def setup(app):
     importscan.scan(widgets)
     dectate.commit(kb)
     app.connect('builder-inited', add_templates_paths)
-    app.connect('env-before-read-docs', events.initialize_site)
+    app.connect('env-before-read-docs', initialize_site)
     app.connect('env-purge-doc', events.purge_resources)
     app.connect('html-page-context', kb_context)
 

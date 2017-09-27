@@ -10,6 +10,15 @@ from kaybee.decorators import kb
 class BaseDirective(Directive):
     has_content = True
 
+    @classmethod
+    def get_resource_class(cls, resource_directive):
+        """ Make this easy to mock """
+        return kb.config.resources[resource_directive]
+
+    @property
+    def doc_title(self):
+        return self.state.parent.parent.children[0].children[0].rawsource
+
     def run(self):
         """ Run at parse time.
 
@@ -25,9 +34,9 @@ class BaseDirective(Directive):
 
         # Get the info from this directive and make instance
         resource_directive = self.name
-        title = self.state.parent.parent.children[0].children[0].rawsource
+        title = self.doc_title
         resource_content = '\n'.join(self.content)
-        resource_class = kb.config.resources[resource_directive]
+        resource_class = BaseDirective.get_resource_class(resource_directive)
         this_resource = resource_class(env.docname, resource_directive,
                                        title, resource_content)
 

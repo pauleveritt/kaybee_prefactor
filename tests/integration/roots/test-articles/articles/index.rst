@@ -12,6 +12,7 @@ Content after YAML.
 
 .. toctree::
     :maxdepth: 1
-    :caption: Contents:
 
     article1
+    article2
+    article3

@@ -10,6 +10,10 @@ pytest = "*"
 [dev-packages]
 beautifulsoup4 = "*"
 html5lib = "*"
+coverage = "*"
+vmprof = "*"
+pytest-mock = "*"
+pytest-cov = "*"
 
 [packages.pykwalify]
 extras = [ "ruamel",]
