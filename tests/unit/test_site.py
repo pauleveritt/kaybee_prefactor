@@ -72,6 +72,7 @@ def dummy_widgets():
         # DummyQuery(dict(template='query1.html', rtype='section'))
     )
 
+
 @pytest.fixture(name='sample_widget')
 def dummy_widget(sample_widgets):
     yield sample_widgets[0]
@@ -164,3 +165,9 @@ def test_remove_widget(site, sample_widget):
     site.add_widget(sample_widget)
     site.remove_widget(sample_widget.name)
     assert site.widgets.get(sample_widget.name, None) is None
+
+
+def test_is_debug(site):
+    assert not site.is_debug
+    site.config['debug'] = True
+    assert site.is_debug

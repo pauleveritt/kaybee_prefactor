@@ -10,6 +10,16 @@ class Site:
         self.config = config
         self.validator = Validator()
 
+    @property
+    def is_debug(self):
+        """ Check the html_theme config to see if we are in debug
+
+         The integration tests run in debug mode which lets templates
+         put some markup at the bottom that can be tested E2E.
+         """
+
+        return self.config.get('debug', False)
+
     def add_resource(self, resource):
         """ Add a resource to the db and do any indexing needed """
 
