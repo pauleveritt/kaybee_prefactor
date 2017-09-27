@@ -9,6 +9,11 @@ Articles
 
 Content after YAML.
 
+A list of articles is here.
+
+.. sectionquery::
+
+    template: sectionquery.html
 
 .. toctree::
     :maxdepth: 1
