@@ -33,5 +33,5 @@ def page(content, request):
     c = (content.outdir / pagename).text()
     yield BeautifulSoup(c, 'html5lib')
 
-    # tempdir = content.builder.confdir
-    # rmtree(tempdir)
+    tempdir = content.builder.confdir
+    rmtree(tempdir)
