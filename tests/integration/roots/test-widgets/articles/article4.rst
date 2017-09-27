@@ -1,6 +1,6 @@
-=========
-Article 4
-=========
+=============
+ZZZ Article 4
+=============
 
 .. article::
     in_nav: True
@@ -8,3 +8,11 @@ Article 4
     style: local-style
 
 This article look very different.
+
+.. sectionquery::
+
+    template: sectionquery.html
+    query:
+        sort_value: rtype
+        order: -1
+

@@ -41,3 +41,48 @@ class TestArticle1:
     def test_title(self, page):
         content = page.find(id='kb-debug-widget').string.strip()
         assert content == 'Widget Custom Template'
+
+
+@pytest.mark.parametrize('page', ['articles/article2.html', ], indirect=True)
+class TestSectionArticle2:
+    """ sectionquery widget """
+
+    def test_title(self, page):
+        content = page.find('title').string.strip()
+        assert content == 'Article 2'
+
+    def test_sectionquery_results(self, page):
+        value1 = page.find(id='kb-debug-result_count').string.strip()
+        assert value1 == '8'
+        value2 = page.find_all(class_='kb-debug-result')[0].string.strip()
+        assert value2 == 'Article 1'
+
+
+@pytest.mark.parametrize('page', ['articles/article3.html', ], indirect=True)
+class TestSectionArticle3:
+    """ sectionquery widget """
+
+    def test_title(self, page):
+        content = page.find('title').string.strip()
+        assert content == 'Article 3'
+
+    def test_sectionquery_results(self, page):
+        value1 = page.find(id='kb-debug-result_count').string.strip()
+        assert value1 == '8'
+        value2 = page.find_all(class_='kb-debug-result')[0].string.strip()
+        assert value2 == 'ZZZ Article 4'
+
+
+@pytest.mark.parametrize('page', ['articles/article4.html', ], indirect=True)
+class TestSectionArticle4:
+    """ sectionquery widget """
+
+    def test_title(self, page):
+        content = page.find('title').string.strip()
+        assert content == 'ZZZ Article 4'
+
+    def test_sectionquery_results(self, page):
+        value1 = page.find(id='kb-debug-result_count').string.strip()
+        assert value1 == '8'
+        value2 = page.find_all(class_='kb-debug-result')[0].string.strip()
+        assert value2 == 'Test Widgets'

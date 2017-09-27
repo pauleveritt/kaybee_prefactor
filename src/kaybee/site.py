@@ -64,7 +64,7 @@ class Site:
             else:
                 r3 = sorted(
                     r2,
-                    key=lambda x: x.props.get(sort_value)
+                    key=lambda x: x.props.get(sort_value, '')
                 )
         else:
             r3 = r2
