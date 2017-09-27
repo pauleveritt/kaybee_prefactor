@@ -168,6 +168,16 @@ def test_filter_resources_limit(site):
     assert len(results) == 2
 
 
+@pytest.mark.parametrize('field, order, expected_title', [
+    ('title', 1, 'About'),
+    ('title', -1, 'Z Last weights first'),
+])
+def test_filter_resources_sort(site, field, order, expected_title):
+    results = site.filter_resources(sort_value=field, order=order)
+    first_title = results[0].title
+    assert first_title == expected_title
+
+
 def test_nav_menu(site, sample_resources):
     # Only include things that want to be in the nav menu,
     # sorted by weight then by title

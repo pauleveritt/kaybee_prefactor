@@ -11,3 +11,7 @@ mapping:
             type: int
         parent_name:
             type: str
+        sort_value:
+            type: str
+        order:
+            type: int
