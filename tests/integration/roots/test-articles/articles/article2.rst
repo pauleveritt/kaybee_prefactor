@@ -3,7 +3,7 @@ Article 2
 =========
 
 .. article::
-    in_nav: True
-    weight: 10
+    in_nav: False
 
-This article should appear in the navmenu.
+
+Content after YAML.

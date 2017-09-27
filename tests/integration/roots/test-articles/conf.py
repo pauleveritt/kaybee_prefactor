@@ -18,5 +18,6 @@ html_context = dict(
     social_media=dict(
         twitter='paulweveritt',
         github='pauleveritt'
-    )
+    ),
+    debug=True
 )

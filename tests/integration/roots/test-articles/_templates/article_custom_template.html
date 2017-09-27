@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div id="kb-debug-custom-title">some custom title</div>
+    <div id="kb-debug-resource-style">{{ resource.style(site) }}</div>
+    <div id="kb-debug-resource-template">{{ resource.template(site) }}</div>
+{% endblock %}

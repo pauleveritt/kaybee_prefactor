@@ -6,3 +6,5 @@ mapping:
     type: bool
   weight:
     type: int
+  doc_template:
+    type: str

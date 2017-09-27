@@ -3,8 +3,7 @@ Article 1
 =========
 
 .. article::
-    in_nav: True
-    weight: 10
 
 
-Content after YAML.
+Test when no properties are set, what is default behavior. Look in body
+for article1-body.

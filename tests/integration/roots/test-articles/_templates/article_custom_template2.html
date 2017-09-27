@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div id="kb-debug-lineage-style">{{ resource.find_prop(site, 'style') }}</div>
+    <div id="kb-debug-lineage-logo">{{ resource.find_prop(site, 'logo') }}</div>
+    <div id="kb-debug-resource-template">{{ resource.template(site) }}</div>
+{% endblock %}

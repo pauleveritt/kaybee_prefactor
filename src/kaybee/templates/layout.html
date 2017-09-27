@@ -14,7 +14,8 @@
     <script src="{{ pathto('_static/app.bundle.js', 1) }}"></script>
 </head>
 <body>
-<section class="kb-header hero {{ resource['style'](site) if resource else '' }}">
+<section
+        class="kb-header hero {{ resource['style'](site) if resource else '' }}">
     <div class="hero-head">
         {% include "navbar.html" %}
     </div>
@@ -27,7 +28,14 @@
 
 {% include "footer.html" %}
 {% include "document_settings.html" %}
-    <script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
+<script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
 
+{% if site and site.is_debug %}
+    <div class="container kb-debug">
+        <h1>Debug Info</h1>
+        {% block debug %}
+        {% endblock %}
+    </div>
+{% endif %}
 </body>
 </html>

@@ -3,6 +3,7 @@ Article 3
 =========
 
 .. article::
-    template: article3_template.html
+    in_nav: True
+    weight: 10
 
-This article look very different.
+This article should appear in the navmenu.

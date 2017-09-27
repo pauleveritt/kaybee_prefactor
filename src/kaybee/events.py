@@ -28,7 +28,7 @@ def initialize_site(app, env, docnames):
     """ Create the Site instance if it is not in the pickle """
 
     if not hasattr(env, 'site'):
-        config = app.config.html_context['kaybee_config']
+        config = app.config.html_context
         env.site = Site(config)
 
 
