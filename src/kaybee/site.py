@@ -40,37 +40,44 @@ class Site:
         self.widgets.pop(name, None)
 
     def filter_resources(self, rtype=None, sort_value='title',
-                         order=1, limit=5):
+                         order=1, limit=5, parent_name=None):
         if rtype:
             r1 = [r for r in self.resources.values() if r.rtype == rtype]
         else:
             r1 = self.resources.values()
 
+        # Filter out only those with a parent in their lineage
+        if parent_name:
+            parent = self.resources[parent_name]
+            r2 = [r for r in tuple(r1) if parent in r.parents]
+        else:
+            r2 = r1
+
         # Now sorting
         if sort_value:
             if sort_value == 'title':
                 # Special case, everything else is in props
-                r2 = sorted(
-                    r1,
+                r3 = sorted(
+                    r2,
                     key=attrgetter('title')
                 )
             else:
-                r2 = sorted(
-                    r1,
+                r3 = sorted(
+                    r2,
                     key=lambda x: x.props.get(sort_value)
                 )
         else:
-            r2 = r1
+            r3 = r2
 
         # Reverse if needed
         if order == -1:
-            r2.reverse()
+            r3.reverse()
 
         # Return a limited number
         if limit:
-            r2 = r2[:limit]
+            r3 = r3[:limit]
 
-        return r2
+        return r3
 
     @property
     def sections(self):

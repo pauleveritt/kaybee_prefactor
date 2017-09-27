@@ -8,6 +8,7 @@ from kaybee.site import Site
 class DummyResource:
     parent = None
     rtype = 'resource'
+    parents = []
 
     def __init__(self, name, title, in_nav=False, weight=0):
         self.name = name
@@ -20,6 +21,7 @@ class DummyResource:
 
 class DummySection:
     rtype = 'section'
+    parents = []
 
     def __init__(self, name, title,
                  in_nav=False, weight=0):
@@ -128,7 +130,7 @@ def test_section_listing(site, sample_resources):
     ('rtype', 'resource', 'About'),
     ('sort_value', 'title', 'About'),
     ('sort_value', 'weight', 'Q Not Last No Weight'),
-    ('order', -1, 'Z Last weights first')
+    ('order', -1, 'Z Last weights first'),
 ])
 def test_filter_resources(site, filter_key, filter_value, expected):
     # No filter applied
@@ -138,6 +140,19 @@ def test_filter_resources(site, filter_key, filter_value, expected):
         kw = {filter_key: filter_value}
     results = site.filter_resources(**kw)
     assert results[0].title == expected
+
+
+def test_filter_resources_parent(site):
+    parent = DummySection('section2/index', 'Second Section')
+    parent.parents = []
+    child = DummyResource('section2/article2', 'Second Resource')
+    child.parents = [parent]
+    site.add_resource(parent)
+    site.add_resource(child)
+    kw = dict(parent_name='section2/index')
+    results = site.filter_resources(**kw)
+    assert len(results) == 1
+    assert results[0].title == 'Second Resource'
 
 
 def test_filter_resources_limit(site):
