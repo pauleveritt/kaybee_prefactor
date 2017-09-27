@@ -28,7 +28,10 @@ class TestSectionIndex:
         assert content == 'Articles'
 
     def test_sectionquery_results(self, page):
-        pass  # TODO write this test after unit test and implementation
+        value1 = page.find(id='kb-debug-result_count').string.strip()
+        assert value1 == '1'
+        value2 = page.find_all(class_='kb-debug-result')[0].string.strip()
+        assert value2 == 'Article 5'
 
 
 @pytest.mark.parametrize('page', ['articles/article1.html', ], indirect=True)

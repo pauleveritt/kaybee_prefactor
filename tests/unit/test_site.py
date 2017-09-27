@@ -8,7 +8,6 @@ from kaybee.site import Site
 class DummyResource:
     parent = None
     rtype = 'resource'
-    parents = []
 
     def __init__(self, name, title, in_nav=False, weight=0):
         self.name = name
@@ -17,11 +16,14 @@ class DummyResource:
             in_nav=in_nav,
             weight=weight
         )
+        self._parents = []
+
+    def parents(self, site):
+        return self._parents
 
 
 class DummySection:
     rtype = 'section'
-    parents = []
 
     def __init__(self, name, title,
                  in_nav=False, weight=0):
@@ -31,6 +33,11 @@ class DummySection:
             in_nav=in_nav,
             weight=weight
         )
+
+        self._parents = []
+
+    def parents(self, site):
+        return self._parents
 
     def __str__(self):
         return self.name
@@ -144,9 +151,9 @@ def test_filter_resources(site, filter_key, filter_value, expected):
 
 def test_filter_resources_parent(site):
     parent = DummySection('section2/index', 'Second Section')
-    parent.parents = []
+    parent._parents = []
     child = DummyResource('section2/article2', 'Second Resource')
-    child.parents = [parent]
+    child._parents = [parent]
     site.add_resource(parent)
     site.add_resource(child)
     kw = dict(parent_name='section2/index')

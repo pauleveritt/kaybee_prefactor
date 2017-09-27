@@ -12,11 +12,9 @@ class DummySite:
 def dummy_sectionquery():
     content = """
     template: sectionquery.html
-    queries:
-        - label: Recent Blog Posts
-          style: primary
-          rtype: section
-          limit: 5
+    query:
+      rtype: section
+      limit: 5
     """
     yield SectionQuery(content)
 

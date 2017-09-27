@@ -49,7 +49,7 @@ class Site:
         # Filter out only those with a parent in their lineage
         if parent_name:
             parent = self.resources[parent_name]
-            r2 = [r for r in tuple(r1) if parent in r.parents]
+            r2 = [r for r in r1 if parent in r.parents(self)]
         else:
             r2 = r1
 
