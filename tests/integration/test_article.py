@@ -67,10 +67,15 @@ class TestArticle3:
         content = nav_items[3].contents[0].strip()
         assert content != 'Article 3'
 
-    def test_section_style(self, page):
+    def test_style(self, page):
         node = page.find(id='kb-debug-resource-style')
         value = node.contents[0].strip()
-        assert 'is-bold is-info' in value
+        assert value == 'is-bold is-info'
+
+    def test_section_name(self, page):
+        node = page.find(id='kb-debug-resource-section')
+        value = node.contents[0].strip()
+        assert value == 'articles'
 
     @pytest.mark.parametrize('propname, propvalue', [
         ('in_nav', 'True'),

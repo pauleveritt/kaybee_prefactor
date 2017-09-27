@@ -88,7 +88,12 @@
     <div id="kb-debug-resource-template">
         Template: {{ resource.template(site) }}</div>
     <div id="kb-debug-resource-name">Resource: {{ resource.name }}</div>
-    <div id="kb-debug-resource-style">Style: {{ resource.style(site) }}</div>
+    <div>Section:
+        <span id="kb-debug-resource-section">{{ resource.section(site).name }}</span>
+    </div>
+    <div>Style:
+        <span id="kb-debug-resource-style">{{ resource.style(site) }}</span>
+    </div>
     <h2>Props</h2>
     <ul id="kb-debug-resource-props" style="margin-left: 2em">
         {% for k, v in resource.props.items() %}

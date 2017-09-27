@@ -113,11 +113,6 @@ class BaseResource:
 
         return name, parent
 
-    @classmethod
-    def package_dir(cls):
-        f = inspect.getfile(cls)
-        return os.path.dirname(f)
-
     def template(self, site):
         """ Template can come from YAML, section, or class """
         custom_template = self.props.get('template')
