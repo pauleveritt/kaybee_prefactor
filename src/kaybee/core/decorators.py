@@ -25,9 +25,9 @@ class SiteAction(dectate.Action):
         'site': dict
     }
 
-    def __init__(self, name='singleton'):
+    def __init__(self):
         super().__init__()
-        self.name = name
+        self.name = 'singleton'
 
     def identifier(self, site):
         return self.name
