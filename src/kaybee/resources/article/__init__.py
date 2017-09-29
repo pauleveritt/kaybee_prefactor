@@ -1,4 +1,4 @@
-from kaybee.decorators import kb
+from kaybee.core.decorators import kb
 from kaybee.resources import BaseResource
 
 
@@ -8,3 +8,8 @@ class Article(BaseResource):
     @property
     def navmenu_href(self):
         return self.name + '.html'
+
+
+@kb.site()
+class Site:
+    name = 'Bubba Palace'

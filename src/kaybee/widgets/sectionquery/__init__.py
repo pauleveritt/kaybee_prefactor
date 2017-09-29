@@ -1,4 +1,4 @@
-from kaybee.decorators import kb
+from kaybee.core.decorators import kb
 from kaybee.widgets import BaseWidget
 
 

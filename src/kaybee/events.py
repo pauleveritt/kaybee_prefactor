@@ -20,7 +20,7 @@ import os
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
 import kaybee
-from kaybee.decorators import kb
+from kaybee.core.decorators import kb
 from kaybee.site import Site
 
 

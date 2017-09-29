@@ -5,7 +5,7 @@ import importscan
 
 import kaybee
 from kaybee import resources, widgets
-from kaybee.decorators import kb
+from kaybee.core.decorators import kb
 from kaybee.events import kb_context, add_templates_paths, initialize_site
 
 __version__ = "0.0.1"

@@ -1,7 +1,8 @@
-import pytest
 from copy import deepcopy
 
-from kaybee.decorators import kb
+import pytest
+
+from kaybee.core.decorators import kb
 from kaybee.site import Site
 
 

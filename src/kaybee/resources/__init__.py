@@ -1,10 +1,7 @@
-import inspect
-import os
-
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
 
-from kaybee.decorators import kb
+from kaybee.core.decorators import kb
 
 
 class BaseDirective(Directive):
