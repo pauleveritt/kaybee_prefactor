@@ -135,6 +135,7 @@ class BaseWidget:
 
         context['site'] = site
         self.make_context(context, site)
+        # NOTE: Can use builder.templates.render_string
         html = builder.templates.render(self.template, context)
         return html
 

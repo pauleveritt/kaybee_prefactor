@@ -12,6 +12,8 @@ A list of articles is here.
 .. sectionquery::
 
     template: sectionquery.html
+    query:
+        rtype: article
 
 .. toctree::
     :hidden:
