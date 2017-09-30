@@ -1,6 +1,6 @@
 import pytest
 
-from kaybee.events import initialize_site, purge_resources
+from kaybee.core.events import initialize_site, purge_resources
 
 
 class DummyApp:

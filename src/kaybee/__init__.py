@@ -1,12 +1,10 @@
 import os
 
-import dectate
-import importscan
-
-import kaybee
-from kaybee import resources, widgets
-from kaybee.core.decorators import kb
-from kaybee.events import kb_context, add_templates_paths, initialize_site
+from kaybee.core.events import (
+    register,
+    kb_context, add_templates_paths,
+    initialize_site, purge_resources
+)
 
 __version__ = "0.0.1"
 
@@ -31,17 +29,11 @@ def get_path():
 
 
 def setup(app):
-    importscan.scan(resources)
-    importscan.scan(widgets)
-    dectate.commit(kb)
+    app.connect('builder-inited', register)
     app.connect('builder-inited', add_templates_paths)
     app.connect('env-before-read-docs', initialize_site)
-    app.connect('env-purge-doc', events.purge_resources)
+    app.connect('env-purge-doc', purge_resources)
     app.connect('html-page-context', kb_context)
-
-    # Delegate directive registration
-    resources.setup(app)
-    widgets.setup(app)
 
     return dict(
         version=__version__,

@@ -133,6 +133,7 @@ class BaseWidget:
         """ Given a Sphinx builder and context with site in it,
          generate HTML """
 
+        kc = kb.config
         context['site'] = site
         self.make_context(context, site)
         # NOTE: Can use builder.templates.render_string

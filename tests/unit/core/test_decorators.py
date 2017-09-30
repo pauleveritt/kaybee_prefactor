@@ -91,3 +91,4 @@ class TestKb:
         assert kb.resource.__name__ == 'method'
         assert kb.site.__name__ == 'method'
         assert kb.get_site.__name__ == 'get_site'
+

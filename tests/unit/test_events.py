@@ -3,7 +3,7 @@ Test the html context event handler
 """
 import pytest
 
-from kaybee.events import (
+from kaybee.core.events import (
     initialize_site, kb_context, purge_resources
 )
 
