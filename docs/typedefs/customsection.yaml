@@ -1,0 +1,7 @@
+kind: resource
+type: customsection
+defaults:
+  template: bam
+  is_nav: True
+---
+y: 2

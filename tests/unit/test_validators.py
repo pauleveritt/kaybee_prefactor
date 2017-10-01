@@ -12,7 +12,7 @@ class DummyResource:
 
 @pytest.fixture()
 def Validator():
-    from kaybee.validators import Validator
+    from kaybee.core.validators import Validator
     yield Validator
 
 

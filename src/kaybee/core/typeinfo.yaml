@@ -1,0 +1,10 @@
+type: map
+mapping:
+  kind:
+    type: str
+    enum: ['resource', 'widget']
+  type:
+    type: str
+  defaults:
+    type: map
+    allowempty: True

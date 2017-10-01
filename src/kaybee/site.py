@@ -1,6 +1,6 @@
 from operator import attrgetter
 
-from kaybee.validators import Validator
+from kaybee.core.validators import Validator
 
 
 class Site:

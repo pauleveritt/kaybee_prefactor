@@ -154,6 +154,17 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 # intersphinx_mapping = {'https://docs.python.org/': None}
+
+# kaybee config
+kaybee_config = dict(
+    logo=dict(
+        img_url='http://bulma.io/images/bulma-logo.png',
+        alt='Sphinx Bulma Theme'
+    ),
+    typedefs=[
+        'typedefs/customsection.yaml',
+    ]
+)
 html_context = dict(
     logo=dict(
         img_url='http://bulma.io/images/bulma-logo.png',

@@ -19,6 +19,8 @@ import os
 
 import dectate
 import importscan
+from pykwalify.core import Core
+from ruamel.yaml import load_all
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
 import kaybee
@@ -27,20 +29,40 @@ from kaybee.core.decorators import kb
 from kaybee.site import Site
 
 
+def _load_typedef(full_fn):
+    """ Given a fn of YAML, parse it and configure registry """
+
+    typeinfo_path = os.path.join(
+        os.path.dirname(inspect.getfile(kaybee)),
+        'core/typeinfo.yaml'
+    )
+    with open(full_fn, 'r') as f:
+        content = f.read()
+        typeinfo, schema = list(load_all(content))
+
+        # Validate the typeinfo, which has to conform to a schema
+        c = Core(source_data=typeinfo, schema_files=[typeinfo_path])
+        c.validate(raise_exception=True)
+
+
 def register(app):
     """ Load the resources, types, etc. from the registry
 
     We can get resources etc. from 3 location: classes in kaybee itself,
     classes in the doc project, and YAML "typedef" files in the doc
     project.
-
-    This function reads all 3 locations to populate kb the registry.
     """
 
-    # First the typedefs.yaml files in the doc project
-
-    # The Site config points to the location of the modules with
-    # resources etc. (i.e. decorators to scan)
+    # If the site has a kaybee_config, get it
+    kc = app.config.kaybee_config
+    if kc:
+        # First the typedefs.yaml files in the doc project
+        typedefs = kc.get('typedefs')
+        if typedefs:
+            for typedef_fn in typedefs:
+                full_fn = os.path.join(app.confdir, typedef_fn)
+                assert os.path.exists(full_fn)
+                _load_typedef(full_fn)
 
     # Finally, scan for decorators in kaybee core
     importscan.scan(resources)
@@ -48,7 +70,8 @@ def register(app):
 
     dectate.commit(kb)
 
-    # Delegate directive registration
+    # Once config is setup, use it to drive various Sphinx registrations
+    # (nodes, directives)
     resources.setup(app)
     widgets.setup(app)
 
