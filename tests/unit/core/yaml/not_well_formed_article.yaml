@@ -1,0 +1,3 @@
+# Not-well formed YAML and thus not valid type def for article
+x: 9
+  y: 9
