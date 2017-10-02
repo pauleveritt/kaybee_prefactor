@@ -6,7 +6,6 @@ import pytest as pytest
 from pykwalify.errors import SchemaError
 from ruamel.yaml.scanner import ScannerError
 
-from kaybee.core.decorators import ResourceAction
 from kaybee.core.typedefs import KbTypedef, KbTypedefDocsError
 
 
@@ -18,29 +17,6 @@ def make_yaml_filename(fn):
         'yaml',
         fn
     )
-
-
-@pytest.fixture()
-def registry():
-    class DummyAction(dectate.Action):
-        config = {
-            'resources': dict
-        }
-
-        def __init__(self, name):
-            super().__init__()
-            self.name = name
-
-        def identifier(self, resources):
-            return self.name
-
-        def perform(self, obj, resources):
-            resources[self.name] = obj
-
-    class registry(dectate.App):
-        dummy = dectate.directive(DummyAction)
-
-    yield registry
 
 
 class TestKbTypedf:
@@ -63,14 +39,124 @@ class TestKbTypedf:
             KbTypedef(yaml_fn=yaml_fn)
 
 
-class TestRegistry:
-    def test_construction(self, registry):
-        @registry.dummy('dummyarticle')
-        class DummyArticle:
-            pass
+class DummySection:
+    pass
 
+
+@pytest.fixture()
+def registry():
+    class DummyResourceAction(dectate.Action):
+        config = {
+            'resources': dict
+        }
+
+        def __init__(self, name, defaults=None, references=None):
+            super().__init__()
+            self.name = name
+            self.defaults = defaults
+            self.references = references
+
+        def identifier(self, resources):
+            return self.name
+
+        def perform(self, obj, resources):
+            resources[self.name] = obj
+
+    class DummyWidgetAction(dectate.Action):
+        config = {
+            'widgets': dict
+        }
+
+        def __init__(self, name, defaults=None, references=None):
+            super().__init__()
+            self.name = name
+            self.defaults = defaults
+            self.references = references
+
+        def identifier(self, widgets):
+            return self.name
+
+        def perform(self, obj, widgets):
+            widgets[self.name] = obj
+
+    class registry(dectate.App):
+        dummyresource = dectate.directive(DummyResourceAction)
+        dummywidget = dectate.directive(DummyWidgetAction)
+
+        @classmethod
+        def first_action(cls, kind, kbtype):
+            qr = dectate.Query(kind)
+            return next((x for x in qr.filter(name=kbtype)(cls)))[0]
+
+    yield registry
+
+
+@pytest.fixture()
+def register_article(registry):
+    @registry.dummyresource('dummyarticle', defaults=dict(x=1),
+                            references=[1, 3])
+    class DummyArticle:
+        pass
+
+    yield DummyArticle
+
+
+@pytest.fixture()
+def query_resource(registry, register_article):
+    yield dectate.Query('dummyresource')
+
+
+class TestRegistry:
+    def test_construction(self, registry, query_resource):
         dectate.commit(registry)
 
-        query = dectate.Query('dummy')
-        results = list(query(registry))
-        assert results[0][1] == 1
+        results = list(query_resource(registry))
+        assert len(results) == 1
+
+    def test_clears_registray_second_time(self, registry, query_resource):
+        with pytest.raises(AttributeError):
+            list(query_resource(registry))
+
+    def test_find_by_type(self, registry, query_resource):
+        dectate.commit(registry)
+        da = registry.first_action('dummyresource', 'dummyarticle')
+        assert da.__class__.__name__.endswith('DummyResourceAction')
+
+    def test_type_defaults(self, registry, query_resource):
+        dectate.commit(registry)
+        da = registry.first_action('dummyresource', 'dummyarticle')
+        assert da.defaults['x'] == 1
+
+    def test_type_no_defaults(self, registry):
+        registry.dummyresource('dummysection')(DummySection)
+        dectate.commit(registry)
+        ds = registry.first_action('dummyresource', 'dummysection')
+        assert ds.defaults is None
+
+    def test_type_references(self, registry, query_resource):
+        dectate.commit(registry)
+        da = registry.first_action('dummyresource', 'dummyarticle')
+        assert da.references == [1, 3]
+
+    def test_type_no_references(self, registry):
+        registry.dummyresource('dummysection')(DummySection)
+        dectate.commit(registry)
+        da = registry.first_action('dummyresource', 'dummysection')
+        assert da.references is None
+
+    def test_imperative_add(self, registry):
+        # This is how YAML-defined types will add type info
+        registry.dummyresource('dummysection')(DummySection)
+        dectate.commit(registry)
+        assert registry.config.resources['dummysection'] == DummySection
+
+    def test_imperative_add_defaults_references(self, registry):
+        # This is how YAML-defined types will add type info
+        d = dict(x=99)
+        r = [1, 3]
+        registry.dummyresource('dummysection',
+                               defaults=d, references=r)(DummySection)
+        dectate.commit(registry)
+        ds = registry.first_action('dummyresource', 'dummysection')
+        assert ds.defaults['x'] == 99
+        assert ds.references == [1, 3]
