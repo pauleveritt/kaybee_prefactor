@@ -14,7 +14,7 @@ class Dummy:
 
 class SampleResource:
     def __init__(self, *args, **kw):
-        pass
+        self.props = dict(template='foo')
 
 
 class SampleDirective(BaseDirective):
@@ -51,6 +51,8 @@ def test_construction(base_directive):
 def test_construction_run(monkeypatch, base_directive):
     monkeypatch.setattr(BaseDirective, 'get_resource_class',
                         lambda x: SampleResource)
+    monkeypatch.setattr(BaseDirective, 'validate_resource',
+                        lambda x, y, z: None)
     monkeypatch.setattr(BaseDirective, 'doc_title',
                         lambda x: 'Some Title')
     result = base_directive.run()

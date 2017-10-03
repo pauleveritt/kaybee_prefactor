@@ -9,7 +9,9 @@ from kaybee.core.registry import (
 
 
 class DummySection:
-    pass
+    @classmethod
+    def get_schema(cls):
+        return dict()
 
 
 class DummySite:
@@ -64,7 +66,9 @@ def dummy_registry():
 def register_article_no_defaults(dummy_registry):
     @dummy_registry.dummyresource('dummyarticle')
     class DummyArticle:
-        pass
+        @classmethod
+        def get_schema(cls):
+            return dict()
 
     yield DummyArticle
 
@@ -74,7 +78,9 @@ def register_article_defaults(dummy_registry):
     @dummy_registry.dummyresource('dummyarticle', defaults=dict(x=1),
                                   references=[1, 3])
     class DummyArticle:
-        pass
+        @classmethod
+        def get_schema(cls):
+            return dict()
 
     yield DummyArticle
 
@@ -148,8 +154,6 @@ class TestRegistry:
         dectate.commit(dummy_registry)
         klass = dummy_registry.get_class('dummyresource', 'dummyarticle')
         assert klass.__name__.endswith('DummyArticle')
-
-
 
     def test_get_site(self, dummy_registry):
         dummy_registry.dummysite()(DummySite)

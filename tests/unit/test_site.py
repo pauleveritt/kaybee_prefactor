@@ -190,10 +190,6 @@ def test_nav_menu(site, sample_resources):
     assert navmenu_ids[3] == sample_resources[4].name
 
 
-def test_validator_exists(site):
-    assert site.validator.__class__.__name__ == 'Validator'
-
-
 def test_remove_widget(site, sample_widget):
     site.add_widget(sample_widget)
     site.remove_widget(sample_widget.name)

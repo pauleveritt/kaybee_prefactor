@@ -131,7 +131,9 @@ def dummy_registry():
 
 
 class DummySection:
-    pass
+    @classmethod
+    def get_schema(cls):
+        return dict()
 
 
 @pytest.fixture()

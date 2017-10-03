@@ -16,3 +16,11 @@ class TestHomepage:
     def test_has_hero_style(self, page):
         div = page.find_all(class_='hero-body')
         assert len(div) == 1
+
+
+@pytest.mark.parametrize('json_page', ['debug.html', ], indirect=True)
+class TestDebugpage:
+    def test_title(self, json_page):
+        registry = json_page['registry']
+        resources = registry['resources']
+        assert resources == ['article', 'homepage', 'section']

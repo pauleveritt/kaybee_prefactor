@@ -1,46 +1,32 @@
+import inspect
+
+import os
 import pytest
-from pykwalify.errors import SchemaError, CoreError
+from pykwalify.errors import SchemaError
+from ruamel.yaml import load
 
-
-class DummyResource:
-    def __init__(self, in_nav=False, weight=0):
-        self.props = dict(
-            in_nav=in_nav,
-            weight=weight
-        )
+from kaybee.core.validators import validate
+from kaybee.resources.article import Article
 
 
 @pytest.fixture()
-def Validator():
-    from kaybee.core.validators import Validator
-    yield Validator
+def article_schema():
+    fn = os.path.join(os.path.dirname(inspect.getfile(Article)),
+                      'article.yaml')
+    with open(fn, 'r') as f:
+        return load(f)
 
 
-@pytest.fixture()
-def validator(Validator):
-    yield Validator()
+def test_import():
+    assert validate.__name__ == 'validate'
 
 
-@pytest.fixture()
-def dummy_resource():
-    yield DummyResource()
+def test_validate_succeed(article_schema):
+    props = dict(template='xx')
+    validate(props, article_schema)
 
 
-def test_import(Validator):
-    assert Validator.__name__ == 'Validator'
-
-
-def test_defaultschema_validate_succeed(validator, dummy_resource):
-    validator.validate(dummy_resource)
-
-
-def test_defaultschema_validate_fail(validator, dummy_resource):
-    dummy_resource.props['xxx'] = 'xxx'
+def test_validate_fail(article_schema):
+    props = dict(xxxtemplate='xx')
     with pytest.raises(SchemaError):
-        validator.validate(dummy_resource)
-
-
-def test_customschema_validate_fail(validator, dummy_resource):
-    dummy_resource.schema_filename = '/Fake/Path'
-    with pytest.raises(CoreError):
-        validator.validate(dummy_resource)
+        validate(props, article_schema)

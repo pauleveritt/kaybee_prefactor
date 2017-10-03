@@ -1,14 +1,11 @@
 from operator import attrgetter
 
-from kaybee.core.validators import Validator
-
 
 class Site:
     def __init__(self, config):
         self.resources = {}
         self.widgets = {}
         self.config = config
-        self.validator = Validator()
 
     @property
     def is_debug(self):

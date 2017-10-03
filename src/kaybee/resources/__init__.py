@@ -25,6 +25,12 @@ class BaseDirective(Directive):
     def doc_title(self):
         return self.state.parent.parent.children[0].children[0].rawsource
 
+    def validate_resource(self, resource, kbtype):
+        props = resource.props
+        action_data = self.get_resource_schema(kbtype)
+        schema_data = action_data.schema
+        validate(props, schema_data)
+
     def run(self):
         """ Run at parse time.
 
@@ -49,14 +55,9 @@ class BaseDirective(Directive):
         # Validate the properties against the schema for this
         # widget type
         # TODO 001 Get the schema from the registry, not the "site"
-        props = this_resource.props
-        action_data = self.get_resource_schema(kbtype)
-        schema_data = action_data.schema
-        validate(props, schema_data)
-
-        # site = self.state.document.settings.env.site
-        # site.validator.validate(this_resource)
-        # site.add_resource(this_resource)
+        self.validate_resource(this_resource, kbtype)
+        site = self.state.document.settings.env.site
+        site.add_resource(this_resource)
 
         # Don't need to return a resource "node", the
         # document is the node

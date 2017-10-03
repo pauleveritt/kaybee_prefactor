@@ -8,6 +8,7 @@ from docutils.parsers.rst import Directive
 from ruamel.yaml import load
 
 from kaybee.core.registry import registry
+from kaybee.core.validators import validate
 from kaybee.widgets.events import process_widget_nodes
 
 
@@ -45,6 +46,17 @@ class widget(nodes.General, nodes.Element):
 class BaseDirective(Directive):
     has_content = True
 
+    @classmethod
+    def get_widget_schema(cls, kbtype):
+        """ Make this easy to mock """
+        return registry.first_action('widget', kbtype)
+
+    def validate_widget(self, widget, kbtype):
+        props = widget.props
+        action_data = self.get_widget_schema(kbtype)
+        schema_data = action_data.schema
+        validate(props, schema_data)
+
     def run(self):
         """ Run at parse time.
 
@@ -66,8 +78,8 @@ class BaseDirective(Directive):
         # Validate the properties against the schema for this
         # widget type
         # TODO 001 No longer the site's responsibility
+        self.validate_widget(this_widget, kbtype)
         site = self.state.document.settings.env.site
-        site.validator.validate(this_widget)
         site.add_widget(this_widget)
 
         # Now add the node to the doctree
