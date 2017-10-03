@@ -1,0 +1,5 @@
+kind: resource
+kbtype: customsection
+based_on: 'section'
+---
+y: 2

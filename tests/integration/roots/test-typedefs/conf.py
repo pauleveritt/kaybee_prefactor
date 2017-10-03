@@ -4,6 +4,7 @@ import os
 import sys
 
 import kaybee
+
 #
 # Add the typedefs to pythonpath
 here = os.path.abspath(os.path.dirname(__file__))
@@ -27,6 +28,16 @@ html_context = dict(
         twitter='paulweveritt',
         github='pauleveritt'
     )
+)
+
+kaybee_config = dict(
+    logo=dict(
+        img_url='http://bulma.io/images/bulma-logo.png',
+        alt='Sphinx Bulma Theme'
+    ),
+    typedefs=[
+        'typedefs/customsection.yaml',
+    ]
 )
 
 html_additional_pages = {

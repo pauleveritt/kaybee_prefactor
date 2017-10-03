@@ -20,8 +20,6 @@ import os
 
 import dectate
 import importscan
-from pykwalify.core import Core
-from ruamel.yaml import load_all
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
 import kaybee
@@ -39,6 +37,11 @@ def register(app):
     project.
     """
 
+    # First, scan for decorators in kaybee core and commit
+    importscan.scan(resources)
+    importscan.scan(widgets)
+    dectate.commit(registry)
+
     # If the site has a kaybee_config, get it
     kc = app.config.kaybee_config
     if kc:
@@ -50,10 +53,6 @@ def register(app):
                 assert os.path.exists(full_fn)
                 yaml_typedef = YamlTypedef(full_fn)
                 yaml_typedef.register(registry)
-
-    # Finally, scan for decorators in kaybee core
-    importscan.scan(resources)
-    importscan.scan(widgets)
 
     dectate.commit(registry)
 
