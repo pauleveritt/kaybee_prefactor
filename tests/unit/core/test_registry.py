@@ -35,7 +35,16 @@ def registry():
 
 
 @pytest.fixture()
-def register_article(registry):
+def register_article_no_defaults(registry):
+    @registry.dummyresource('dummyarticle')
+    class DummyArticle:
+        pass
+
+    yield DummyArticle
+
+
+@pytest.fixture()
+def register_article_defaults(registry):
     @registry.dummyresource('dummyarticle', defaults=dict(x=1),
                             references=[1, 3])
     class DummyArticle:
@@ -45,12 +54,13 @@ def register_article(registry):
 
 
 @pytest.fixture()
-def query_resource(registry, register_article):
+def query_resource(registry):
     yield dectate.Query('dummyresource')
 
 
 class TestRegistry:
-    def test_construction(self, registry, query_resource):
+    def test_construction(self, registry, register_article_no_defaults,
+                          query_resource):
         dectate.commit(registry)
 
         results = list(query_resource(registry))
@@ -60,28 +70,29 @@ class TestRegistry:
         with pytest.raises(AttributeError):
             list(query_resource(registry))
 
-    def test_find_by_type(self, registry, query_resource):
+    def test_find_by_type(self, registry, register_article_no_defaults):
         dectate.commit(registry)
         da = registry.first_action('dummyresource', 'dummyarticle')
         assert da.__class__.__name__.endswith('ResourceAction')
 
-    def test_type_defaults(self, registry, query_resource):
+    def test_type_defaults(self, registry, register_article_defaults):
         dectate.commit(registry)
         da = registry.first_action('dummyresource', 'dummyarticle')
         assert da.defaults['x'] == 1
 
-    def test_type_no_defaults(self, registry):
+    def test_type_no_defaults(self, registry, register_article_no_defaults):
         registry.dummyresource('dummysection')(DummySection)
         dectate.commit(registry)
         ds = registry.first_action('dummyresource', 'dummysection')
         assert ds.defaults is None
 
-    def test_type_references(self, registry, query_resource):
+    def test_type_references(self, registry, register_article_defaults,
+                             query_resource):
         dectate.commit(registry)
         da = registry.first_action('dummyresource', 'dummyarticle')
         assert da.references == [1, 3]
 
-    def test_type_no_references(self, registry):
+    def test_type_no_references(self, registry, register_article_no_defaults):
         registry.dummyresource('dummysection')(DummySection)
         dectate.commit(registry)
         da = registry.first_action('dummyresource', 'dummysection')
@@ -111,5 +122,4 @@ class TestRegistry:
 
         # TODO
         # Test a YAML typedef getting associated with a registered class
-        # Unwind the fixtures in here, be more manual/explicit
         # Move over the class method from decorator and write tests
