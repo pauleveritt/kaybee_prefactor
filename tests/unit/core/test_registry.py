@@ -18,10 +18,44 @@ class DummySite:
 
 @pytest.fixture()
 def dummy_registry():
-    class dummy_registry(registry):
+    class dummy_registry(dectate.App):
         dummyresource = dectate.directive(ResourceAction)
         dummywidget = dectate.directive(WidgetAction)
         dummysite = dectate.directive(SiteAction)
+
+        @classmethod
+        def add_action(cls, kind, kbtype, klass, defaults=None,
+                       references=None):
+            """ YAML types imperatively add config per contract """
+
+            # Get the kind, raise custom exception if it doesn't exist
+            k = getattr(cls, kind, None)
+            if k is None:
+                raise KbActionInvalidKind(kind)
+
+            k(kbtype, defaults=defaults, references=references)(klass)
+
+        @classmethod
+        def first_action(cls, kind, kbtype):
+            """ Get type config info from the kbtype of certain kind """
+            qr = dectate.Query(kind)
+            # Use a generator expression to get the first action
+            # in "kind" with a name of ktype. kind might be
+            # "resource" or "widget", kbtype might be "article".
+            return next((x for x in qr.filter(name=kbtype)(cls)))[0]
+
+        @classmethod
+        def get_class(cls, kind, kbtype):
+            q = dectate.Query(kind)
+            klass = [i[1] for i in list(q(cls)) if i[0].name == kbtype][0]
+            return klass
+
+        @classmethod
+        def get_site(cls, sitename='site'):
+            """ Don't have a way to register a singleton for Dectate """
+            query = dectate.Query(sitename)
+            results = list(query(cls))
+            return results[0][1]
 
     yield dummy_registry
 
