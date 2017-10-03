@@ -119,7 +119,7 @@ class TestRegistry:
         registry.dummysite()(DummySite)
         dectate.commit(registry)
         site = registry.get_site()
+        assert site.__name__.endswith('DummySite')
 
         # TODO
         # Test a YAML typedef getting associated with a registered class
-        # Move over the class method from decorator and write tests
