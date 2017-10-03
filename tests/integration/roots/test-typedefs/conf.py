@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import os
+import sys
+
 import kaybee
+#
+# Add the typedefs to pythonpath
+here = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(here, 'typedefs'))
+from blogpost import Blogpost
 
 extensions = [kaybee.__title__]
 

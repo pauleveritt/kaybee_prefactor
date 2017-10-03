@@ -8,4 +8,4 @@ class TestDebugpage:
     def test_title(self, json_page):
         registry = json_page['registry']
         resources = registry['resources']
-        assert resources == ['article', 'homepage', 'section']
+        assert resources == ['blogpost', 'article', 'homepage', 'section']
