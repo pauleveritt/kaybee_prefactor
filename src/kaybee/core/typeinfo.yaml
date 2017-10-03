@@ -3,8 +3,17 @@ mapping:
   kind:
     type: str
     enum: ['resource', 'widget']
-  type:
+    required: True
+  kbtype:
     type: str
+    required: True
+  based_on:
+    type: str
+    required: True
   defaults:
     type: map
     allowempty: True
+  references:
+    type: seq
+    sequence:
+      - type: str
