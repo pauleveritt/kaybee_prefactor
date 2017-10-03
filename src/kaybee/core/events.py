@@ -15,6 +15,7 @@ Choosing a Template - Precedence Rules
 """
 
 import inspect
+import json
 import os
 
 import dectate
@@ -130,6 +131,11 @@ def kb_context(app, pagename, templatename, context, doctree):
     if pagename.endswith('/index'):
         pname = pagename[:-6]
     resource = site.resources.get(pname)
+
+    # XXX TODO Make this configurable
+    debug = dict()
+    debug['registry'] = [1, 2, 3]
+    context['debug'] = json.dumps(debug)
 
     if resource:
         # We return a custom template
