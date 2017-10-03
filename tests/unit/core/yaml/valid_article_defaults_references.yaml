@@ -1,0 +1,12 @@
+# Well-formed AND valid YAML for a custom type "article" with defaults
+# and references
+kind: 'resource'
+kbtype: 'dummyarticle'
+based_on: 'article'
+defaults:
+  style: defaultstyle
+references:
+  - author
+---
+style: customstyle
+author: paulie

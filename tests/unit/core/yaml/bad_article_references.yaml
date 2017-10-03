@@ -1,0 +1,12 @@
+# Well-formed and valid schema, but fails extra constraints. The defaults
+# and references refer to
+kind: 'resource'
+kbtype: 'dummyarticle'
+based_on: 'article'
+defaults:
+  style: defaultstyle
+references:
+  - xxxauthor
+---
+style: customstyle
+author: paulie

@@ -1,5 +1,5 @@
 # Well-formed AND valid YAML for a custom type "article"
-kind: 'resource'
+kind: 'XXXresource'
 kbtype: 'dummyarticle'
 based_on: 'article'
 ---

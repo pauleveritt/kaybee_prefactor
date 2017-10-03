@@ -1,8 +1,6 @@
 """ Extract typedef info from YAML and register
  """
 import inspect
-from typing import Dict, Sequence
-
 import os
 
 from pykwalify.core import Core
@@ -21,12 +19,19 @@ class KbTypedefDocsError(Exception):
         Exception.__init__(self, 'typedef files need two YAML documents')
 
 
+class KbTypedefInvalidDefault(Exception):
+    def __init__(self, default_key):
+        f = f'default "{default_key}" does not exist in schema'
+        Exception.__init__(self, f)
+
+
+class KbTypedefReference(Exception):
+    def __init__(self, reference):
+        f = f'reference "{reference}" does not exist in schema'
+        Exception.__init__(self, f)
+
+
 class YamlTypedef:
-    kind: str
-    kbtype: str
-    defaults: Dict
-    references: Sequence
-    schema: Dict
 
     def read(self):
         with open(self.yaml_fn) as f:
@@ -41,6 +46,15 @@ class YamlTypedef:
     def validate(self):
         c = Core(source_data=self.typeinfo, schema_files=[typeinfo_path])
         c.validate(raise_exception=True)
+
+        # Now ensure that the keys in defaults and values in references,
+        # point to things actually in the schema.
+        for k in self.defaults.keys():
+            if k not in self.schema:
+                raise KbTypedefInvalidDefault(k)
+        for r in self.references:
+            if r not in self.schema:
+                raise KbTypedefReference(r)
 
     def __init__(self, yaml_fn=None):
         self.yaml_fn = yaml_fn
