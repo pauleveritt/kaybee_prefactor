@@ -11,10 +11,6 @@ class DummyResource:
     def __init__(self):
         self.rtype = None
 
-    @classmethod
-    def set_rtype(cls, rtype):
-        cls.rtype = rtype
-
 
 class DummyWidget:
     def __init__(self):
@@ -91,4 +87,3 @@ class TestKb:
         assert kb.resource.__name__ == 'method'
         assert kb.site.__name__ == 'method'
         assert kb.get_site.__name__ == 'get_site'
-

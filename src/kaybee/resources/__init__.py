@@ -73,18 +73,6 @@ class BaseResource:
         self.title = title
         self.props = BaseResource.load(content)
 
-    @classmethod
-    def set_rtype(cls, rtype):
-        """ Stamp the rtype on the class at config time.
-
-         The registry decorator has the name of the directive. The
-         resource class needs to know the name of that directive
-         to register itself. Help dectate registration to
-         stamp the rtype on the class.
-         """
-
-        cls.rtype = rtype
-
     @staticmethod
     def load(content):
         """ Provide a way to stub this in tests """
