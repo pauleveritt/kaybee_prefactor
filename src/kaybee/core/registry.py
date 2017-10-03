@@ -19,6 +19,12 @@ This registration system provides the following services:
 import dectate
 
 
+class KbActionInvalidKind(Exception):
+    def __init__(self, args):
+        fmt = 'registry has no class attribute action ""'
+        Exception.__init__(self, fmt)
+
+
 class SiteAction(dectate.Action):
     config = {
         'site': dict
@@ -75,6 +81,15 @@ class registry(dectate.App):
     widget = dectate.directive(WidgetAction)
     resource = dectate.directive(ResourceAction)
     site = dectate.directive(SiteAction)
+
+    @classmethod
+    def add_action(cls, kind, kbtype, klass, defaults=None,
+                   references=None):
+        """ YAML types imperatively add config per contract """
+
+        k = getattr(cls, kind, None)
+        if k is None:
+            raise KbActionInvalidKind()
 
     @classmethod
     def first_action(cls, kind, kbtype):
