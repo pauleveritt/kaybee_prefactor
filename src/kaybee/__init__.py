@@ -2,7 +2,7 @@ import os
 
 from kaybee.core.events import (
     register,
-    kb_context, add_templates_paths,
+    kaybee_context, add_templates_paths,
     initialize_site, purge_resources
 )
 
@@ -34,7 +34,7 @@ def setup(app):
     app.connect('builder-inited', add_templates_paths)
     app.connect('env-before-read-docs', initialize_site)
     app.connect('env-purge-doc', purge_resources)
-    app.connect('html-page-context', kb_context)
+    app.connect('html-page-context', kaybee_context)
 
     return dict(
         version=__version__,

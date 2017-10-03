@@ -1,8 +1,7 @@
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
 
-from kaybee.core.decorators import kb
-
+from kaybee.core.registry import registry
 
 class BaseDirective(Directive):
     has_content = True
@@ -10,7 +9,7 @@ class BaseDirective(Directive):
     @classmethod
     def get_resource_class(cls, resource_directive):
         """ Make this easy to mock """
-        return kb.config.resources[resource_directive]
+        return registry.config.resources[resource_directive]
 
     @property
     def doc_title(self):
@@ -30,15 +29,16 @@ class BaseDirective(Directive):
         env = self.state.document.settings.env
 
         # Get the info from this directive and make instance
-        resource_directive = self.name
+        kbtype = self.name
         title = self.doc_title
         resource_content = '\n'.join(self.content)
-        resource_class = BaseDirective.get_resource_class(resource_directive)
-        this_resource = resource_class(env.docname, resource_directive,
+        resource_class = BaseDirective.get_resource_class(kbtype)
+        this_resource = resource_class(env.docname, kbtype,
                                        title, resource_content)
 
         # Validate the properties against the schema for this
         # widget type
+        # TODO 001 Get the schema from the registry, not the "site"
         site = self.state.document.settings.env.site
         site.validator.validate(this_resource)
         site.add_resource(this_resource)
@@ -61,7 +61,7 @@ class BaseResource:
     def set_rtype(cls, rtype):
         """ Stamp the rtype on the class at config time.
 
-         The kb decorator has the name of the directive. The
+         The registry decorator has the name of the directive. The
          resource class needs to know the name of that directive
          to register itself. Help dectate registration to
          stamp the rtype on the class.
@@ -182,5 +182,6 @@ class BaseResource:
 def setup(app):
     # Loop through the registered resources and add a directive
     # for each
-    for r in kb.config.resources.values():
-        app.add_directive(r.rtype, BaseDirective)
+    for kbtype in registry.config.resources.keys():
+        # TODO 001 Have the registry interact with Sphinx and do this?
+        app.add_directive(kbtype, BaseDirective)

@@ -26,25 +26,9 @@ from sphinx.jinja2glue import SphinxFileSystemLoader
 
 import kaybee
 from kaybee import resources, widgets
-from kaybee.core.decorators import kb
 from kaybee.core.registry import registry
+from kaybee.core.typedefs import YamlTypedef
 from kaybee.site import Site
-
-
-def _load_typedef(full_fn):
-    """ Given a fn of YAML, parse it and configure registry """
-
-    typeinfo_path = os.path.join(
-        os.path.dirname(inspect.getfile(kaybee)),
-        'core/typeinfo.yaml'
-    )
-    with open(full_fn, 'r') as f:
-        content = f.read()
-        typeinfo, schema = list(load_all(content))
-
-        # Validate the typeinfo, which has to conform to a schema
-        c = Core(source_data=typeinfo, schema_files=[typeinfo_path])
-        c.validate(raise_exception=True)
 
 
 def register(app):
@@ -64,13 +48,14 @@ def register(app):
             for typedef_fn in typedefs:
                 full_fn = os.path.join(app.confdir, typedef_fn)
                 assert os.path.exists(full_fn)
-                _load_typedef(full_fn)
+                yaml_typedef = YamlTypedef(full_fn)
+                yaml_typedef.register(registry)
 
     # Finally, scan for decorators in kaybee core
     importscan.scan(resources)
     importscan.scan(widgets)
 
-    dectate.commit(kb)
+    dectate.commit(registry)
 
     # Once config is setup, use it to drive various Sphinx registrations
     # (nodes, directives)
@@ -98,8 +83,8 @@ def add_templates_paths(app):
     template_bridge.loaders.append(SphinxFileSystemLoader(confdir))
 
     # Add the widgets and resources
-    values = list(kb.config.widgets.values()) + \
-             list(kb.config.resources.values())
+    values = list(registry.config.widgets.values()) + \
+             list(registry.config.resources.values())
     for v in values:
         f = os.path.dirname(inspect.getfile(v))
         template_bridge.loaders.append(SphinxFileSystemLoader(f))
@@ -119,7 +104,7 @@ def purge_resources(app, env, docname):
         env.site.remove_resource(docname)
 
 
-def kb_context(app, pagename, templatename, context, doctree):
+def kaybee_context(app, pagename, templatename, context, doctree):
     site = app.env.site
     context['site'] = site
 
@@ -136,9 +121,11 @@ def kb_context(app, pagename, templatename, context, doctree):
     # XXX TODO Make this configurable
     dectate.commit(registry)
     debug = dict()
-    q = dectate.Query('resource')
+    qr = dectate.Query('resource')
+    qw = dectate.Query('widget')
     debug['registry'] = dict(
-        resources=[i[0].name for i in list(q(registry))],
+        resources=[i[0].name for i in list(qr(registry))],
+        widgets=[i[0].name for i in list(qw(registry))],
     )
     context['debug'] = json.dumps(debug)
 

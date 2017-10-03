@@ -1,7 +1,7 @@
-from kaybee.core.decorators import kb
+from kaybee.core.registry import registry
 from kaybee.resources import BaseResource
 
 
-@kb.resource('section')
+@registry.resource('section')
 class Section(BaseResource):
     pass

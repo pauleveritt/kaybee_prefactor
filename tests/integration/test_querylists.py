@@ -13,3 +13,12 @@ class TestQuery:
         assert headings[0].contents[0].strip() == 'Recent Blog Posts'
         assert headings[1].contents[0].strip() == 'Recent Articles'
         assert headings[2].contents[0].strip() == 'Recent Tutorials'
+
+
+@pytest.mark.parametrize('json_page', ['debug.html', ], indirect=True)
+class TestDebugpage:
+    def test_title(self, json_page):
+        registry = json_page['registry']
+        resources = registry['resources']
+        widgets = registry['widgets']
+        assert resources == ['article', 'homepage', 'section']

@@ -20,3 +20,8 @@ html_context = dict(
         github='pauleveritt'
     )
 )
+
+
+html_additional_pages = {
+    'debug': 'debug.json',
+}

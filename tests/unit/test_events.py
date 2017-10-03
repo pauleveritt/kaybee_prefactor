@@ -4,7 +4,7 @@ Test the html context event handler
 import pytest
 
 from kaybee.core.events import (
-    initialize_site, kb_context, purge_resources
+    initialize_site, kaybee_context, purge_resources
 )
 
 
@@ -87,7 +87,7 @@ class TestPurgeResources:
 
 class TestKbContext:
     def test_import(self):
-        assert kb_context.__name__ == 'kb_context'
+        assert kaybee_context.__name__ == 'kaybee_context'
 
     def test_no_resource(self, app, site):
         app.env.site = site
@@ -95,7 +95,7 @@ class TestKbContext:
         templatename = 'defaulttemplate'
         context = dict()
         doctree = None
-        result = kb_context(app, pagename, templatename, context, doctree)
+        result = kaybee_context(app, pagename, templatename, context, doctree)
         assert result == templatename
 
     def test_resource(self, app, site, resource):
@@ -104,7 +104,7 @@ class TestKbContext:
         templatename = 'defaulttemplate'
         context = dict()
         doctree = None
-        result = kb_context(app, pagename, templatename, context, doctree)
+        result = kaybee_context(app, pagename, templatename, context, doctree)
         assert result == 'dummyresource.html'
         assert context['template'] == 'dummyresource.html'
         assert context['site'] == site

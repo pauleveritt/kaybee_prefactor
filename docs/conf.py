@@ -162,7 +162,7 @@ kaybee_config = dict(
         alt='Sphinx Bulma Theme'
     ),
     typedefs=[
-        'typedefs/customsection.yaml',
+        # 'typedefs/customsection.yaml',
     ]
 )
 html_context = dict(

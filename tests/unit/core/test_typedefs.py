@@ -147,14 +147,6 @@ class TestIntegration:
         yaml_fn = make_yaml_filename('valid_article_defaults_references.yaml')
         yaml_typedef = YamlTypedef(yaml_fn)
         yaml_typedef.register(dummy_registry)
-        # kind = yaml_typedef.kind
-        # kbtype = yaml_typedef.kbtype
-        # defaults = yaml_typedef.defaults
-        # references = yaml_typedef.references
-        # dummy_registry.add_action(
-        #     kind, kbtype, DummySection,
-        #     defaults=defaults, references=references,
-        # )
         dectate.commit(dummy_registry)
         assert dummy_registry.config.resources['dummyarticle'] == DummySection
         da = dummy_registry.first_action('dummyresource', 'dummyarticle')

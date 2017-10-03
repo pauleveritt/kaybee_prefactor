@@ -1,8 +1,8 @@
-from kaybee.core.decorators import kb
+from kaybee.core.registry import registry
 from kaybee.widgets import BaseWidget
 
 
-@kb.widget('querylist')
+@registry.widget('querylist')
 class QueryList(BaseWidget):
 
     def make_context(self, context, site):

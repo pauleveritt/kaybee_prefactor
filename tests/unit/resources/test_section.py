@@ -1,5 +1,3 @@
-from pykwalify.errors import SchemaError
-import pytest
 from kaybee.resources.section import Section
 
 LOAD = 'kaybee.resources.BaseResource.load'

@@ -1,7 +1,7 @@
-from kaybee.core.decorators import kb
+from kaybee.core.registry import registry
 from kaybee.resources import BaseResource
 
 
-@kb.resource('homepage')
+@registry.resource('homepage')
 class Homepage(BaseResource):
     default_style = 'header-image is-medium'

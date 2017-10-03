@@ -5,7 +5,7 @@ from docutils import nodes
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
 
-from kaybee.core.decorators import kb
+from kaybee.core.registry import registry
 from kaybee.widgets.events import process_widget_nodes
 
 
@@ -55,21 +55,22 @@ class BaseDirective(Directive):
         """
 
         # Get the info from this directive and make instance
-        wtype = self.name
+        kbtype = self.name
         widget_content = '\n'.join(self.content)
-        widget_class = kb.config.widgets[wtype]
+        widget_class = registry.config.widgets[kbtype]
         this_widget = widget_class(widget_content)
-        this_widget.wtype = wtype
+        this_widget.wtype = kbtype
 
         # Validate the properties against the schema for this
         # widget type
+        # TODO 001 No longer the site's responsibility
         site = self.state.document.settings.env.site
         site.validator.validate(this_widget)
         site.add_widget(this_widget)
 
         # Now add the node to the doctree
         widget_node = widget()
-        attrs = dict(ids=[this_widget.name], names=[wtype])
+        attrs = dict(ids=[this_widget.name], names=[kbtype])
         widget_node.update_basic_atts(attrs)
         return [widget_node]
 
@@ -85,7 +86,7 @@ class BaseWidget:
     def set_wtype(cls, wtype):
         """ Stamp the wtype on the class at config time.
 
-         The kb decorator has the name of the directive. The
+         The registry decorator has the name of the directive. The
          widget class needs to know the name of that directive
          to register itself. Help dectate registration to
          stamp the wtype on the class.
@@ -133,7 +134,6 @@ class BaseWidget:
         """ Given a Sphinx builder and context with site in it,
          generate HTML """
 
-        kc = kb.config
         context['site'] = site
         self.make_context(context, site)
         # NOTE: Can use builder.templates.render_string
@@ -145,7 +145,8 @@ def setup(app):
     # Loop through the registered widgets and add a directive
     # for each
     app.add_node(widget)
-    for w in kb.config.widgets.values():
-        app.add_directive(w.wtype, BaseDirective)
+    for kbtype in registry.config.widgets.keys():
+        # TODO 001 Have the registry interact with Sphinx and do this?
+        app.add_directive(kbtype, BaseDirective)
 
     app.connect('doctree-resolved', process_widget_nodes)

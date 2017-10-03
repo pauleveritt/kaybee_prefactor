@@ -1,5 +1,5 @@
 import pytest
-from pykwalify.errors import SchemaError
+
 from kaybee.resources import BaseResource
 
 LOAD = 'kaybee.resources.BaseResource.load'
