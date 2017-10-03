@@ -78,8 +78,16 @@ class registry(dectate.App):
 
     @classmethod
     def first_action(cls, kind, kbtype):
+        """ Get type config info from the kbtype of certain kind """
         qr = dectate.Query(kind)
         # Use a generator expression to get the first action
         # in "kind" with a name of ktype. kind might be
         # "resource" or "widget", kbtype might be "article".
         return next((x for x in qr.filter(name=kbtype)(cls)))[0]
+
+    @classmethod
+    def get_site(cls):
+        """ Don't have a way to register a singleton for Dectate """
+        query = dectate.Query('site')
+        results = list(query(registry))
+        return results[0][1]

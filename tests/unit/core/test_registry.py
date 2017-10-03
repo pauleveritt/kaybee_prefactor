@@ -1,10 +1,14 @@
 import dectate
 import pytest
 
-from kaybee.core.registry import ResourceAction, WidgetAction
+from kaybee.core.registry import ResourceAction, WidgetAction, SiteAction
 
 
 class DummySection:
+    pass
+
+
+class DummySite:
     pass
 
 
@@ -13,11 +17,19 @@ def registry():
     class registry(dectate.App):
         dummyresource = dectate.directive(ResourceAction)
         dummywidget = dectate.directive(WidgetAction)
+        dummysite = dectate.directive(SiteAction)
 
         @classmethod
         def first_action(cls, kind, kbtype):
             qr = dectate.Query(kind)
             return next((x for x in qr.filter(name=kbtype)(cls)))[0]
+
+        @classmethod
+        def get_site(cls):
+            """ Don't have a way to register a singleton for Dectate """
+            query = dectate.Query('dummysite')
+            results = list(query(registry))
+            return results[0][1]
 
     yield registry
 
@@ -92,5 +104,12 @@ class TestRegistry:
         assert ds.defaults['x'] == 99
         assert ds.references == [1, 3]
 
-# TODO
-# Test a YAML typedef getting associated with a registered class
+    def test_get_site(self, registry):
+        registry.dummysite()(DummySite)
+        dectate.commit(registry)
+        site = registry.get_site()
+
+        # TODO
+        # Test a YAML typedef getting associated with a registered class
+        # Unwind the fixtures in here, be more manual/explicit
+        # Move over the class method from decorator and write tests
