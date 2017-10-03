@@ -20,8 +20,8 @@ import dectate
 
 
 class KbActionInvalidKind(Exception):
-    def __init__(self, args):
-        fmt = 'registry has no class attribute action ""'
+    def __init__(self, kind):
+        fmt = f'registry has no class attribute action "{kind}"'
         Exception.__init__(self, fmt)
 
 
@@ -87,9 +87,12 @@ class registry(dectate.App):
                    references=None):
         """ YAML types imperatively add config per contract """
 
+        # Get the kind, raise custom exception if it doesn't exist
         k = getattr(cls, kind, None)
         if k is None:
-            raise KbActionInvalidKind()
+            raise KbActionInvalidKind(kind)
+
+        k(kbtype, defaults=defaults, references=references)(klass)
 
     @classmethod
     def first_action(cls, kind, kbtype):
@@ -101,8 +104,8 @@ class registry(dectate.App):
         return next((x for x in qr.filter(name=kbtype)(cls)))[0]
 
     @classmethod
-    def get_site(cls):
+    def get_site(cls, sitename='site'):
         """ Don't have a way to register a singleton for Dectate """
-        query = dectate.Query('site')
-        results = list(query(registry))
+        query = dectate.Query(sitename)
+        results = list(query(cls))
         return results[0][1]

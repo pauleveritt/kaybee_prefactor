@@ -3,7 +3,8 @@ import pytest
 
 from kaybee.core.registry import (
     ResourceAction, WidgetAction, SiteAction,
-    registry
+    registry,
+    KbActionInvalidKind
 )
 
 
@@ -17,13 +18,10 @@ class DummySite:
 
 @pytest.fixture()
 def dummy_registry():
-    class dummy_registry(dectate.App):
+    class dummy_registry(registry):
         dummyresource = dectate.directive(ResourceAction)
         dummywidget = dectate.directive(WidgetAction)
         dummysite = dectate.directive(SiteAction)
-        add_action = registry.add_action
-        first_action = registry.first_action
-        get_site = registry.get_site
 
     yield dummy_registry
 
@@ -77,9 +75,8 @@ class TestRegistry:
 
     def test_type_no_defaults(self, dummy_registry,
                               register_article_no_defaults):
-        dummy_registry.dummyresource('dummysection')(DummySection)
         dectate.commit(dummy_registry)
-        ds = dummy_registry.first_action('dummyresource', 'dummysection')
+        ds = dummy_registry.first_action('dummyresource', 'dummyarticle')
         assert ds.defaults is None
 
     def test_type_references(self, dummy_registry, register_article_defaults,
@@ -90,14 +87,14 @@ class TestRegistry:
 
     def test_type_no_references(self, dummy_registry,
                                 register_article_no_defaults):
-        dummy_registry.dummyresource('dummysection')(DummySection)
         dectate.commit(dummy_registry)
-        da = dummy_registry.first_action('dummyresource', 'dummysection')
+        da = dummy_registry.first_action('dummyresource', 'dummyarticle')
         assert da.references is None
 
     def test_imperative_add(self, dummy_registry):
         # This is how YAML-defined types will add type info
-        dummy_registry.dummyresource('dummysection')(DummySection)
+        dummy_registry.add_action('dummyresource', 'dummysection',
+                                  DummySection)
         dectate.commit(dummy_registry)
         assert dummy_registry.config.resources['dummysection'] == DummySection
 
@@ -105,22 +102,25 @@ class TestRegistry:
         # This is how YAML-defined types will add type info
         d = dict(x=99)
         r = [1, 3]
-        dummy_registry.dummyresource('dummysection',
-                                     defaults=d, references=r)(DummySection)
+        dummy_registry.add_action(
+            'dummyresource', 'dummysection', DummySection,
+            defaults=d, references=r)
         dectate.commit(dummy_registry)
         ds = dummy_registry.first_action('dummyresource', 'dummysection')
-        assert ds.defaults['x'] == 99
-        assert ds.references == [1, 3]
+        assert ds.defaults['x'] == d['x']
+        assert ds.references == r
 
     def test_get_site(self, dummy_registry):
         dummy_registry.dummysite()(DummySite)
         dectate.commit(dummy_registry)
-        site = dummy_registry.get_site()
+        site = dummy_registry.get_site('dummysite')
         assert site.__name__.endswith('DummySite')
-
-        # TODO
-        # Test a YAML typedef getting associated with a registered class
 
     def test_add_action_bad_kind(self, dummy_registry):
         """ Choosing a non-existing kind should throw exception """
-        dummy_registry.add_action
+
+        with pytest.raises(KbActionInvalidKind) as excinfo:
+            dummy_registry.add_action = dummy_registry.add_action(
+                'xxxresource', 'dummysection', DummySection
+            )
+        assert 'xxxresource' in str(excinfo.value)
