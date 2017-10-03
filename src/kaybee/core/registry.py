@@ -104,6 +104,12 @@ class registry(dectate.App):
         return next((x for x in qr.filter(name=kbtype)(cls)))[0]
 
     @classmethod
+    def get_class(cls, kind, kbtype):
+        q = dectate.Query(kind)
+        klass = [i[1] for i in list(q(cls)) if i[0].name == kbtype][0]
+        return klass
+
+    @classmethod
     def get_site(cls, sitename='site'):
         """ Don't have a way to register a singleton for Dectate """
         query = dectate.Query(sitename)

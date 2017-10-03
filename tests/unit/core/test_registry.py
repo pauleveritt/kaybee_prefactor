@@ -110,6 +110,13 @@ class TestRegistry:
         assert ds.defaults['x'] == d['x']
         assert ds.references == r
 
+    def test_get_class(self, dummy_registry, register_article_no_defaults):
+        dectate.commit(dummy_registry)
+        klass = dummy_registry.get_class('dummyresource', 'dummyarticle')
+        assert klass.__name__.endswith('DummyArticle')
+
+
+
     def test_get_site(self, dummy_registry):
         dummy_registry.dummysite()(DummySite)
         dectate.commit(dummy_registry)

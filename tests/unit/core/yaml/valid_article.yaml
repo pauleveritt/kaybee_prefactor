@@ -1,6 +1,6 @@
 # Well-formed AND valid YAML for a custom type "article"
 kind: 'resource'
 kbtype: 'dummyarticle'
-based_on: 'article'
+based_on: 'section'
 ---
 in_nav: True

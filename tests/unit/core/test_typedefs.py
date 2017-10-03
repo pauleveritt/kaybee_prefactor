@@ -1,14 +1,17 @@
 import inspect
 import os
 
+import dectate
 import pytest
 from pykwalify.errors import SchemaError
 from ruamel.yaml.scanner import ScannerError
 
+from kaybee.core.registry import registry, ResourceAction
 from kaybee.core.typedefs import (
     YamlTypedef, KbTypedefDocsError,
     KbTypedefInvalidDefault,
-    KbTypedefReference
+    KbTypedefReference,
+    KbTypedefInvalidClass
 )
 
 YAMLTYPEDEF_PATH = 'kaybee.core.typedefs.YamlTypedef'
@@ -87,6 +90,7 @@ class TestYamlTypedf:
         yaml_typedef = YamlTypedef(yaml_fn)
         assert yaml_typedef.kind == 'resource'
         assert yaml_typedef.kbtype == 'dummyarticle'
+        assert yaml_typedef.based_on == 'section'
         assert yaml_typedef.defaults == dict()
         assert yaml_typedef.references == []
 
@@ -113,8 +117,57 @@ class TestYamlTypedf:
             YamlTypedef(yaml_fn)
         assert 'xxxauthor' in str(exc.value)
 
-    # bad defaults, bad references
-    def test_bad_based_on(self):
-        pass
 
-        # Other tests: references points to an author that doesn't exist
+@pytest.fixture()
+def dummy_registry():
+    class dummy_registry(registry):
+        dummyresource = dectate.directive(ResourceAction)
+
+    dummy_registry.add_action('dummyresource', 'dummysection',
+                              DummySection)
+    dectate.commit(dummy_registry)
+
+    yield dummy_registry
+
+
+class DummySection:
+    pass
+
+
+@pytest.fixture()
+def query_resource(dummy_registry):
+    yield dectate.Query('dummyresource')
+
+
+class TestIntegration:
+    """ Hook up to the registry for testing """
+
+    def test_good_add(self, dummy_registry):
+        """ Create new type and add to registry """
+        yaml_fn = make_yaml_filename('valid_article_defaults_references.yaml')
+        yaml_typedef = YamlTypedef(yaml_fn)
+        yaml_typedef.register(dummy_registry)
+        # kind = yaml_typedef.kind
+        # kbtype = yaml_typedef.kbtype
+        # defaults = yaml_typedef.defaults
+        # references = yaml_typedef.references
+        # dummy_registry.add_action(
+        #     kind, kbtype, DummySection,
+        #     defaults=defaults, references=references,
+        # )
+        dectate.commit(dummy_registry)
+        assert dummy_registry.config.resources['dummyarticle'] == DummySection
+        da = dummy_registry.first_action('dummyresource', 'dummyarticle')
+        assert da.defaults['style'] == 'defaultstyle'
+
+    def test_bad_based_on(self, dummy_registry):
+        """ YAML typedef pointed to an unregistered action """
+        yaml_fn = make_yaml_filename('bad_article_based_on.yaml')
+        yaml_typedef = YamlTypedef(yaml_fn)
+        with pytest.raises(KbTypedefInvalidClass) as exc:
+            yaml_typedef.get_class(dummy_registry)
+        assert 'based_on: xxxdummysection' in str(exc.value)
+
+# TODO Other tests:
+# - label triggers the creation of a reference
+# - references points to an author that doesn't exist

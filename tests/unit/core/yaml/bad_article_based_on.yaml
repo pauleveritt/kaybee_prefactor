@@ -2,7 +2,7 @@
 # and references
 kind: 'resource'
 kbtype: 'dummyarticle'
-based_on: 'dummysection'
+based_on: 'xxxdummysection'
 defaults:
   style: defaultstyle
 references:

@@ -3,6 +3,7 @@
 import inspect
 import os
 
+import dectate
 from pykwalify.core import Core
 from ruamel.yaml import load_all
 
@@ -28,6 +29,12 @@ class KbTypedefInvalidDefault(Exception):
 class KbTypedefReference(Exception):
     def __init__(self, reference):
         f = f'reference "{reference}" does not exist in schema'
+        Exception.__init__(self, f)
+
+
+class KbTypedefInvalidClass(Exception):
+    def __init__(self, kind, based_on):
+        f = f'no class in registry for kind: {kind} and based_on: {based_on}'
         Exception.__init__(self, f)
 
 
@@ -84,5 +91,29 @@ class YamlTypedef:
         return self.typeinfo.get('references', [])
 
     @property
-    def klass(self):
-        return self.typeinfo['kind']
+    def based_on(self):
+        return self.typeinfo['based_on']
+
+    def get_class(self, registry):
+        """ Look in registry to get the class from based_on
+
+          This typedef's typeinfo has a `based_on` attribute. It is the
+          kbtype that, along with `kind`, can look up the class to
+          associate with this type.
+
+          """
+        try:
+            klass = registry.get_class(self.kind, self.based_on)
+        except IndexError:
+            raise KbTypedefInvalidClass(self.kind, self.based_on)
+
+        return klass
+
+    def register(self, registry):
+        """ Put new type into registry and assert constraints """
+
+        klass = self.get_class(registry)
+        registry.add_action(
+            self.kind, self.kbtype, klass,
+            defaults=self.defaults, references=self.references
+        )
