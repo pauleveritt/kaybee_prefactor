@@ -2,4 +2,9 @@ kind: resource
 kbtype: customsection
 based_on: 'section'
 ---
-y: 2
+type: map
+mapping:
+  template:
+    type: str
+  flag:
+    type: str

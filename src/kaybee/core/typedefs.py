@@ -3,7 +3,6 @@
 import inspect
 import os
 
-import dectate
 from pykwalify.core import Core
 from ruamel.yaml import load_all
 

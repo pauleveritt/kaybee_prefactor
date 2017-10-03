@@ -1,7 +1,12 @@
+import inspect
+import os
+
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
 
 from kaybee.core.registry import registry
+from kaybee.core.validators import validate
+
 
 class BaseDirective(Directive):
     has_content = True
@@ -10,6 +15,11 @@ class BaseDirective(Directive):
     def get_resource_class(cls, resource_directive):
         """ Make this easy to mock """
         return registry.config.resources[resource_directive]
+
+    @classmethod
+    def get_resource_schema(cls, kbtype):
+        """ Make this easy to mock """
+        return registry.first_action('resource', kbtype)
 
     @property
     def doc_title(self):
@@ -39,9 +49,14 @@ class BaseDirective(Directive):
         # Validate the properties against the schema for this
         # widget type
         # TODO 001 Get the schema from the registry, not the "site"
-        site = self.state.document.settings.env.site
-        site.validator.validate(this_resource)
-        site.add_resource(this_resource)
+        props = this_resource.props
+        action_data = self.get_resource_schema(kbtype)
+        schema_data = action_data.schema
+        validate(props, schema_data)
+
+        # site = self.state.document.settings.env.site
+        # site.validator.validate(this_resource)
+        # site.add_resource(this_resource)
 
         # Don't need to return a resource "node", the
         # document is the node
@@ -177,6 +192,17 @@ class BaseResource:
         # assume container. Leaf types will override this.
 
         return self.name
+
+    @classmethod
+    def get_schema(cls):
+        """ Subclasses or instances can override this """
+        class_name = cls.__name__.lower()
+        class_filename = inspect.getfile(cls)
+        package_dir = os.path.dirname(class_filename)
+        schema_filename = os.path.join(package_dir, class_name + '.yaml')
+        with open(schema_filename, 'r') as f:
+            schema = load(f)
+            return schema
 
 
 def setup(app):

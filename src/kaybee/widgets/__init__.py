@@ -1,6 +1,8 @@
+import inspect
 import json
 from collections import Mapping
 
+import os
 from docutils import nodes
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
@@ -139,6 +141,17 @@ class BaseWidget:
         # NOTE: Can use builder.templates.render_string
         html = builder.templates.render(self.template, context)
         return html
+
+    @classmethod
+    def get_schema(cls):
+        """ Subclasses or instances can override this """
+        class_name = cls.__name__.lower()
+        class_filename = inspect.getfile(cls)
+        package_dir = os.path.dirname(class_filename)
+        schema_filename = os.path.join(package_dir, class_name + '.yaml')
+        with open(schema_filename, 'r') as f:
+            schema = load(f)
+            return schema
 
 
 def setup(app):

@@ -7,6 +7,11 @@ import os
 from pykwalify.core import Core
 
 
+def validate(props, schema_data):
+    c = Core(source_data=props, schema_data=schema_data)
+    c.validate(raise_exception=True)
+
+
 class Validator:
     @staticmethod
     def validate(resource):

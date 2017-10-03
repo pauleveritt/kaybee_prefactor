@@ -46,9 +46,10 @@ class ResourceAction(dectate.Action):
         'resources': dict
     }
 
-    def __init__(self, name, defaults=None, references=None):
+    def __init__(self, name, schema=None, defaults=None, references=None):
         super().__init__()
         self.name = name
+        self.schema = schema
         self.defaults = defaults
         self.references = references
 
@@ -57,6 +58,11 @@ class ResourceAction(dectate.Action):
 
     def perform(self, obj, resources):
         resources[self.name] = obj
+        if self.schema is None:
+            # The YamlType adds the schema from the YAML. If we
+            # get here, we are doing the decorator. Ask the class.
+            s = obj.get_schema()
+            self.schema = s
 
 
 class WidgetAction(dectate.Action):
@@ -64,9 +70,10 @@ class WidgetAction(dectate.Action):
         'widgets': dict
     }
 
-    def __init__(self, name, defaults=None, references=None):
+    def __init__(self, name, schema=None, defaults=None, references=None):
         super().__init__()
         self.name = name
+        self.schema = schema
         self.defaults = defaults
         self.references = references
 
@@ -75,6 +82,11 @@ class WidgetAction(dectate.Action):
 
     def perform(self, obj, widgets):
         widgets[self.name] = obj
+        if self.schema is None:
+            # The YamlType adds the schema from the YAML. If we
+            # get here, we are doing the decorator. Ask the class.
+            s = obj.get_schema()
+            self.schema = s
 
 
 class registry(dectate.App):

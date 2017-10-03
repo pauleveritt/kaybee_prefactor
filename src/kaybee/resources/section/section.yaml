@@ -8,3 +8,5 @@ mapping:
     type: int
   doc_template:
     type: str
+  template:
+    type: str
