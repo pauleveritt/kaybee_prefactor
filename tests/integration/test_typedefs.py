@@ -7,4 +7,5 @@ pytestmark = pytest.mark.sphinx('html', testroot='typedefs')
 class TestHomepage:
     def test_title(self, json_page):
         registry = json_page['registry']
-        assert registry[0] == 1
+        resources = registry['resources']
+        assert resources[0] == 'article2'

@@ -27,6 +27,7 @@ from sphinx.jinja2glue import SphinxFileSystemLoader
 import kaybee
 from kaybee import resources, widgets
 from kaybee.core.decorators import kb
+from kaybee.core.registry import registry
 from kaybee.site import Site
 
 
@@ -133,8 +134,12 @@ def kb_context(app, pagename, templatename, context, doctree):
     resource = site.resources.get(pname)
 
     # XXX TODO Make this configurable
+    dectate.commit(registry)
     debug = dict()
-    debug['registry'] = [1, 2, 3]
+    q = dectate.Query('resource')
+    debug['registry'] = dict(
+        resources=[i[0].name for i in list(q(registry))],
+    )
     context['debug'] = json.dumps(debug)
 
     if resource:
