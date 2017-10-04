@@ -1,6 +1,8 @@
 kind: resource
 kbtype: customsection
 based_on: 'section'
+defaults:
+  template: typeinfotemplate.html
 ---
 type: map
 mapping:

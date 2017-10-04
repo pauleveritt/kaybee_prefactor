@@ -1,7 +1,12 @@
 kind: resource
-type: customsection
+kbtype: customsection
+based_on: 'section'
 defaults:
-  template: bam
-  is_nav: True
+  template: typeinfotemplate.html
 ---
-y: 2
+type: map
+mapping:
+  template:
+    type: str
+  flag:
+    type: str

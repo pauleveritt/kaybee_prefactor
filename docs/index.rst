@@ -16,6 +16,7 @@ Welcome to kaybee's documentation!
     blog/index
     articles/index
     features
+    customsection1.rst
 
 
 .. querylist::
@@ -30,10 +31,9 @@ Welcome to kaybee's documentation!
           style: info
           rtype: article
           limit: 5
-        - label: Recent Tutorials
+        - label: All Recent
           style: warning
-          rtype: article
-          limit: 5
+          limit: 10
 
 
 

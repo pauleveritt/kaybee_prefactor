@@ -8,4 +8,5 @@ Content after YAML.
 .. toctree::
 
     blogpost1
-    customsection1
+    instancetemplate
+    typeinfotemplate

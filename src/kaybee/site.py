@@ -41,7 +41,7 @@ class Site:
         if rtype:
             r1 = [r for r in self.resources.values() if r.rtype == rtype]
         else:
-            r1 = self.resources.values()
+            r1 = list(self.resources.values())
 
         # Filter out only those with a parent in their lineage
         if parent_name:

@@ -3,4 +3,7 @@ kind: 'XXXresource'
 kbtype: 'dummyarticle'
 based_on: 'article'
 ---
-in_nav: True
+type: map
+mapping:
+  in_nav:
+    type: str

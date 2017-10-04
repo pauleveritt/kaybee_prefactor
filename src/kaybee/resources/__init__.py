@@ -17,7 +17,7 @@ class BaseDirective(Directive):
         return registry.config.resources[resource_directive]
 
     @classmethod
-    def get_resource_schema(cls, kbtype):
+    def get_resource_action(cls, kbtype):
         """ Make this easy to mock """
         return registry.first_action('resource', kbtype)
 
@@ -27,7 +27,7 @@ class BaseDirective(Directive):
 
     def validate_resource(self, resource, kbtype):
         props = resource.props
-        action_data = self.get_resource_schema(kbtype)
+        action_data = self.get_resource_action(kbtype)
         schema_data = action_data.schema
         validate(props, schema_data)
 
@@ -51,6 +51,13 @@ class BaseDirective(Directive):
         resource_class = BaseDirective.get_resource_class(kbtype)
         this_resource = resource_class(env.docname, kbtype,
                                        title, resource_content)
+        # If the typedef had an defaults that aren't in the props, add them
+        defaults = self.get_resource_action(kbtype).defaults
+        if defaults:
+            for k, v in defaults.items():
+                # TODO 001 Needs tests
+                if k not in this_resource.props:
+                    this_resource.props[k] = v
 
         # Validate the properties against the schema for this
         # widget type

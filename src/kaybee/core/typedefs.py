@@ -56,10 +56,10 @@ class YamlTypedef:
         # Now ensure that the keys in defaults and values in references,
         # point to things actually in the schema.
         for k in self.defaults.keys():
-            if k not in self.schema:
+            if k not in self.schema['mapping']:
                 raise KbTypedefInvalidDefault(k)
         for r in self.references:
-            if r not in self.schema:
+            if r not in self.schema['mapping']:
                 raise KbTypedefReference(r)
 
     def __init__(self, yaml_fn=None):

@@ -3,4 +3,7 @@ kind: 'resource'
 kbtype: 'dummyarticle'
 based_on: 'section'
 ---
-in_nav: True
+type: map
+mapping:
+  in_nav:
+    type: str

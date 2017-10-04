@@ -7,7 +7,8 @@
                         {{ result_set.label }}
                     </p>
                     {% for result in result_set.results %}
-                        <a class="panel-block">
+                        <a class="panel-block"
+                           href="{{ '/' + result.name + '.html' }}">
                             {{ result.title }}
                         </a>
                     {% endfor %}

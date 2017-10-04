@@ -8,5 +8,9 @@ defaults:
 references:
   - xxxauthor
 ---
-style: customstyle
-author: paulie
+type: map
+mapping:
+  style:
+    type: str
+  author:
+    type:str
