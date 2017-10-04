@@ -26,6 +26,8 @@ def content(app):
     app.build()
     yield app
 
+    tempdir = app.builder.confdir
+    rmtree(tempdir)
 
 @pytest.fixture()
 def page(content, request):
@@ -33,8 +35,6 @@ def page(content, request):
     c = (content.outdir / pagename).text()
     yield BeautifulSoup(c, 'html5lib')
 
-    # tempdir = content.builder.confdir
-    # rmtree(tempdir)
 
 @pytest.fixture()
 def json_page(content, request):
@@ -42,6 +42,3 @@ def json_page(content, request):
     c = (content.outdir / pagename).text()
 
     yield json.loads(c)
-
-    # tempdir = content.builder.confdir
-    # rmtree(tempdir)
