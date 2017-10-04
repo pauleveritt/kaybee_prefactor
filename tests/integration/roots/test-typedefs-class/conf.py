@@ -34,12 +34,5 @@ kaybee_config = dict(
     logo=dict(
         img_url='http://bulma.io/images/bulma-logo.png',
         alt='Sphinx Bulma Theme'
-    ),
-    typedefs=[
-        'typedefs/customsection.yaml',
-    ]
+    )
 )
-
-html_additional_pages = {
-    'debug': 'debug.json',
-}
