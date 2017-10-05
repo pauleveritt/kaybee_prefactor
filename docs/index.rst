@@ -16,7 +16,6 @@ Welcome to kaybee's documentation!
     blog/index
     articles/index
     features
-    customsection1.rst
 
 
 .. querylist::

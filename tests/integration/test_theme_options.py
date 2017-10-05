@@ -20,3 +20,5 @@ class TestHomepage:
         twitter = page.find(id='kb-twitter').attrs['href']
         assert twitter == 'https://twitter.com/kbtest'
 
+# Put GitHub/Twitter logos in top right
+# Bring back the footer
