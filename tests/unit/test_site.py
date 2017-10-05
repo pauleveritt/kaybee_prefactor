@@ -1,8 +1,5 @@
-from copy import deepcopy
-
 import pytest
 
-from kaybee.core.registry import registry
 from kaybee.site import Site
 
 
@@ -90,24 +87,12 @@ def dummy_widget(sample_widgets):
 
 @pytest.fixture()
 def site(site_config, sample_resources, sample_widgets):
-    original_config = deepcopy(registry.config)
     s = Site(site_config)
-    registry.config.resources = dict()
-    registry.config.widgets = dict()
-
-    # Register some classes
-    registry.config.resources['dummyresource'] = DummyResource
-    registry.config.resources['dummysection'] = DummySection
-    registry.config.resources['dummyquery'] = DummyQuery
-    registry.config.widgets['dummyquery'] = DummyQuery
 
     # Add some sample data
     [s.add_resource(sr) for sr in sample_resources]
     [s.add_widget(sw) for sw in sample_widgets]
     yield s
-
-    # Reset registry.config
-    registry.config = original_config
 
 
 def test_import():
