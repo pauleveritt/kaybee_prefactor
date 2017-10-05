@@ -4,9 +4,9 @@
     </p>
     <ul class="menu-list">
 
-        {%- for parent in parents %}
+        {%- for parent in parents|reverse %}
             <li>
-                <a href="{{ parent.link|e }}">
+                <a href="{{ pathto(parent.name, 1) }}">
                     {% for arrow in range(loop.index) %}
                         <span class="kb-breadcrumb-separator">></span>
                     {% endfor %}

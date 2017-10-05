@@ -26,20 +26,11 @@
                                 <a class="kb-debug-result"
                                    href="{{ '/' + result.name + '.html' }}">{{ result.title }}</a>
                             </div>
-                            <p class="kb-listing-synopsis">
-                                The synopses that goes with it. The synopses
-                                might
-                                be
-                                long.
-                                The synopses that goes with it. The synopses
-                                might
-                                be
-                                long.
-                                The synopses that goes with it. The synopses
-                                might
-                                be
-                                long.
-                            </p>
+                            {% if result.props.synopsis %}
+                                <p class="kb-listing-synopsis">
+                                    {{ result.props.synopsis }}
+                                </p>
+                            {% endif %}
                         </td>
                         <td class="kb-listing-timeago">an hour ago</td>
                     </tr>

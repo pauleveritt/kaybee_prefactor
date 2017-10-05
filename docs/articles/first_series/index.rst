@@ -12,6 +12,7 @@ A list of articles is here.
 
     template: sectionquery.html
     query:
+        parent_name: articles/first_series
         rtype: article
 
 .. toctree::

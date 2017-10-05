@@ -8,3 +8,5 @@ mapping:
     type: bool
   weight:
     type: int
+  synopsis:
+    type: str
