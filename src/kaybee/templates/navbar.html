@@ -1,8 +1,8 @@
 <nav class="nav">
     <div class="nav-left">
         <a class="nav-item" href="/">
-            <img src="{{ logo.img_url }}"
-                 alt="{{ logo.alt }}" />
+            <img src="{{ site_config.logo.img_url }}"
+                 alt="{{ site_config.logo.alt }}" />
         </a>
         {% for nav in site.navmenu %}
             <a class="nav-item is-hidden-mobile{{ ' is-active' if resource and resource.is_active_section(site, nav.name) }}"
@@ -21,15 +21,15 @@
             <a class="nav-item is-hidden-tablet"
                href="{{ nav.href }}">{{ nav.title }}</a>
         {% endfor %}
-        <a class="nav-item"
-           href="https://github.com/{{ social_media.github }}" target="_blank">
+        <a class="nav-item" id="kb-github"
+           href="https://github.com/{{ site_config.social_media.github }}" target="_blank">
                       <span class="icon" style="color: #333;">
                         <i class="fa fa-github"></i>
                       </span>
         </a>
 
-        <a class="nav-item"
-           href="https://twitter.com/{{ social_media.twitter }}"
+        <a class="nav-item" id="kb-twitter"
+           href="https://twitter.com/{{ site_config.social_media.twitter }}"
            target="_blank">
                       <span class="icon" style="color: #55acee;">
                         <i class="fa fa-twitter"></i>

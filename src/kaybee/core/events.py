@@ -93,7 +93,7 @@ def initialize_site(app, env, docnames):
     """ Create the Site instance if it is not in the pickle """
 
     if not hasattr(env, 'site'):
-        config = app.config.html_context
+        config = app.config.kaybee_config
         env.site = Site(config)
 
 
@@ -117,7 +117,7 @@ def kaybee_context(app, pagename, templatename, context, doctree):
         pname = pagename[:-6]
     resource = site.resources.get(pname)
 
-    # XXX TODO Make this configurable
+    # XXX TODO Make this debug stuff configurable
     dectate.commit(registry)
     debug = dict()
     qr = dectate.Query('resource')
@@ -127,6 +127,8 @@ def kaybee_context(app, pagename, templatename, context, doctree):
         widgets=[i[0].name for i in list(qw(registry))],
     )
     context['debug'] = json.dumps(debug)
+
+    context['site_config'] = app.config.kaybee_config
 
     if resource:
         # We return a custom template

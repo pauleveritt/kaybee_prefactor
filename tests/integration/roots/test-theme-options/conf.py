@@ -8,15 +8,13 @@ master_doc = 'index'
 html_theme = 'kaybee'
 exclude_patterns = ['_build']
 
-alt = 'Kaybee Logo Alt'
-html_context = dict(
-    kaybee_config={},
+kaybee_config = dict(
     logo=dict(
         img_url='http://some.site.com/fake_image.png',
-        alt=alt
+        alt='Kaybee Logo Alt'
     ),
     social_media=dict(
-        twitter='paulweveritt',
-        github='pauleveritt'
-    )
+        twitter='kbtest',
+        github='kbtest'
+    ),
 )

@@ -22,7 +22,7 @@ class DummyResource:
 
 
 class DummyConfig:
-    html_context = dict(flag=9)
+    kaybee_config = dict(flag=9)
 
 
 class DummyEnv:
