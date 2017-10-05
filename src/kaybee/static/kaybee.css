@@ -5091,6 +5091,9 @@ label.panel-block {
   background-color: whitesmoke;
   padding: 3rem 1.5rem 6rem; }
 
+.kb-header.hero .hero-head .nav-item {
+  border-bottom: 2px solid transparent; }
+
 .kb-header.hero .hero-head .nav-item:hover {
   border-bottom: 2px solid #7a7a7a; }
 

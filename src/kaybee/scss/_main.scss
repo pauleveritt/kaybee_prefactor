@@ -1,6 +1,11 @@
 @import "../../../node_modules/bulma/sass/utilities/variables";
 
 // All nav elements should get a grey border when hovered
+.kb-header.hero .hero-head .nav-item {
+  // To avoid text jumping on hover, put an invisible by default
+  border-bottom: 2px solid transparent;
+}
+
 .kb-header.hero .hero-head .nav-item:hover {
   border-bottom: 2px solid $grey;
 }
