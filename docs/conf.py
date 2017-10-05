@@ -138,6 +138,7 @@ kaybee_config = dict(
         img_file='kaybee_logo.png',
         alt='Kaybee Logo Alt'
     ),
+    copyright='2017, All Rights Reserved',
     social_media=dict(
         twitter='kbtest',
         github='kbtest'
