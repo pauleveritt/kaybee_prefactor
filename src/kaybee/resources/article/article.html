@@ -3,7 +3,7 @@
     <div class="container">
         <div class="columns">
             <div class="column sb_body">
-                <h2>Parents</h2>
+                <h1 class="title is-1">{{ resource.title }}</h1>
                 <ul>
                     {% for parent in parents | reverse %}
                         <li>{{ parent.title|e }}</li>

@@ -167,3 +167,9 @@
   list-style: none;
   margin: 0;
 }
+
+// Hide the first heading, where Sphinx inserts the page title
+// into the generated body
+.sb_body .section:first-of-type h1:first-of-type {
+  display: none;
+}

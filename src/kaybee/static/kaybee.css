@@ -5195,3 +5195,6 @@ label.panel-block {
 .sb_sidenav ul {
   list-style: none;
   margin: 0; }
+
+.sb_body .section:first-of-type h1:first-of-type {
+  display: none; }
