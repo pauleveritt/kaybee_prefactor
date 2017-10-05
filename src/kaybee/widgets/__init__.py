@@ -149,7 +149,10 @@ class BaseWidget:
          generate HTML """
 
         context['site'] = site
+
+        # make_context is implemented on the concrete class for each widget
         self.make_context(context, site)
+
         # NOTE: Can use builder.templates.render_string
         html = builder.templates.render(self.template, context)
         return html
