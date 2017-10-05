@@ -134,7 +134,8 @@ texinfo_documents = [
 # kaybee config
 kaybee_config = dict(
     logo=dict(
-        img_url='http://some.site.com/fake_image.png',
+        # img_url='http://bulma.io/images/bulma-logo.png',
+        img_file='kaybee_logo.png',
         alt='Kaybee Logo Alt'
     ),
     social_media=dict(
