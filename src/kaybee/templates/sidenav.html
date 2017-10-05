@@ -31,14 +31,19 @@
            title="{{ _('next chapter') }}">{{ next.title }}</a>
     </ul>
 
-    <p class="menu-label">
-        Contents
-    </p>
-    <ul class="menu-list">
-        <li><a>Dashboard</a></li>
-        <li><a>This could be the long title of a parent
-            that goes on too long</a></li>
-    </ul>
+    {% set toc_entries = resource.extract_toc(toc) %}
+    {% if toc_entries %}
+        <p class="menu-label">
+            Contents
+        <ul class="menu-list">
+            {% for entry in toc_entries %}
+                <li>
+                    <a href="{{ entry[0] }}">{{ entry[1] }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        </p>
+    {% endif %}
 
     <p class="menu-label">
         Categories

@@ -1,5 +1,6 @@
 import inspect
 import os
+import xml.etree.ElementTree as ET
 
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
@@ -199,6 +200,18 @@ class BaseResource:
         with open(schema_filename, 'r') as f:
             schema = load(f)
             return schema
+
+    def extract_toc(self, toc):
+        """ Convert HTML markup for toc into a data structure
+
+         In templates, Sphinx provides a ``toc`` in the ``html_context``
+         that templates can use to insert an unordered listing of the
+         local headings, with internal links. But it's HTML. We want
+         to render the markup ourselves. Extract the data from the markup.
+         """
+
+        ul = ET.fromstring(toc)
+        return [(a.get('href'), a.text) for a in ul.iter('a')]
 
 
 def setup(app):
