@@ -4,25 +4,23 @@
         <div class="columns">
             <div class="column sb_body">
                 <h1 class="title is-1">{{ resource.title }}</h1>
-                <ul>
-                    {% for parent in parents | reverse %}
-                        <li>{{ parent.title|e }}</li>
-                    {% endfor %}
-                </ul>
                 {{ body }}
                 <section class="section">
                     <div class="columns">
                         <div class="column has-text-centered">
                             <div>Previous</div>
                             <div>
-                                <a href="#">A possibly long title for
-                                    webpack and even longer than it might</a>
+                                <a href="{{ _('previous chapter') }}">
+                                    {{ prev.title }}
+                                </a>
                             </div>
                         </div>
                         <div class="column has-text-centered">
                             <div>Next</div>
                             <div>
-                                <a href="#">Config</a>
+                                <a href="{{ _('next chapter') }}">
+                                    {{ next.title }}
+                                </a>
                             </div>
                         </div>
                     </div>

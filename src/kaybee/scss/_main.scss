@@ -139,10 +139,6 @@
   }
 }
 
-.sb_sidenav {
-  font-size: $size-small;
-}
-
 .kb-section-heading {
   border-bottom: 1px solid gray;
 }
@@ -168,9 +164,12 @@
   }
 }
 
-.sb_sidenav ul {
-  list-style: none;
-  margin: 0;
+.sb_sidenav {
+  font-size: $size-small;
+  ul {
+    list-style: none;
+    margin: 0;
+  }
 }
 
 // Hide the first heading, where Sphinx inserts the page title

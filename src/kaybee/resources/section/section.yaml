@@ -1,5 +1,7 @@
 type: map
 mapping:
+  subheading:
+    type: str
   style:
     type: str
   in_nav:

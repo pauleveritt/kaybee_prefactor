@@ -5179,9 +5179,6 @@ label.panel-block {
   background-color: #3273dc;
   color: #fff; }
 
-.sb_sidenav {
-  font-size: 0.75rem; }
-
 .kb-section-heading {
   border-bottom: 1px solid gray; }
 
@@ -5195,9 +5192,11 @@ label.panel-block {
   .sb_body table.highlighttable td {
     padding: 0; }
 
-.sb_sidenav ul {
-  list-style: none;
-  margin: 0; }
+.sb_sidenav {
+  font-size: 0.75rem; }
+  .sb_sidenav ul {
+    list-style: none;
+    margin: 0; }
 
 .sb_body .section:first-of-type h1:first-of-type {
   display: none; }
