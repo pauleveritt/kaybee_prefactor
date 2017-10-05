@@ -15,10 +15,11 @@ class TestHomepage:
         assert 'fake_image.png' in img['src']
 
     def test_social_media(self, page):
-        github = page.find(id='kb-github').attrs['href']
+        github = page.find(id='kb-config-github').attrs['href']
         assert github == 'https://github.com/kbtest'
-        twitter = page.find(id='kb-twitter').attrs['href']
+        twitter = page.find(id='kb-config-twitter').attrs['href']
         assert twitter == 'https://twitter.com/kbtest'
 
-# Put GitHub/Twitter logos in top right
-# Bring back the footer
+    def test_footer(self, page):
+        copyright = page.find(id='kb-config-copyright').contents[0].strip()
+        assert copyright == '© All Rights Reserved'
