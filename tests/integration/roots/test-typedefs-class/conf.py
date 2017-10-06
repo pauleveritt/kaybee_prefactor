@@ -7,6 +7,8 @@ import kaybee
 
 #
 # Add the typedefs to pythonpath
+from kaybee.core.site_config import SiteConfig
+
 here = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(here, 'typedefs'))
 from blogpost import Blogpost
@@ -17,22 +19,15 @@ master_doc = 'index'
 html_theme = 'kaybee'
 exclude_patterns = ['_build']
 
-alt = 'Kaybee Logo Alt'
-html_context = dict(
-    kaybee_config={},
+kaybee_config = SiteConfig(
     logo=dict(
         img_url='http://some.site.com/fake_image.png',
-        alt=alt
+        alt='Kaybee Logo Alt'
     ),
+    copyright='2017, All Rights Reserved',
     social_media=dict(
-        twitter='paulweveritt',
-        github='pauleveritt'
-    )
-)
-
-kaybee_config = dict(
-    logo=dict(
-        img_url='http://bulma.io/images/bulma-logo.png',
-        alt='Sphinx Bulma Theme'
-    )
+        twitter='kbtest',
+        github='kbtest'
+    ),
+    is_debug=True
 )

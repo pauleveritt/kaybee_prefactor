@@ -22,4 +22,4 @@ class TestHomepage:
 
     def test_footer(self, page):
         copyright = page.find(id='kb-config-copyright').contents[0].strip()
-        assert copyright == '© All Rights Reserved'
+        assert copyright == '© 2017, All Rights Reserved'

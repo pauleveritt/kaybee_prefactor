@@ -14,8 +14,10 @@ kaybee_config = SiteConfig(
         img_url='http://some.site.com/fake_image.png',
         alt='Kaybee Logo Alt'
     ),
+    copyright='2017, All Rights Reserved',
     social_media=dict(
         twitter='kbtest',
         github='kbtest'
     ),
+    is_debug=True
 )

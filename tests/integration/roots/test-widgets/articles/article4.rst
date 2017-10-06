@@ -15,4 +15,4 @@ This article look very different.
     query:
         sort_value: rtype
         order: -1
-
+        limit: 10

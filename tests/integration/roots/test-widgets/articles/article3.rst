@@ -14,4 +14,5 @@ This article should appear in the navmenu.
     query:
         sort_value: title
         order: -1
+        limit: 10
 

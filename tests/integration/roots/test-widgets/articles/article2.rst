@@ -13,4 +13,5 @@ Content after YAML.
     query:
         sort_value: title
         order: 1
+        limit: 10
 

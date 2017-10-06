@@ -14,8 +14,3 @@ class TestHomepage:
         assert 'Kaybee Logo Alt' in img['alt']
         assert 'fake_image.png' in img['src']
 
-
-#
-# TODO Need a test that gets the body content inserted, which means
-# we need a regular pages to insert content correctly.
-#
