@@ -15,6 +15,3 @@ coverage = "*"
 vmprof = "*"
 pytest-mock = "*"
 pytest-cov = "*"
-
-[packages.pykwalify]
-extras = [ "ruamel",]
