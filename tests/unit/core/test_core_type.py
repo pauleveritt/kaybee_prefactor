@@ -33,7 +33,7 @@ class Site:
 
 class Node:
     parent = None
-    rtype = ''
+    kbtype = ''
 
     def __init__(self, name):
         self.name = name

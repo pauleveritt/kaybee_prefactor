@@ -13,7 +13,7 @@ def dummy_sectionquery():
     content = """
     template: sectionquery.html
     query:
-      rtype: section
+      kbtype: section
       limit: 5
     """
     yield SectionQuery('somewidget', 'dummywidget', 'Some Widget', content)
