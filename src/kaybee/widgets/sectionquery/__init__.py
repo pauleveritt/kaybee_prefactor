@@ -1,20 +1,13 @@
 from pydantic import BaseModel
 
+from kaybee.core.core_type import CoreQueryModel
 from kaybee.core.registry import registry
 from kaybee.widgets import BaseWidget
 
 
-class QueryModel(BaseModel):
-    kbtype: str = None
-    limit: int = 5
-    parent_name: str = None
-    sort_value: str = None
-    order: int = 1
-
-
 class SectionQueryModel(BaseModel):
     template: str
-    query: QueryModel
+    query: CoreQueryModel
 
 
 @registry.widget('sectionquery')

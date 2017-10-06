@@ -2,23 +2,20 @@ from typing import List
 
 from pydantic.main import BaseModel
 
+from kaybee.core.core_type import CoreQueryModel
 from kaybee.core.registry import registry
 from kaybee.widgets import BaseWidget
 
 
-class QueryModel(BaseModel):
+class QuerySectionModel(BaseModel):
     label: str
     style: str = None
-    kbtype: str = None
-    limit: int = 5
-    parent_name: str = None
-    sort_value: str = None
-    order: int = 1
+    query: CoreQueryModel
 
 
 class QueryListModel(BaseModel):
     template: str
-    queries: List[QueryModel]
+    queries: List[QuerySectionModel]
 
 
 @registry.widget('querylist')
@@ -31,11 +28,12 @@ class QueryList(BaseWidget):
         # Build up some results to put in the context, for each of the
         # nested queries
         result_sets = []
-        for query in self.props.queries:
+        for query_section in self.props.queries:
             result_set = dict(
-                label=query.label,
-                style=query.style,
+                label=query_section.label,
+                style=query_section.style,
             )
+            query = query_section.query
             kbtype = query.kbtype
             sort_value = query.sort_value
             limit = query.limit

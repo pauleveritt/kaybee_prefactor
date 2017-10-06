@@ -19,10 +19,14 @@ class Site:
 
     def filter_resources(self, kbtype=None, sort_value='title',
                          order=1, limit=5, parent_name=None):
+
+        # Start with (hopefully) most common, filter based on resource type
         if kbtype:
             r1 = [r for r in self.resources.values() if r.kbtype == kbtype]
         else:
             r1 = list(self.resources.values())
+
+        # Filter those results based on arbitrary key-value pairs
 
         # Filter out only those with a parent in their lineage
         if parent_name:

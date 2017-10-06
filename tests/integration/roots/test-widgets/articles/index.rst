@@ -15,7 +15,7 @@ A list of articles is here.
 
     template: sectionquery.html
     query:
-        rtype: article
+        kbtype: article
         parent_name: articles2
 
 .. toctree::

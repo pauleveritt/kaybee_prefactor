@@ -13,6 +13,6 @@ This article look very different.
 
     template: sectionquery.html
     query:
-        sort_value: rtype
+        sort_value: kbtype
         order: -1
         limit: 10
