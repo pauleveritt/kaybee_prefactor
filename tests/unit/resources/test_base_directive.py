@@ -4,8 +4,8 @@ from kaybee.resources import BaseDirective
 
 
 class DummySite:
-    def add_resource(self, resource):
-        self.resource = resource
+    def __init__(self):
+        self.resources = dict()
 
 
 class Dummy:
@@ -14,6 +14,7 @@ class Dummy:
 
 class SampleResource:
     def __init__(self, *args, **kw):
+        self.name = 'name'
         self.props = dict(template='foo')
 
 

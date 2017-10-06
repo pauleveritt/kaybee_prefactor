@@ -17,25 +17,6 @@ class Site:
 
         return self.config.is_debug
 
-    def add_resource(self, resource):
-        """ Add a resource to the db and do any indexing needed """
-
-        self.resources[resource.name] = resource
-
-    def remove_resource(self, name):
-        """ Remove a resource from the site and do any unindexing """
-        self.resources.pop(name, None)
-
-    def add_widget(self, widget):
-        """ Add a widget to the db and do any indexing needed """
-
-        self.widgets[widget.name] = widget
-
-    def remove_widget(self, name):
-        """ Remove a widget from the site and do any unindexing """
-
-        self.widgets.pop(name, None)
-
     def filter_resources(self, kbtype=None, sort_value='title',
                          order=1, limit=5, parent_name=None):
         if kbtype:

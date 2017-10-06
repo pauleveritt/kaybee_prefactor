@@ -7,7 +7,6 @@ class DummyModel:
     sort_value = 'title'
 
 
-
 class DummyResource:
     parent = None
     kbtype = 'resource'
@@ -93,8 +92,10 @@ def site(site_config, sample_resources, sample_widgets):
     s = Site(site_config)
 
     # Add some sample data
-    [s.add_resource(sr) for sr in sample_resources]
-    [s.add_widget(sw) for sw in sample_widgets]
+    for sr in sample_resources:
+        s.resources[sr.name] = sr
+    for sw in sample_widgets:
+        s.widgets[sw.name] = sw
     yield s
 
 
@@ -107,13 +108,13 @@ def test_construction(site):
 
 
 def test_add_resource_succeeds(site, sample_resource):
-    site.add_resource(sample_resource)
-    assert site.resources.get(sample_resource.name) == sample_resource
+    site.resources[sample_resource.name] = sample_resource
+    assert site.resources[sample_resource.name] == sample_resource
 
 
 def test_remove_resource(site, sample_resource):
-    site.add_resource(sample_resource)
-    site.remove_resource(sample_resource.name)
+    site.resources[sample_resource.name] = sample_resource
+    del site.resources[sample_resource.name]
     assert site.resources.get(sample_resource.name, None) is None
 
 
@@ -143,8 +144,8 @@ def test_filter_resources_parent(site):
     parent._parents = []
     child = DummyResource('section2/article2', 'Second Resource')
     child._parents = [parent]
-    site.add_resource(parent)
-    site.add_resource(child)
+    site.resources[parent.name] = parent
+    site.resources[child.name] = child
     kw = dict(parent_name='section2/index')
     results = site.filter_resources(**kw)
     assert len(results) == 1
@@ -179,8 +180,8 @@ def test_nav_menu(site, sample_resources):
 
 
 def test_remove_widget(site, sample_widget):
-    site.add_widget(sample_widget)
-    site.remove_widget(sample_widget.name)
+    site.widgets[sample_widget.name] = sample_widget
+    del site.widgets[sample_widget.name]
     assert site.widgets.get(sample_widget.name, None) is None
 
 

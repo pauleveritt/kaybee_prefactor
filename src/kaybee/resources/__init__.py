@@ -44,7 +44,7 @@ class BaseDirective(Directive):
 
 
         site = self.state.document.settings.env.site
-        site.add_resource(this_resource)
+        site.resources[this_resource.name] = this_resource
 
         # Don't need to return a resource "node", the
         # document is the node

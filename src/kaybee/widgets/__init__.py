@@ -74,7 +74,7 @@ class BaseDirective(Directive):
         )
 
         site = self.state.document.settings.env.site
-        site.add_widget(this_widget)
+        site.widgets[this_widget.name] = this_widget
 
         # Now add the node to the doctree
         widget_node = widget()
