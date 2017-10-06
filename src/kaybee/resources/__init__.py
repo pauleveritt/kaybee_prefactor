@@ -151,5 +151,4 @@ def setup(app):
     # Loop through the registered resources and add a directive
     # for each
     for kbtype in registry.config.resources.keys():
-        # TODO 001 Have the registry interact with Sphinx and do this?
         app.add_directive(kbtype, BaseDirective)

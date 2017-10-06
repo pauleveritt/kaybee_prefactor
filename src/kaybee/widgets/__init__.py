@@ -126,7 +126,6 @@ def setup(app):
     # for each
     app.add_node(widget)
     for kbtype in registry.config.widgets.keys():
-        # TODO 001 Have the registry interact with Sphinx and do this?
         app.add_directive(kbtype, BaseDirective)
 
     app.connect('doctree-resolved', process_widget_nodes)

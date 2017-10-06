@@ -1,5 +1,6 @@
 import pytest
 
+from kaybee.core.core_type import CorePropFilterModel
 from kaybee.site import Site
 
 
@@ -150,6 +151,15 @@ def test_filter_resources_parent(site):
     results = site.filter_resources(**kw)
     assert len(results) == 1
     assert results[0].title == 'Second Resource'
+
+
+def test_filter_resources_props(site):
+    prop = dict(key='weight', value=20)
+    kv = [CorePropFilterModel(**prop)]
+    kw = dict(props=kv)
+    results = site.filter_resources(**kw)
+    assert len(results) == 1
+    assert results[0].title == 'About'
 
 
 def test_filter_resources_limit(site):

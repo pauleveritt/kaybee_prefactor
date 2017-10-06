@@ -1,7 +1,13 @@
 import json
+from typing import List, Any
 
 from pydantic.main import BaseModel
 from ruamel.yaml import load
+
+
+class CorePropFilterModel(BaseModel):
+    key: str
+    value: Any
 
 
 class CoreQueryModel(BaseModel):
@@ -10,6 +16,7 @@ class CoreQueryModel(BaseModel):
     parent_name: str = None
     sort_value: str = None
     order: int = None
+    props: List[CorePropFilterModel] = []
 
 
 class CoreResourceModel(BaseModel):

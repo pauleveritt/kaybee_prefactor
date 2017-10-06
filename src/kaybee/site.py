@@ -18,7 +18,8 @@ class Site:
         return self.config.is_debug
 
     def filter_resources(self, kbtype=None, sort_value='title',
-                         order=1, limit=5, parent_name=None):
+                         order=1, limit=5, parent_name=None,
+                         props=[]):
 
         # Start with (hopefully) most common, filter based on resource type
         if kbtype:
@@ -27,6 +28,9 @@ class Site:
             r1 = list(self.resources.values())
 
         # Filter those results based on arbitrary key-value pairs
+        for prop in props:
+            r1 = [r for r in r1
+                  if getattr(r.props, prop.key, None) == prop.value]
 
         # Filter out only those with a parent in their lineage
         if parent_name:
