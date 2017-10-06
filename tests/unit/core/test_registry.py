@@ -3,7 +3,6 @@ import pytest
 
 from kaybee.core.registry import (
     ResourceAction, WidgetAction, SiteAction,
-    registry,
     KbActionInvalidKind
 )
 
@@ -98,7 +97,7 @@ class TestRegistry:
         results = list(query_resource(dummy_registry))
         assert len(results) == 1
 
-    def test_clears_registray_second_time(self, dummy_registry,
+    def test_clears_registry_second_time(self, dummy_registry,
                                           query_resource):
         with pytest.raises(AttributeError):
             list(query_resource(dummy_registry))
