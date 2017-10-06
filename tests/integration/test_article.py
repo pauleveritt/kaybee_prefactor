@@ -51,7 +51,7 @@ class TestArticle2:
     ])
     def test_direct_props(self, page, propname, propvalue):
         # No props
-        node = page.find(id=f'kb-debug-resource-props-{propname}-value')
+        node = page.find(id=f'kb-debug-resource-props-in_nav')
         value = node.contents[0].strip()
         assert value == propvalue
 

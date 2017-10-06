@@ -93,13 +93,7 @@
         <span id="kb-debug-resource-style">{{ resource.style(site) }}</span>
     </div>
     <h2>Props</h2>
-    <ul id="kb-debug-resource-props" style="margin-left: 2em">
-        {% for k, v in resource.props.items() %}
-            <li>
-                <span id="kb-debug-resource-props-{{ k }}">{{ k }}</span>
-                <span id="kb-debug-resource-props-{{ k }}-value">{{ v }}</span>
-            </li>
-        {% endfor %}
-    </ul>
-
+    <div>in_nav:
+        <span id="kb-debug-resource-props-in_nav">{{ resource.props.in_nav }}</span>
+    </div>
 {% endblock %}

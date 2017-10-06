@@ -3,17 +3,21 @@ import pytest
 from kaybee.site import Site
 
 
+class DummyModel:
+    sort_value = 'title'
+
+
+
 class DummyResource:
     parent = None
-    rtype = 'resource'
+    kbtype = 'resource'
 
     def __init__(self, name, title, in_nav=False, weight=0):
         self.name = name
         self.title = title
-        self.props = dict(
-            in_nav=in_nav,
-            weight=weight
-        )
+        self.props = DummyModel()
+        self.props.in_nav = in_nav
+        self.props.weight = weight
         self._parents = []
 
     def parents(self, site):
@@ -21,16 +25,15 @@ class DummyResource:
 
 
 class DummySection:
-    rtype = 'section'
+    kbtype = 'section'
 
     def __init__(self, name, title,
                  in_nav=False, weight=0):
         self.name = name
         self.title = title
-        self.props = dict(
-            in_nav=in_nav,
-            weight=weight
-        )
+        self.props = DummyModel()
+        self.props.in_nav = in_nav
+        self.props.weight = weight
 
         self._parents = []
 
@@ -43,14 +46,14 @@ class DummySection:
 
 class DummyQuery:
 
-    def __init__(self, name, props):
+    def __init__(self, name):
         self.name = name
-        self.props = props
+        self.props = DummyModel()
 
 
 @pytest.fixture()
 def site_config():
-    yield dict()
+    yield DummyModel()
 
 
 @pytest.fixture(name='sample_resources')
@@ -71,12 +74,12 @@ def dummy_resource(sample_resources):
 
 @pytest.fixture(name='sample_widgets')
 def dummy_widgets():
-    props = dict(template='query1.html', rtype='section')
-    dq = DummyQuery('query1', props)
+    # props = dict(template='query1.html', kbtype='section')
+    dq = DummyQuery('query1')
     yield (
         dq,
         dq
-        # DummyQuery(dict(template='query1.html', rtype='section'))
+        # DummyQuery(dict(template='query1.html', kbtype='section'))
     )
 
 
@@ -120,7 +123,7 @@ def test_section_listing(site, sample_resources):
 
 @pytest.mark.parametrize('filter_key, filter_value, expected', [
     (None, 'resource', 'About'),
-    ('rtype', 'resource', 'About'),
+    ('kbtype', 'resource', 'About'),
     ('sort_value', 'title', 'About'),
     ('sort_value', 'weight', 'Q Not Last No Weight'),
     ('order', -1, 'Z Last weights first'),
@@ -182,6 +185,7 @@ def test_remove_widget(site, sample_widget):
 
 
 def test_is_debug(site):
+    site.config.is_debug = False
     assert not site.is_debug
-    site.config['debug'] = True
+    site.config.is_debug = True
     assert site.is_debug

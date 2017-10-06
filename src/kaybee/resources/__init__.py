@@ -7,7 +7,6 @@ from ruamel.yaml import load
 
 from kaybee.core.core_type import CoreType
 from kaybee.core.registry import registry
-from kaybee.core.validators import validate
 
 
 class BaseDirective(Directive):
@@ -18,20 +17,9 @@ class BaseDirective(Directive):
         """ Make this easy to mock """
         return registry.config.resources[resource_directive]
 
-    @classmethod
-    def get_resource_action(cls, kbtype):
-        """ Make this easy to mock """
-        return registry.first_action('resource', kbtype)
-
     @property
     def doc_title(self):
         return self.state.parent.parent.children[0].children[0].rawsource
-
-    def validate_resource(self, resource, kbtype):
-        props = resource.props
-        action_data = self.get_resource_action(kbtype)
-        schema_data = action_data.schema
-        validate(props, schema_data)
 
     def run(self):
         """ Run at parse time.
@@ -53,18 +41,8 @@ class BaseDirective(Directive):
         resource_class = BaseDirective.get_resource_class(kbtype)
         this_resource = resource_class(env.docname, kbtype,
                                        title, resource_content)
-        # If the typedef had an defaults that aren't in the props, add them
-        defaults = self.get_resource_action(kbtype).defaults
-        if defaults:
-            for k, v in defaults.items():
-                # TODO 001 Needs tests
-                if k not in this_resource.props:
-                    this_resource.props[k] = v
 
-        # Validate the properties against the schema for this
-        # widget type
-        # TODO 001 Get the schema from the registry, not the "site"
-        self.validate_resource(this_resource, kbtype)
+
         site = self.state.document.settings.env.site
         site.add_resource(this_resource)
 

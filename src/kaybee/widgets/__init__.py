@@ -9,7 +9,6 @@ from ruamel.yaml import load
 
 from kaybee.core.core_type import CoreType
 from kaybee.core.registry import registry
-from kaybee.core.validators import validate
 from kaybee.widgets.events import process_widget_nodes
 
 
@@ -32,7 +31,7 @@ class widget(nodes.General, nodes.Element):
         return self['ids'][0]
 
     @property
-    def wtype(self):
+    def kbtype(self):
         """ The directive used, which finds the class needed
 
          If our RST has ``.. querylist::``
@@ -47,16 +46,10 @@ class widget(nodes.General, nodes.Element):
 class BaseDirective(Directive):
     has_content = True
 
-    @classmethod
-    def get_widget_schema(cls, kbtype):
-        """ Make this easy to mock """
-        return registry.first_action('widget', kbtype)
+    @property
+    def doc_title(self):
+        return self.state.parent.parent.children[0].children[0].rawsource
 
-    def validate_widget(self, widget, kbtype):
-        props = widget.props
-        action_data = self.get_widget_schema(kbtype)
-        schema_data = action_data.schema
-        validate(props, schema_data)
 
     def run(self):
         """ Run at parse time.
@@ -69,17 +62,17 @@ class BaseDirective(Directive):
 
         """
 
+        env = self.state.document.settings.env
+
         # Get the info from this directive and make instance
         kbtype = self.name
         widget_content = '\n'.join(self.content)
         widget_class = registry.config.widgets[kbtype]
-        this_widget = widget_class(widget_content)
-        this_widget.wtype = kbtype
+        this_widget = widget_class(
+            env.docname,
+            kbtype, self.doc_title, widget_content
+        )
 
-        # Validate the properties against the schema for this
-        # widget type
-        # TODO 001 No longer the site's responsibility
-        self.validate_widget(this_widget, kbtype)
         site = self.state.document.settings.env.site
         site.add_widget(this_widget)
 
@@ -92,8 +85,6 @@ class BaseDirective(Directive):
 
 class BaseWidget(CoreType):
     kind = 'widget'
-
-
 
     @property
     def template(self):

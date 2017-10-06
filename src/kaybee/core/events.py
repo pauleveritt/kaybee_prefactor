@@ -25,7 +25,6 @@ from sphinx.jinja2glue import SphinxFileSystemLoader
 import kaybee
 from kaybee import resources, widgets
 from kaybee.core.registry import registry
-from kaybee.core.typedefs import YamlTypedef
 from kaybee.site import Site
 
 

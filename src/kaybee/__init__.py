@@ -5,6 +5,7 @@ from kaybee.core.events import (
     kaybee_context, add_templates_paths,
     initialize_site, purge_resources
 )
+from kaybee.core.site_config import SiteConfig
 
 __version__ = "0.0.1"
 
@@ -29,7 +30,7 @@ def get_path():
 
 
 def setup(app):
-    app.add_config_value('kaybee_config', dict(), 'html')
+    app.add_config_value('kaybee_config', SiteConfig(), 'html')
     app.connect('builder-inited', register)
     app.connect('builder-inited', add_templates_paths)
     app.connect('env-before-read-docs', initialize_site)

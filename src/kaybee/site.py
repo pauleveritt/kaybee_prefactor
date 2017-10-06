@@ -15,7 +15,7 @@ class Site:
          put some markup at the bottom that can be tested E2E.
          """
 
-        return self.config.get('debug', False)
+        return self.config.is_debug
 
     def add_resource(self, resource):
         """ Add a resource to the db and do any indexing needed """
@@ -36,10 +36,10 @@ class Site:
 
         self.widgets.pop(name, None)
 
-    def filter_resources(self, rtype=None, sort_value='title',
+    def filter_resources(self, kbtype=None, sort_value='title',
                          order=1, limit=5, parent_name=None):
-        if rtype:
-            r1 = [r for r in self.resources.values() if r.rtype == rtype]
+        if kbtype:
+            r1 = [r for r in self.resources.values() if r.kbtype == kbtype]
         else:
             r1 = list(self.resources.values())
 
@@ -61,7 +61,7 @@ class Site:
             else:
                 r3 = sorted(
                     r2,
-                    key=lambda x: x.props.get(sort_value, '')
+                    key=lambda x: getattr(x.props, sort_value, 0)
                 )
         else:
             r3 = r2
@@ -78,19 +78,19 @@ class Site:
 
     @property
     def sections(self):
-        """ Listing of resources with rtype == section """
+        """ Listing of resources with kbtype == section """
 
-        return [s for s in self.resources.values() if s.rtype == 'section']
+        return [s for s in self.resources.values() if s.kbtype == 'section']
 
     @property
     def navmenu(self):
         """ Sorted listing of resources with in_nav set to true """
 
         resources = [r for r in self.resources.values() if
-                     r.props.get('in_nav')]
+                     r.props.in_nav]
 
         # Sort first by title, then by "weight"
         return sorted(resources,
                       key=lambda x: (
-                          x.props.get('weight', 0), attrgetter('title')(x))
+                          x.props.weight, attrgetter('title')(x))
                       )

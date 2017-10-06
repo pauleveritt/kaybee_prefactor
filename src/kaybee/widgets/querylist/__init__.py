@@ -36,11 +36,11 @@ class QueryList(BaseWidget):
                 label=query.label,
                 style=query.style,
             )
-            rtype = query.kbtype
+            kbtype = query.kbtype
             sort_value = query.sort_value
             limit = query.limit
             order = query.order
-            q = dict(rtype=rtype, sort_value=sort_value, limit=limit,
+            q = dict(kbtype=kbtype, sort_value=sort_value, limit=limit,
                      order=order)
             results = site.filter_resources(**q)
             result_set['results'] = results
