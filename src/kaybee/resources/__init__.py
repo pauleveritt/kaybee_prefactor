@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
 
+from kaybee.core.core_type import CoreType
 from kaybee.core.registry import registry
 from kaybee.core.validators import validate
 
@@ -72,59 +73,13 @@ class BaseDirective(Directive):
         return []
 
 
-class BaseResource:
+class BaseResource(CoreType):
+    kind = 'resource'
     default_style = ''
-
-    def __init__(self, pagename, rtype, title, content):
-        self.name, self.parent = BaseResource.parse_pagename(pagename)
-        self.rtype = rtype
-        self.title = title
-        self.props = BaseResource.load(content)
-
-    @staticmethod
-    def load(content):
-        """ Provide a way to stub this in tests """
-
-        # If the string of YAML is empty-ish (new lines, etc.)
-        # then return an empty dict
-        if content.strip() == '':
-            return {}
-        return load(content)
-
-    @staticmethod
-    def parse_pagename(pagename):
-        """ Instead of doing this in the constructor, more testable """
-
-        lineage = pagename.split('/')
-        lineage_count = len(lineage)
-
-        # Default
-        name = pagename
-        parent = None
-
-        if lineage_count == 1:
-            # This is a doc in the root e.g. index or about
-            parent = '/'
-        elif lineage_count == 2 and lineage[-1] == 'index':
-            # This is blog/index, parent is the root
-            name = lineage[0]
-            parent = '/'
-        elif lineage_count == 2:
-            # This is blog/about
-            parent = lineage[0]
-        elif lineage[-1] == 'index':
-            # This is blog/sub/index
-            name = '/'.join(lineage[:-1])
-            parent = '/'.join(lineage[:-2])
-        else:
-            # This should be blog/sub/about
-            parent = '/'.join(lineage[:-1])
-
-        return name, parent
 
     def template(self, site):
         """ Template can come from YAML, section, or class """
-        custom_template = self.props.get('template')
+        custom_template = getattr(self.props, 'template')
         if custom_template:
             return custom_template
         section_doctemplate = self.find_prop(site, 'doc_template')
@@ -135,7 +90,7 @@ class BaseResource:
     def section(self, site):
         """ Which section is this in, if any """
 
-        section = [p for p in self.parents(site) if p.rtype == 'section']
+        section = [p for p in self.parents(site) if p.kbtype == 'section']
         if section:
             return section[0]
         return None
@@ -173,7 +128,7 @@ class BaseResource:
         lineage = self.parents(site)
         lineage.insert(0, self)
         for resource in lineage:
-            v = resource.props.get(prop_name)
+            v = getattr(resource.props, prop_name, None)
             if v:
                 # This resource has the prop, return it
                 return v

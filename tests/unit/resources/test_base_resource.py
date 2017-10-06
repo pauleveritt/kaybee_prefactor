@@ -1,8 +1,7 @@
 import pytest
 
+from kaybee.core.core_type import CoreResourceModel, CoreType
 from kaybee.resources import BaseResource
-
-LOAD = 'kaybee.resources.BaseResource.load'
 
 
 class Site:
@@ -12,17 +11,23 @@ class Site:
 
 class Node:
     parent = None
-    rtype = ''
+    kbtype = ''
 
     def __init__(self, name):
         self.name = name
-        self.props = {}
+        self.props = DummyArticleModel()
 
     def __repr__(self):
         return self.name
 
 
+class DummyArticleModel(CoreResourceModel):
+    doc_template: str = None
+    foo: str = None
+
+
 class DummyArticle(BaseResource):
+    model = DummyArticleModel
     default_style = 'classstyle'
 
 
@@ -31,8 +36,8 @@ def site():
     this_site = Node('site')
     f1 = Node('f1')
     f1.parent = '/'
-    f1.props['doc_template'] = 'section_doctemplate.html'
-    f1.props['style'] = 'sectionstyle'
+    f1.props.doc_template = 'section_doctemplate.html'
+    f1.props.style = 'sectionstyle'
     f2 = Node('f2')
     f2.parent = 'f1'
     f3 = Node('f3')
@@ -54,54 +59,62 @@ def test_import():
     assert BaseResource.__name__ == 'BaseResource'
 
 
-def test_instance(monkeypatch):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    br = BaseResource('index', 'rtype', 'title', 'content')
-    assert br.name == 'index'
-    assert br.parent == '/'
-    assert br.rtype == 'rtype'
-    assert br.title == 'title'
-    assert br.props['flag'] == 9
+def test_instance():
+    da = DummyArticle('somepage', 'dummyarticle', 'Some Page', '')
+    assert da.__class__.__name__ == 'DummyArticle'
+    assert da.name == 'somepage'
+    assert da.parent == '/'
+    assert da.kbtype == 'dummyarticle'
+    assert da.title == 'Some Page'
+    assert da.props.in_nav is False
 
 
-@pytest.mark.parametrize('loader, expected', [
-    # Most specific: The YAML has a template
-    (lambda c: dict(template='yamltemplate.html'), 'yamltemplate.html'),
-
-    # Next specific, not in YAML, but in section
-    (lambda c: dict(), 'section_doctemplate.html'),
-
-    # Least specific: neither YAML nor section, get from class
-    (lambda c: dict(flag=9), 'dummyarticle.html')
-])
-def test_template(monkeypatch, site, loader, expected):
-    # In the last case, remove the doc_template from the dummy section
-    # props
-    if expected == 'dummyarticle.html':
-        del site.resources['f1'].props['doc_template']
-
-    monkeypatch.setattr(LOAD, loader)
-    a = DummyArticle('f1/f2/f3', 'rtype', 'title', 'content')
-    assert a.template(site) == expected
+def test_template_from_props(monkeypatch, site):
+    dam = DummyArticleModel()
+    dam.template = 'damtemplate.html'
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+    assert a.template(site) == dam.template
 
 
-@pytest.mark.parametrize('loader, expected', [
-    # Most specific: The YAML has a style
-    (lambda c: dict(style='yamlstyle'), 'yamlstyle'),
+def test_template_from_section(monkeypatch, site):
+    dam = DummyArticleModel()
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+    assert a.template(site) == 'section_doctemplate.html'
 
-    # Next specific, not in YAML, but in parents
-    (lambda c: dict(), 'sectionstyle'),
 
-    # Least specific: neither YAML nor section, get from class
-    (lambda c: dict(), 'classstyle')
-])
-def test_style(monkeypatch, site, loader, expected):
-    if expected != 'sectionstyle':
-        del site.resources['f1'].props['style']
+def test_template_from_class(monkeypatch, site):
+    # Delete the lineage-intheried doc_template prop on the section
+    site.resources['f1'].props.doc_template = None
+    dam = DummyArticleModel()
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+    assert a.template(site) == 'dummyarticle.html'
 
-    monkeypatch.setattr(LOAD, loader)
-    a = DummyArticle('f1/f2/f3', 'rtype', 'title', 'content')
-    assert a.style(site) == expected
+
+def test_style_from_props(monkeypatch, site):
+    dam = DummyArticleModel()
+    dam.style = 'instance_style'
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+    assert a.style(site) == dam.style
+
+
+def test_style_from_section(monkeypatch, site):
+    dam = DummyArticleModel()
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+    assert a.style(site) == 'sectionstyle'
+
+
+def test_style_from_class(monkeypatch, site):
+    # Delete the lineage-intheried doc_template prop on the section
+    site.resources['f1'].props.style = None
+    dam = DummyArticleModel()
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+    assert a.style(site) == 'classstyle'
 
 
 @pytest.mark.parametrize('pagename, parents_len, parentname', [
@@ -116,81 +129,51 @@ def test_style(monkeypatch, site, loader, expected):
     ('f1/f2/f3/about', 4, 'f3'),
 ])
 def test_root_parents(monkeypatch, site, pagename, parents_len, parentname):
-    monkeypatch.setattr(LOAD, lambda c: dict())
-    br = BaseResource(pagename, 'rtype', 'title', 'content')
-    parents = br.parents(site)
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: None)
+    a = DummyArticle(pagename, 'kbtype', 'title', 'content')
+    parents = a.parents(site)
     assert len(parents) == parents_len
     if pagename != '/':
         assert parents[0].name == parentname
 
 
-@pytest.mark.parametrize('pagename, name, parent', [
-    ('index', 'index', '/'),
-    ('about', 'about', '/'),
-    ('blog/index', 'blog', '/'),
-    ('blog/about', 'blog/about', 'blog'),
-    ('blog/s1/index', 'blog/s1', 'blog'),
-    ('blog/s1/about', 'blog/s1/about', 'blog/s1'),
-    ('blog/s1/s2/index', 'blog/s1/s2', 'blog/s1'),
-    ('blog/s1/s2/about', 'blog/s1/s2/about', 'blog/s1/s2'),
-    ('blog/s1/s2/s3/index', 'blog/s1/s2/s3', 'blog/s1/s2'),
-    ('blog/s1/s2/s3/about', 'blog/s1/s2/s3/about', 'blog/s1/s2/s3'),
-])
-def test_name_parent(monkeypatch, site, pagename, name, parent):
-    monkeypatch.setattr(LOAD, lambda c: dict(flag=9))
-    this_name, this_parent = BaseResource.parse_pagename(pagename)
-    assert this_name == name
-    assert this_parent == parent
+def test_find_prop_none_local(monkeypatch, site):
+    dam = DummyArticleModel()
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
+    prop = a.find_prop(site, 'foo')
+    assert prop is None
 
 
 @pytest.mark.parametrize('parentname, propvalue', [
-    (None, None),
     ('f1/f2/f3', 'hellof3'),
     ('f1/f2', 'hellof2'),
     ('f1', 'hellof1'),
     ('/', 'hellofsite'),
 ])
 def test_find_prop_none(monkeypatch, site, parentname, propvalue):
-    if parentname is not None:
-        site.resources[parentname].props['foo'] = propvalue
-    monkeypatch.setattr(LOAD, lambda c: dict())
-    br = BaseResource('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
-    prop = br.find_prop(site, 'foo')
+    site.resources[parentname].props.foo = propvalue
+    dam = DummyArticleModel()
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
+    prop = a.find_prop(site, 'foo')
     assert prop == propvalue
-    if parentname is not None:
-        del site.resources[parentname].props['foo']
-
-
-def test_props():
-    content = """
-count: 999
-level: 2
-    """
-    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', content)
-    assert br.props['count'] == 999
-    assert br.props['level'] == 2
-
-
-def test_empty_yaml_string():
-    content = """
-    
-    
-    """
-    props = BaseResource.load(content)
-    assert props == {}
+    site.resources[parentname].props.foo = None
 
 
 def test_section_none(monkeypatch, site):
-    monkeypatch.setattr(LOAD, lambda c: dict())
-    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
-    assert br.section(site) is None
+    dam = DummyArticleModel()
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
+    assert a.section(site) is None
 
 
 def test_section_f1(monkeypatch, site):
-    site.resources['f1'].rtype = 'section'
-    monkeypatch.setattr(LOAD, lambda c: dict())
-    br = DummyArticle('f1/f2/f3/f4/about', 'rtype', 'title', 'content')
-    assert br.section(site) == site.resources['f1']
+    site.resources['f1'].kbtype = 'section'
+    dam = DummyArticleModel()
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
+    assert a.section(site) == site.resources['f1']
 
 
 @pytest.mark.parametrize('pagename, nav_href, expected', [
@@ -202,6 +185,7 @@ def test_section_f1(monkeypatch, site):
     ('f1/f2/about', 'f2', False),
 ])
 def test_is_active(monkeypatch, site, pagename, nav_href, expected):
-    monkeypatch.setattr(LOAD, lambda c: dict())
-    br = DummyArticle(pagename, 'rtype', 'title', 'content')
-    assert br.is_active_section(site, nav_href) == expected
+    dam = DummyArticleModel()
+    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+    a = DummyArticle(pagename, 'kbtype', 'title', 'content')
+    assert a.is_active_section(site, nav_href) == expected
