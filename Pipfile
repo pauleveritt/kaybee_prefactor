@@ -6,6 +6,7 @@ verify_ssl = true
 Sphinx = "*"
 livereload = "*"
 pytest = "*"
+pydantic = "*"
 
 [dev-packages]
 beautifulsoup4 = "*"

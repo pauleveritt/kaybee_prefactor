@@ -9,6 +9,8 @@ import kaybee
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
+from kaybee.core.site_config import SiteConfig
+
 extensions = ['sphinx.ext.intersphinx',
               kaybee.__title__,
               ]
@@ -132,7 +134,7 @@ texinfo_documents = [
 # intersphinx_mapping = {'https://docs.python.org/': None}
 
 # kaybee config
-kaybee_config = dict(
+kaybee_config = SiteConfig(
     logo=dict(
         # img_url='http://bulma.io/images/bulma-logo.png',
         img_file='kaybee_logo.png',

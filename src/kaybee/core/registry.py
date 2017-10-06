@@ -56,9 +56,6 @@ class ResourceAction(dectate.Action):
     def identifier(self, resources):
         return self.name
 
-    # def discriminators(self, resources):
-    #     return self.name
-
     def perform(self, obj, resources):
         resources[self.name] = obj
         if self.schema is None:

@@ -44,15 +44,17 @@ def register(app):
 
     # If the site has a kaybee_config, get it
     kc = app.config.kaybee_config
-    if kc:
-        # First the typedefs.yaml files in the doc project
-        typedefs = kc.get('typedefs')
-        if typedefs:
-            for typedef_fn in typedefs:
-                full_fn = os.path.join(app.confdir, typedef_fn)
-                assert os.path.exists(full_fn)
-                yaml_typedef = YamlTypedef(full_fn)
-                yaml_typedef.register(registry)
+
+    # TODO OO2 We are yanking this out
+    # if kc:
+    #     # First the typedefs.yaml files in the doc project
+    #     typedefs = kc.get('typedefs')
+    #     if typedefs:
+    #         for typedef_fn in typedefs:
+    #             full_fn = os.path.join(app.confdir, typedef_fn)
+    #             assert os.path.exists(full_fn)
+    #             yaml_typedef = YamlTypedef(full_fn)
+    #             yaml_typedef.register(registry)
 
     dectate.commit(registry)
 
@@ -93,6 +95,7 @@ def initialize_site(app, env, docnames):
     """ Create the Site instance if it is not in the pickle """
 
     if not hasattr(env, 'site'):
+        # Load and validate the config
         config = app.config.kaybee_config
         env.site = Site(config)
 
