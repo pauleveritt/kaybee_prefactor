@@ -1,5 +1,21 @@
+import pytest
+
 from kaybee.resources.homepage import Homepage
 
 
-def test_import():
-    assert Homepage.__name__ == 'Homepage'
+@pytest.fixture()
+def dummy_homepage():
+    content = """
+template: somehomepage.html
+logo: somelogo.png
+    """
+    yield Homepage('somehomepage', 'dummyhomepage', 'Some Homepage', content)
+
+
+def test_import(dummy_homepage):
+    assert dummy_homepage.__class__.__name__ == 'Homepage'
+
+
+def test_construction(dummy_homepage):
+    assert dummy_homepage.props.template == 'somehomepage.html'
+    assert dummy_homepage.props.logo == 'somelogo.png'

@@ -1,15 +1,24 @@
 import pytest
 
+from kaybee.core.core_type import CoreWidgetModel
 from kaybee.widgets import widget, BaseDirective, BaseWidget
+
+
+class DummyWidgetModel(CoreWidgetModel):
+    flag: int = None
+
+
+class DummyWidget(BaseWidget):
+    model = DummyWidgetModel
 
 
 @pytest.fixture(name='base_widget')
 def dummy_base_widget():
     content = """
 template: widget1.html
-rtype: section
+kbtype: section
     """
-    yield BaseWidget(content)
+    yield DummyWidget('somewidget', 'dummywidget', 'Some Widget', content)
 
 
 class TestWidgetNode:
@@ -18,7 +27,7 @@ class TestWidgetNode:
         assert widget.__name__ == 'widget'
 
     def test_construction(self, base_widget):
-        assert base_widget.__class__.__name__ == 'BaseWidget'
+        assert base_widget.__class__.__name__ == 'DummyWidget'
 
 
 class TestBaseDirective:
@@ -34,18 +43,14 @@ class TestBaseWidget:
 
     def test_construction(self):
         content = """
-flag: 9        
-        """
-        bw = BaseWidget(content)
-        assert bw.content == content
-        assert bw.props['flag'] == 9
+template: hello
+                """
+        dw = DummyWidget('somewidget', 'dummywidget', 'Some Widget', content)
+        assert dw.__class__.__name__ == 'DummyWidget'
+        assert dw.props.template == 'hello'
 
     def test_name_sorted(self, base_widget):
-        # Do the props one way
-        expected = '{"limit": 5, "rtype": "section"}'
-        base_widget.props = {'rtype': 'section', 'limit': 5}
-        assert base_widget.name == expected
-        base_widget.props = {'limit': 5, 'rtype': 'section'}
+        expected = '{"kbtype": "section", "template": "widget1.html"}'
         assert base_widget.name == expected
 
     def test_template(self, base_widget):

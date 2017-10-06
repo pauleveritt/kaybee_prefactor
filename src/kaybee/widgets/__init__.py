@@ -7,6 +7,7 @@ from docutils import nodes
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
 
+from kaybee.core.core_type import CoreType
 from kaybee.core.registry import registry
 from kaybee.core.validators import validate
 from kaybee.widgets.events import process_widget_nodes
@@ -89,57 +90,17 @@ class BaseDirective(Directive):
         return [widget_node]
 
 
-class BaseWidget:
-    wtype = None
+class BaseWidget(CoreType):
+    kind = 'widget'
 
-    def __init__(self, content):
-        self.content = content
-        self.props = self.load(content)
 
-    @classmethod
-    def set_wtype(cls, wtype):
-        """ Stamp the wtype on the class at config time.
-
-         The registry decorator has the name of the directive. The
-         widget class needs to know the name of that directive
-         to register itself. Help dectate registration to
-         stamp the wtype on the class.
-         """
-
-        cls.wtype = wtype
-
-    @staticmethod
-    def load(content):
-        """ Provide a way to stub this in tests """
-
-        # If the string of YAML is empty-ish (new lines, etc.)
-        # then return an empty dict
-        if content.strip() == '':
-            return {}
-        return load(content)
 
     @property
     def template(self):
         """ Allow the template used to come from different places """
 
         # For now, it comes from a mandatory item in the YAML
-        return self.props['template']
-
-    @property
-    def name(self):
-        """ Generate a stable, re-usable identifier
-
-         We need a key to store this instance on the site. We don't
-         want to make the author's concoct some unique id to add
-         in the YAML in the .rst file. Also, if the same widget is
-         used in more than one place, we might want to cache the
-         results.
-
-         Generate a key as a string from the JSON representation of the
-         sorted properties.
-         """
-
-        return json.dumps(self.props, sort_keys=True)
+        return self.props.template
 
     def make_context(self, context: Mapping, site):
         raise NotImplementedError('Subclass must override make_context')

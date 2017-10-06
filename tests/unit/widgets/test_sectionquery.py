@@ -16,7 +16,7 @@ def dummy_sectionquery():
       rtype: section
       limit: 5
     """
-    yield SectionQuery(content)
+    yield SectionQuery('somewidget', 'dummywidget', 'Some Widget', content)
 
 
 @pytest.fixture(name='sample_site')
@@ -30,7 +30,7 @@ def test_import(sectionquery):
 
 def test_make_context(sectionquery, sample_site):
     context = dict()
-    mc = sectionquery.make_context(context, sample_site)
+    sectionquery.make_context(context, sample_site)
     results = []
     assert context['result_count'] == 0
     assert context['results'] == results

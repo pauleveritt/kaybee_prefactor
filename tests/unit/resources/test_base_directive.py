@@ -16,8 +16,10 @@ class SampleResource:
     def __init__(self, *args, **kw):
         self.props = dict(template='foo')
 
+
 class SampleAction:
     defaults = dict()
+
 
 class SampleDirective(BaseDirective):
     name = 'sample_directive'

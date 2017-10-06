@@ -17,6 +17,12 @@ class DummyArticleModel(BaseModel):
 
 
 class DummyArticle(CoreType):
+    kind = 'resource'
+    model = DummyArticleModel
+
+
+class DummyWidget(CoreType):
+    kind = 'widget'
     model = DummyArticleModel
 
 
@@ -66,13 +72,25 @@ class TestCoreType:
         assert CoreType.__name__ == 'CoreType'
 
     def test_subclass_and_construct(self):
-        da = DummyArticle('someparent/somepage', 'dummyarticle', 'Some Page', '')
+        da = DummyArticle('someparent/somepage', 'dummyarticle', 'Some Page',
+                          '')
         assert da.__class__.__name__ == 'DummyArticle'
+        assert da.pagename == 'someparent/somepage'
         assert da.name == 'someparent/somepage'
         assert da.parent == 'someparent'
         assert da.kbtype == 'dummyarticle'
         assert da.title == 'Some Page'
         assert da.props.in_nav is False
+
+    def test_widget_name_construction(self):
+        yaml_content = """
+in_nav: True
+weight: 998
+        """
+
+        dw = DummyWidget('someparent/somepage', 'dummyarticle', 'Some Page',
+                         yaml_content)
+        assert dw.name == '{"in_nav": true, "weight": 998}'
 
     def test_missing_model(self):
         with pytest.raises(AttributeError) as exc:

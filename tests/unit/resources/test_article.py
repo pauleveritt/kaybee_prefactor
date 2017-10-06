@@ -1,5 +1,18 @@
+import pytest
+
 from kaybee.resources.article import Article
 
+"""
 
-def test_import():
-    assert Article.__name__ == 'Article'
+
+"""
+@pytest.fixture()
+def dummy_article():
+    content = """
+    template: somearticle.html
+    """
+    yield Article('somearticle', 'dummyarticle', 'Some Article', content)
+
+
+def test_import(dummy_article):
+    assert dummy_article.__class__.__name__ == 'Article'

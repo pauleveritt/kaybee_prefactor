@@ -62,6 +62,7 @@ def test_import():
 def test_instance():
     da = DummyArticle('somepage', 'dummyarticle', 'Some Page', '')
     assert da.__class__.__name__ == 'DummyArticle'
+    assert da.pagename == 'somepage'
     assert da.name == 'somepage'
     assert da.parent == '/'
     assert da.kbtype == 'dummyarticle'

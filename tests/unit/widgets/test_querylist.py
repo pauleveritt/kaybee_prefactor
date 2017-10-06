@@ -18,7 +18,7 @@ def dummy_querylist():
           rtype: section
           limit: 5
     """
-    yield QueryList(content)
+    yield QueryList('somewidget', 'dummywidget', 'Some Widget', content)
 
 
 @pytest.fixture(name='sample_site')

@@ -1,3 +1,5 @@
+import json
+
 from pydantic.main import BaseModel
 from ruamel.yaml import load
 
@@ -35,10 +37,22 @@ class CoreType:
             msg = f'Class {self.__class__.__name__} must have model attribute'
             raise AttributeError(msg)
 
-        self.name, self.parent = self.parse_pagename(pagename)
+        self.pagename, self.parent = self.parse_pagename(pagename)
+        self.name = self.get_name(yaml_content)
         self.kbtype = kbtype
         self.title = title
         self.props = self.load_model(self.model, yaml_content)
+
+    def get_name(self, yaml_content: str):
+        """ The identifier that this instance is stored as """
+
+        if self.kind == 'widget':
+            # Resources use the pagename, widgets will do something else,
+            # since you might have multiple widgets per page
+            yaml_props = (load(yaml_content) or {})
+            return json.dumps(yaml_props, sort_keys=True)
+        else:
+            return self.pagename
 
     @staticmethod
     def load_model(model, yaml_content: str):
@@ -79,4 +93,3 @@ class CoreType:
             parent = '/'.join(lineage[:-1])
 
         return name, parent
-
