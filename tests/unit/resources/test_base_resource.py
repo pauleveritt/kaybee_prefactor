@@ -1,6 +1,6 @@
 import pytest
 
-from kaybee.core.core_type import CoreResourceModel, CoreType
+from kaybee.core.core_type import CoreType
 from kaybee.resources import BaseResource
 from kaybee.resources.article import Article
 
@@ -10,26 +10,14 @@ class Site:
         self.resources = {}
 
 
-#
-# class DummyArticleModel(CoreResourceModel):
-#     doc_template: str = None
-#     foo: str = None
-#
-#
-# class DummyArticle(BaseResource):
-#     model = DummyArticleModel
-#     default_style = 'classstyle'
-
-DummyArticle = Article
-
 @pytest.fixture
 def site():
-    f1 = DummyArticle('f1', 'dummyarticle', 'Some Page', '')
+    f1 = Article('f1', 'article', 'Some Page', '')
     f1.props.doc_template = 'section_doctemplate.html'
     f1.props.style = 'sectionstyle'
-    f2 = DummyArticle('f1/f2', 'dummyarticle', 'Some Page', '')
-    f3 = DummyArticle('f1/f2/f3', 'dummyarticle', 'Some Page', '')
-    f4 = DummyArticle('f1/f2/f3/f4', 'dummyarticle', 'Some Page', '')
+    f2 = Article('f1/f2', 'article', 'Some Page', '')
+    f3 = Article('f1/f2/f3', 'article', 'Some Page', '')
+    f4 = Article('f1/f2/f3/f4', 'article', 'Some Page', '')
     s = Site()
     s.resources = {
         'f1': f1,
@@ -45,12 +33,12 @@ def test_import():
 
 
 def test_instance():
-    da = DummyArticle('somepage', 'dummyarticle', 'Some Page', '')
-    assert da.__class__.__name__ == 'DummyArticle'
+    da = Article('somepage', 'article', 'Some Page', '')
+    assert da.__class__.__name__ == 'Article'
     assert da.pagename == 'somepage'
     assert da.name == 'somepage'
     assert da.parent == '/'
-    assert da.kbtype == 'dummyarticle'
+    assert da.kbtype == 'article'
     assert da.title == 'Some Page'
     assert da.props.in_nav is False
 
@@ -58,7 +46,7 @@ def test_instance():
 @pytest.fixture()
 def dam(monkeypatch):
     """ Pretend to load and validate the model """
-    dam = DummyArticleModel()
+    dam = ArticleModel()
     monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
     yield dam
 
@@ -75,7 +63,7 @@ def dam(monkeypatch):
 ])
 def test_root_parents(monkeypatch, site, pagename, parents_len, parentname,
                       dam):
-    a = DummyArticle(pagename, 'kbtype', 'title', 'content')
+    a = Article(pagename, 'kbtype', 'title', 'content')
     parents = a.parents(site)
     assert len(parents) == parents_len
     if parents_len:
@@ -83,7 +71,7 @@ def test_root_parents(monkeypatch, site, pagename, parents_len, parentname,
 
 
 def test_find_prop_none_local(monkeypatch, site, dam):
-    a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
+    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
     prop = a.find_prop(site, 'foo')
     assert prop is None
 
@@ -95,20 +83,20 @@ def test_find_prop_none_local(monkeypatch, site, dam):
 ])
 def test_find_prop_none(monkeypatch, site, dam, parentname, propvalue):
     site.resources[parentname].props.foo = propvalue
-    a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
+    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
     prop = a.find_prop(site, 'foo')
     assert prop == propvalue
     site.resources[parentname].props.foo = None
 
 
 def test_section_none(monkeypatch, site, dam):
-    a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
+    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
     assert a.section(site) is None
 
 
 def test_section_f1(monkeypatch, site, dam):
     site.resources['f1'].kbtype = 'section'
-    a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
+    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
     assert a.section(site) == site.resources['f1']
 
 
@@ -121,7 +109,7 @@ def test_section_f1(monkeypatch, site, dam):
     ('f1/f2/about', 'f2', False),
 ])
 def test_is_active(monkeypatch, site, dam, pagename, nav_href, expected):
-    a = DummyArticle(pagename, 'kbtype', 'title', 'content')
+    a = Article(pagename, 'kbtype', 'title', 'content')
     assert a.is_active_section(site, nav_href) == expected
 
 
@@ -130,7 +118,7 @@ def test_is_active(monkeypatch, site, dam, pagename, nav_href, expected):
 
 @pytest.fixture()
 def da():
-    yield DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+    yield Article('f1/f2/f3', 'kbtype', 'title', 'content')
 
 
 class TestInheritedProperty:
@@ -145,7 +133,7 @@ class TestInheritedProperty:
     def test_template_from_class(self, monkeypatch, site, dam, da):
         # Delete the lineage-intheried doc_template prop on the section
         site.resources['f1'].props.doc_template = None
-        assert da.template(site) == 'dummyarticle.html'
+        assert da.template(site) == 'article.html'
 
     def test_style_from_props(self, monkeypatch, site, dam, da):
         dam.style = 'instance_style'

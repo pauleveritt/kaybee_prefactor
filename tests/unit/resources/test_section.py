@@ -6,11 +6,20 @@ from kaybee.resources.section import Section
 @pytest.fixture()
 def dummy_section():
     content = """
-template: somehomepage.html
 subheading: some subheading text
-doc_template: somesection.html
     """
-    yield Section('somesection', 'dummysection', 'Some Section', content)
+    yield Section('s1', 'dummysection', 'S1', content)
+
+
+@pytest.fixture()
+def dummy_override():
+    content = """
+overrides:
+    article:
+        template: override_article.html
+    """
+
+    yield Section('s1', 'dummysection', 'S1', content)
 
 
 def test_import():
@@ -18,8 +27,12 @@ def test_import():
 
 
 def test_construction(dummy_section):
-    assert dummy_section.name == 'somesection'
+    assert dummy_section.name == 's1'
     assert dummy_section.kbtype == 'dummysection'
-    assert dummy_section.title == 'Some Section'
-    assert dummy_section.props.doc_template == 'somesection.html'
+    assert dummy_section.title == 'S1'
     assert dummy_section.props.subheading == 'some subheading text'
+
+
+def test_dummy_override(dummy_override):
+    dao = dummy_override.props.overrides['article']['template']
+    assert 'override_article.html' == dao
