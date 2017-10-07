@@ -9,18 +9,6 @@ class Site:
         self.resources = {}
 
 
-class Node:
-    parent = None
-    kbtype = ''
-
-    def __init__(self, name):
-        self.name = name
-        self.props = DummyArticleModel()
-
-    def __repr__(self):
-        return self.name
-
-
 class DummyArticleModel(CoreResourceModel):
     doc_template: str = None
     foo: str = None
@@ -33,20 +21,14 @@ class DummyArticle(BaseResource):
 
 @pytest.fixture
 def site():
-    this_site = Node('site')
-    f1 = Node('f1')
-    f1.parent = '/'
+    f1 = DummyArticle('f1', 'dummyarticle', 'Some Page', '')
     f1.props.doc_template = 'section_doctemplate.html'
     f1.props.style = 'sectionstyle'
-    f2 = Node('f2')
-    f2.parent = 'f1'
-    f3 = Node('f3')
-    f3.parent = 'f1/f2'
-    f4 = Node('f4')
-    f4.parent = 'f1/f2/f3'
+    f2 = DummyArticle('f1/f2', 'dummyarticle', 'Some Page', '')
+    f3 = DummyArticle('f1/f2/f3', 'dummyarticle', 'Some Page', '')
+    f4 = DummyArticle('f1/f2/f3/f4', 'dummyarticle', 'Some Page', '')
     s = Site()
     s.resources = {
-        '/': this_site,
         'f1': f1,
         'f1/f2': f2,
         'f1/f2/f3': f3,
@@ -79,23 +61,22 @@ def dam(monkeypatch):
 
 
 @pytest.mark.parametrize('pagename, parents_len, parentname', [
-    ('/', 0, None),
-    ('index', 1, 'site'),
-    ('about', 1, 'site'),
-    ('f1/index', 1, 'site'),
-    ('f1/about', 2, 'f1'),
-    ('f1/f2/index', 2, 'f1'),
-    ('f1/f2/about', 3, 'f2'),
-    ('f1/f2/f3/index', 3, 'f2'),
-    ('f1/f2/f3/about', 4, 'f3'),
+    ('index', 0, 'site'),
+    ('about', 0, 'site'),
+    ('f1/index', 0, 'site'),
+    ('f1/about', 1, 'f1'),
+    ('f1/f2/index', 1, 'f1'),
+    ('f1/f2/about', 2, 'f1/f2'),
+    ('f1/f2/f3/index', 2, 'f1/f2'),
+    ('f1/f2/f3/about', 3, 'f1/f2/f3'),
 ])
 def test_root_parents(monkeypatch, site, pagename, parents_len, parentname,
                       dam):
     a = DummyArticle(pagename, 'kbtype', 'title', 'content')
     parents = a.parents(site)
     assert len(parents) == parents_len
-    if pagename != '/':
-        assert parents[0].name == parentname
+    if parents_len:
+        assert parentname == parents[0].name
 
 
 def test_find_prop_none_local(monkeypatch, site, dam):
@@ -108,7 +89,6 @@ def test_find_prop_none_local(monkeypatch, site, dam):
     ('f1/f2/f3', 'hellof3'),
     ('f1/f2', 'hellof2'),
     ('f1', 'hellof1'),
-    ('/', 'hellofsite'),
 ])
 def test_find_prop_none(monkeypatch, site, dam, parentname, propvalue):
     site.resources[parentname].props.foo = propvalue
