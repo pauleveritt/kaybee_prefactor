@@ -42,7 +42,6 @@ class BaseDirective(Directive):
         this_resource = resource_class(env.docname, kbtype,
                                        title, resource_content)
 
-
         site = self.state.document.settings.env.site
         site.resources[this_resource.name] = this_resource
 
@@ -55,16 +54,6 @@ class BaseResource(CoreType):
     kind = 'resource'
     default_style = ''
 
-    def template(self, site):
-        """ Template can come from YAML, section, or class """
-        custom_template = getattr(self.props, 'template')
-        if custom_template:
-            return custom_template
-        section_doctemplate = self.find_prop(site, 'doc_template')
-        if section_doctemplate:
-            return section_doctemplate
-        return self.__class__.__name__.lower() + '.html'
-
     def section(self, site):
         """ Which section is this in, if any """
 
@@ -73,15 +62,36 @@ class BaseResource(CoreType):
             return section[0]
         return None
 
+    def get_override(self, site, kbtype, propname):
+        """ Find a prop either local, overrides, or from class  """
+
+        # Instance
+        custom_prop = getattr(self.props, propname)
+        if custom_prop:
+            return custom_prop
+
+        # Parents...can't use find_prop as have to keep going on overrides
+        for parent in self.parents(site):
+            overrides = parent.props.overrides
+            if overrides:
+                kbtype_override = parent.props.overrides.get(self.kbtype)
+                if kbtype_override:
+                    prop_override = kbtype_override.get(propname)
+                    if prop_override:
+                        return prop_override
+
+        # Class name
+        return self.__class__.__name__.lower() + '.html'
+
+    def template(self, site):
+        """ Get the template from: YAML, hierarchy, or class """
+
+        return self.get_override(site, self.kbtype, 'template')
+
     def style(self, site):
         """ Get the style from: YAML, hierarchy, or class """
 
-        custom_style = self.find_prop(site, 'style')
-        if custom_style:
-            return custom_style
-
-        # If the class/instance has style, return it, otherwise none
-        return getattr(self, 'default_style', '')
+        return self.get_override(site, self.kbtype, 'style')
 
     def parents(self, site):
         """ Split the path in name and get parents """

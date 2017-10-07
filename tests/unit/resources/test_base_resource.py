@@ -1,8 +1,8 @@
 import pytest
 
-from kaybee.core.core_type import CoreType
 from kaybee.resources import BaseResource
 from kaybee.resources.article import Article
+from kaybee.resources.section import Section
 
 
 class Site:
@@ -12,18 +12,32 @@ class Site:
 
 @pytest.fixture
 def site():
-    f1 = Article('f1', 'article', 'Some Page', '')
-    f1.props.doc_template = 'section_doctemplate.html'
-    f1.props.style = 'sectionstyle'
-    f2 = Article('f1/f2', 'article', 'Some Page', '')
-    f3 = Article('f1/f2/f3', 'article', 'Some Page', '')
-    f4 = Article('f1/f2/f3/f4', 'article', 'Some Page', '')
+    f1_content = """
+template: f1_section_template.html
+overrides:
+    article:
+        template: override_article.html
+    section:
+        style: f1style    
+    """
+    about = Article('about', 'article', 'A1', '')
+    f1 = Section('f1', 'section', 'S1', f1_content)
+    f1_about = Article('f1/about', 'article', 'AF1', '')
+    f2 = Section('f1/f2', 'section', 'S2', '')
+    f2_about = Article('f1/f2/about', 'article', 'AF2', '')
+    f3 = Section('f1/f2/f3', 'section', 'S3', 'style: f3style')
+    f3_about = Article('f1/f2/f3/about', 'article', 'AF3', '')
+    f4 = Article('f1/f2/f3/f4', 'article', 'A4', '')
     s = Site()
     s.resources = {
+        'about': about,
         'f1': f1,
+        'f1/about': f1_about,
         'f1/f2': f2,
+        'f1/f2/about': f2_about,
         'f1/f2/f3': f3,
-        'f1/f2/f3/f4': f4
+        'f1/f2/f3/about': f3_about,
+        'f1/f2/f3/f4/index': f4
     }
     yield s
 
@@ -43,61 +57,45 @@ def test_instance():
     assert da.props.in_nav is False
 
 
-@pytest.fixture()
-def dam(monkeypatch):
-    """ Pretend to load and validate the model """
-    dam = ArticleModel()
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
-    yield dam
+# @pytest.fixture()
+# def dam(monkeypatch):
+#     """ Pretend to load and validate the model """
+#     dam = ArticleModel()
+#     monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+#     yield dam
 
 
 @pytest.mark.parametrize('pagename, parents_len, parentname', [
-    ('index', 0, 'site'),
     ('about', 0, 'site'),
-    ('f1/index', 0, 'site'),
+    ('f1', 0, 'site'),
     ('f1/about', 1, 'f1'),
-    ('f1/f2/index', 1, 'f1'),
+    ('f1/f2', 1, 'f1'),
     ('f1/f2/about', 2, 'f1/f2'),
-    ('f1/f2/f3/index', 2, 'f1/f2'),
+    ('f1/f2/f3', 2, 'f1/f2'),
     ('f1/f2/f3/about', 3, 'f1/f2/f3'),
 ])
-def test_root_parents(monkeypatch, site, pagename, parents_len, parentname,
-                      dam):
-    a = Article(pagename, 'kbtype', 'title', 'content')
+def test_root_parents(site, pagename, parents_len, parentname):
+    a = site.resources[pagename]
     parents = a.parents(site)
-    assert len(parents) == parents_len
+    assert parents_len == len(parents)
     if parents_len:
         assert parentname == parents[0].name
 
 
-def test_find_prop_none_local(monkeypatch, site, dam):
-    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
+def test_find_prop_none_local(site):
+    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', '')
     prop = a.find_prop(site, 'foo')
-    assert prop is None
+    assert None is prop
 
 
-@pytest.mark.parametrize('parentname, propvalue', [
-    ('f1/f2/f3', 'hellof3'),
-    ('f1/f2', 'hellof2'),
-    ('f1', 'hellof1'),
-])
-def test_find_prop_none(monkeypatch, site, dam, parentname, propvalue):
-    site.resources[parentname].props.foo = propvalue
-    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
-    prop = a.find_prop(site, 'foo')
-    assert prop == propvalue
-    site.resources[parentname].props.foo = None
-
-
-def test_section_none(monkeypatch, site, dam):
-    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
+def test_section_nonesite(site):
+    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', '')
     assert a.section(site) is None
 
 
-def test_section_f1(monkeypatch, site, dam):
-    site.resources['f1'].kbtype = 'section'
-    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
-    assert a.section(site) == site.resources['f1']
+def test_section_f1(site):
+    a = Article('f1/f2/f3/another', 'kbtype', 'title', '')
+    assert site.resources['f1/f2/f3'] == a.section(site)
 
 
 @pytest.mark.parametrize('pagename, nav_href, expected', [
@@ -108,8 +106,8 @@ def test_section_f1(monkeypatch, site, dam):
     ('f1/f2/index', 'f1', True),
     ('f1/f2/about', 'f2', False),
 ])
-def test_is_active(monkeypatch, site, dam, pagename, nav_href, expected):
-    a = Article(pagename, 'kbtype', 'title', 'content')
+def test_is_active(site, pagename, nav_href, expected):
+    a = Article(pagename, 'kbtype', 'title', '')
     assert a.is_active_section(site, nav_href) == expected
 
 
@@ -117,32 +115,36 @@ def test_is_active(monkeypatch, site, dam, pagename, nav_href, expected):
 # Inheriting template, style, etc.
 
 @pytest.fixture()
-def da():
-    yield Article('f1/f2/f3', 'kbtype', 'title', 'content')
+def da(site):
+    yield site.resources['f1/f2/f3/about']
 
 
 class TestInheritedProperty:
 
-    def test_template_from_props(self, monkeypatch, site, dam, da):
-        dam.template = 'damtemplate.html'
-        assert da.template(site) == dam.template
+    def test_template_from_props(self, site, da):
+        expected = 'f1_section_template.html'
+        assert expected == site.resources['f1'].template(site)
 
-    def test_template_from_section(self, monkeypatch, site, dam, da):
-        assert da.template(site) == 'section_doctemplate.html'
+    def test_template_from_section(self, site, da):
+        expected = 'override_article.html'
+        assert expected == da.template(site)
 
-    def test_template_from_class(self, monkeypatch, site, dam, da):
+    def test_template_from_class(self, site, da):
         # Delete the lineage-intheried doc_template prop on the section
-        site.resources['f1'].props.doc_template = None
-        assert da.template(site) == 'article.html'
+        f1 = site.resources['f1']
+        del f1.props.overrides['article']
+        assert 'article.html' == da.template(site)
 
-    def test_style_from_props(self, monkeypatch, site, dam, da):
-        dam.style = 'instance_style'
-        assert da.style(site) == dam.style
+    def test_style_from_props(self, site):
+        da = site.resources['f1/f2/f3']
+        assert 'f3style' == da.style(site)
 
-    def test_style_from_section(self, monkeypatch, site, dam, da):
-        assert da.style(site) == 'sectionstyle'
+    def test_style_from_section(self, site):
+        da = site.resources['f1/f2']
+        assert 'f1style' == da.style(site)
 
-    def test_style_from_class(self, monkeypatch, site, dam, da):
+    def test_style_from_class(self, site):
         # Delete the lineage-intheried doc_template prop on the section
-        site.resources['f1'].props.style = None
-        assert da.style(site) == 'classstyle'
+        del site.resources['f1'].props.overrides['section']
+        da = site.resources['f1/f2']
+        assert 'section.html' == da.style(site)
