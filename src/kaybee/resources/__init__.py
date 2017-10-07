@@ -52,7 +52,6 @@ class BaseDirective(Directive):
 
 class BaseResource(CoreType):
     kind = 'resource'
-    default_style = ''
 
     def section(self, site):
         """ Which section is this in, if any """

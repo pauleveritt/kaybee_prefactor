@@ -5,7 +5,6 @@ from kaybee.resources import BaseResource
 
 class SectionModel(CoreContainerModel):
     subheading: str = None
-    doc_template: str = None
 
 
 @registry.resource('section')
