@@ -70,52 +70,12 @@ def test_instance():
     assert da.props.in_nav is False
 
 
-def test_template_from_props(monkeypatch, site):
-    dam = DummyArticleModel()
-    dam.template = 'damtemplate.html'
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
-    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
-    assert a.template(site) == dam.template
-
-
-def test_template_from_section(monkeypatch, site):
+@pytest.fixture()
+def dam(monkeypatch):
+    """ Pretend to load and validate the model """
     dam = DummyArticleModel()
     monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
-    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
-    assert a.template(site) == 'section_doctemplate.html'
-
-
-def test_template_from_class(monkeypatch, site):
-    # Delete the lineage-intheried doc_template prop on the section
-    site.resources['f1'].props.doc_template = None
-    dam = DummyArticleModel()
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
-    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
-    assert a.template(site) == 'dummyarticle.html'
-
-
-def test_style_from_props(monkeypatch, site):
-    dam = DummyArticleModel()
-    dam.style = 'instance_style'
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
-    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
-    assert a.style(site) == dam.style
-
-
-def test_style_from_section(monkeypatch, site):
-    dam = DummyArticleModel()
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
-    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
-    assert a.style(site) == 'sectionstyle'
-
-
-def test_style_from_class(monkeypatch, site):
-    # Delete the lineage-intheried doc_template prop on the section
-    site.resources['f1'].props.style = None
-    dam = DummyArticleModel()
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
-    a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
-    assert a.style(site) == 'classstyle'
+    yield dam
 
 
 @pytest.mark.parametrize('pagename, parents_len, parentname', [
@@ -129,8 +89,8 @@ def test_style_from_class(monkeypatch, site):
     ('f1/f2/f3/index', 3, 'f2'),
     ('f1/f2/f3/about', 4, 'f3'),
 ])
-def test_root_parents(monkeypatch, site, pagename, parents_len, parentname):
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: None)
+def test_root_parents(monkeypatch, site, pagename, parents_len, parentname,
+                      dam):
     a = DummyArticle(pagename, 'kbtype', 'title', 'content')
     parents = a.parents(site)
     assert len(parents) == parents_len
@@ -138,9 +98,7 @@ def test_root_parents(monkeypatch, site, pagename, parents_len, parentname):
         assert parents[0].name == parentname
 
 
-def test_find_prop_none_local(monkeypatch, site):
-    dam = DummyArticleModel()
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+def test_find_prop_none_local(monkeypatch, site, dam):
     a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
     prop = a.find_prop(site, 'foo')
     assert prop is None
@@ -152,27 +110,21 @@ def test_find_prop_none_local(monkeypatch, site):
     ('f1', 'hellof1'),
     ('/', 'hellofsite'),
 ])
-def test_find_prop_none(monkeypatch, site, parentname, propvalue):
+def test_find_prop_none(monkeypatch, site, dam, parentname, propvalue):
     site.resources[parentname].props.foo = propvalue
-    dam = DummyArticleModel()
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
     a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
     prop = a.find_prop(site, 'foo')
     assert prop == propvalue
     site.resources[parentname].props.foo = None
 
 
-def test_section_none(monkeypatch, site):
-    dam = DummyArticleModel()
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+def test_section_none(monkeypatch, site, dam):
     a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
     assert a.section(site) is None
 
 
-def test_section_f1(monkeypatch, site):
+def test_section_f1(monkeypatch, site, dam):
     site.resources['f1'].kbtype = 'section'
-    dam = DummyArticleModel()
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
     a = DummyArticle('f1/f2/f3/f4/about', 'kbtype', 'title', 'content')
     assert a.section(site) == site.resources['f1']
 
@@ -185,8 +137,45 @@ def test_section_f1(monkeypatch, site):
     ('f1/f2/index', 'f1', True),
     ('f1/f2/about', 'f2', False),
 ])
-def test_is_active(monkeypatch, site, pagename, nav_href, expected):
-    dam = DummyArticleModel()
-    monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+def test_is_active(monkeypatch, site, dam, pagename, nav_href, expected):
     a = DummyArticle(pagename, 'kbtype', 'title', 'content')
     assert a.is_active_section(site, nav_href) == expected
+
+
+#
+# Inheriting template, style, etc.
+
+
+class TestInheritedProperty:
+
+    def test_template_from_props(self, monkeypatch, site, dam):
+        dam.template = 'damtemplate.html'
+        a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+        assert a.template(site) == dam.template
+
+    def test_template_from_section(self, monkeypatch, site, dam):
+        dam = DummyArticleModel()
+        monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
+        a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+        assert a.template(site) == 'section_doctemplate.html'
+
+    def test_template_from_class(self, monkeypatch, site, dam):
+        # Delete the lineage-intheried doc_template prop on the section
+        site.resources['f1'].props.doc_template = None
+        a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+        assert a.template(site) == 'dummyarticle.html'
+
+    def test_style_from_props(self, monkeypatch, site, dam):
+        dam.style = 'instance_style'
+        a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+        assert a.style(site) == dam.style
+
+    def test_style_from_section(self, monkeypatch, site, dam):
+        a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+        assert a.style(site) == 'sectionstyle'
+
+    def test_style_from_class(self, monkeypatch, site, dam):
+        # Delete the lineage-intheried doc_template prop on the section
+        site.resources['f1'].props.style = None
+        a = DummyArticle('f1/f2/f3', 'kbtype', 'title', 'content')
+        assert a.style(site) == 'classstyle'
