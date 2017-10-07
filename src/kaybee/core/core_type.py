@@ -1,5 +1,5 @@
 import json
-from typing import List, Any
+from typing import List, Any, Mapping
 
 from pydantic.main import BaseModel
 from ruamel.yaml import load
@@ -27,6 +27,22 @@ class CoreResourceModel(BaseModel):
     in_nav: bool = False
     weight: int = 0
     synopsis: str = None
+
+
+class CoreContainerModel(CoreResourceModel):
+    """ A resource that is a parent for other resources
+
+     Parents can override child properties based on kbtype
+
+    E.g.
+
+    overrides:
+        article:
+            template: customtemplate.html
+            style: boldestbaddest
+
+     """
+    overrides: Mapping[str, Mapping[str, str]] = None
 
 
 class CoreWidgetModel(BaseModel):

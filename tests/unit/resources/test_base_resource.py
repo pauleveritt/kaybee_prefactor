@@ -2,6 +2,7 @@ import pytest
 
 from kaybee.core.core_type import CoreResourceModel, CoreType
 from kaybee.resources import BaseResource
+from kaybee.resources.article import Article
 
 
 class Site:
@@ -9,15 +10,17 @@ class Site:
         self.resources = {}
 
 
-class DummyArticleModel(CoreResourceModel):
-    doc_template: str = None
-    foo: str = None
+#
+# class DummyArticleModel(CoreResourceModel):
+#     doc_template: str = None
+#     foo: str = None
+#
+#
+# class DummyArticle(BaseResource):
+#     model = DummyArticleModel
+#     default_style = 'classstyle'
 
-
-class DummyArticle(BaseResource):
-    model = DummyArticleModel
-    default_style = 'classstyle'
-
+DummyArticle = Article
 
 @pytest.fixture
 def site():

@@ -4,7 +4,7 @@ import pytest
 from pydantic import ValidationError
 from pydantic.main import BaseModel
 
-from kaybee.core.core_type import CoreType
+from kaybee.core.core_type import CoreType, CoreContainerModel
 
 
 class DummyMissingModel(CoreType):
@@ -19,6 +19,15 @@ class DummyArticleModel(BaseModel):
 class DummyArticle(CoreType):
     kind = 'resource'
     model = DummyArticleModel
+
+
+class DummyContainerModel(CoreContainerModel):
+    pass
+
+
+class DummyContainer(CoreType):
+    kind = 'resource'
+    model = DummyContainerModel
 
 
 class DummyWidget(CoreType):
@@ -126,3 +135,27 @@ def test_name_parent(site, pagename, name, parent):
     this_name, this_parent = CoreType.parse_pagename(pagename)
     assert this_name == name
     assert this_parent == parent
+
+
+class TestContainer:
+    def test_import(self):
+        assert CoreContainerModel.__name__ == 'CoreContainerModel'
+
+    def test_construction(self):
+        content = """
+        
+        """
+        dc = DummyContainer(
+            'someparent/somepage', 'dummycontainer', 'Some Page', content)
+        assert dc.pagename == 'someparent/somepage'
+
+    def test_overrides(self):
+        content = """
+overrides:
+    article:
+        template: sometemplate2.html
+        """
+        dc = DummyContainer(
+            'someparent/somepage', 'dummycontainer', 'Some Page', content)
+        overrides = dc.props.overrides
+        assert overrides['article']['template'] == 'sometemplate2.html'
