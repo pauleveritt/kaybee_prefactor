@@ -11,3 +11,9 @@ First Article
         the kinds of things that it is about.
 
 The article body is here.
+
+Two kinds of references:
+
+- :ref:`category-python` uses the target as the link title
+
+- :ref:`Link title <category-python>` makes a new link title

@@ -4,7 +4,8 @@ from kaybee.core.events import (
     register,
     kaybee_context, add_templates_paths,
     initialize_site, purge_resources,
-    validate_references
+    validate_references,
+    missing_reference
 )
 from kaybee.core.site_config import SiteConfig
 
@@ -36,6 +37,7 @@ def setup(app):
     app.connect('builder-inited', add_templates_paths)
     app.connect('env-check-consistency', validate_references)
     app.connect('env-before-read-docs', initialize_site)
+    app.connect('missing-reference', missing_reference)
     app.connect('env-purge-doc', purge_resources)
     app.connect('html-page-context', kaybee_context)
 

@@ -4,12 +4,12 @@ import os
 
 import dectate
 import importscan
+from docutils import nodes
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
 import kaybee
 from kaybee import resources, widgets
 from kaybee.core.registry import registry
-from kaybee.resources import BaseResource
 from kaybee.site import Site
 
 
@@ -151,3 +151,25 @@ Document {resource.name} has unregistered reference "{field_name}"'''
                     msg = f'''\
 Document {resource.name} has "{field_name}" with orphan {target_label} '''
                     raise KeyError(msg)
+
+
+def missing_reference(app, env, node, contnode):
+    site = env.site
+    refdoc = node['refdoc']
+    target_kbtype, target_label = node['reftarget'].split('-')
+    target = site.get_reference(target_kbtype, target_label)
+
+    if node['refexplicit']:
+        # The ref has a title e.g. :ref:`Some Title <category-python>`
+        dispname = contnode.children[0]
+    else:
+        # Use the title from the target
+        dispname = target.title
+    uri = app.builder.get_relative_uri(refdoc, target.name)
+    newnode = nodes.reference('', '', internal=True, refuri=uri,
+                              reftitle=dispname)
+
+    emp = nodes.emphasis()
+    newnode.append(emp)
+    emp.append(nodes.Text(dispname))
+    return newnode
