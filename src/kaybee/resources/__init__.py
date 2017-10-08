@@ -51,7 +51,7 @@ class BaseDirective(Directive):
             # This resource is a reference. Find all of the fields
             # that
             label = this_resource.label
-            site.add_reference(kbtype, label)
+            site.add_reference(kbtype, label, this_resource)
 
         # Don't need to return a resource "node", the
         # document is the node

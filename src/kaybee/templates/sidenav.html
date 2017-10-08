@@ -70,9 +70,9 @@
     </p>
     {% if resource.props.category %}
         <p>
-            {% for category in resource.props.category %}
+            {% for category in resource.references(site)['category'] %}
                 <a>
-                    <span class="tag">{{ category }}</span>
+                    <span class="tag">{{ category.title }}</span>
                 </a>
             {% endfor %}
         </p>
