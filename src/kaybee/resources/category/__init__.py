@@ -7,7 +7,7 @@ class CategoryModel(CoreResourceModel):
     label: str
 
 
-@registry.resource('article')
+@registry.resource('category')
 class Category(BaseResource):
     model = CategoryModel
 
