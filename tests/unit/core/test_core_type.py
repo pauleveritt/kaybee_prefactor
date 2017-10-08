@@ -152,15 +152,15 @@ class TestResource:
         assert now > past.published
         assert now < future.published
 
-    def test_categories(self):
-        no_cats = CoreResourceModel(**dict(categories=[]))
-        assert [] == no_cats.categories
+    def test_category(self):
+        no_cats = CoreResourceModel(**dict(category=[]))
+        assert [] == no_cats.category
         c1 = ['python', 'web']
-        cats = CoreResourceModel(**dict(categories=c1))
-        assert c1 == cats.categories
+        cats = CoreResourceModel(**dict(category=c1))
+        assert c1 == cats.category
         c2 = [923, dict(broken=True)]
         with pytest.raises(ValidationError):
-            CoreResourceModel(**dict(categories=c2))
+            CoreResourceModel(**dict(category=c2))
 
 
 class TestContainer:

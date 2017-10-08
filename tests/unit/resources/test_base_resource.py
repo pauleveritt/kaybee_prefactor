@@ -10,6 +10,9 @@ class Site:
     def __init__(self):
         self.resources = {}
 
+    def get_reference(self, kbtype, label):
+        pass
+
 
 @pytest.fixture
 def site():
@@ -157,6 +160,11 @@ class TestReferences:
         article = Article('d1/a1', 'article', 'Some Article', content)
         assert [] == article.props.tag
 
+    def test_reference_fieldnames(self):
+        article = Article('d1/a1', 'article', 'Some Article', '')
+        field_names = article.reference_fieldnames()
+        assert ['tag'] == field_names
+
     def test_valid(self):
         content = """
 tag:
@@ -186,3 +194,26 @@ tag:
         """
         article = Article('d1/a1', 'article', 'Some Article', content)
         assert ['tag1', 'tag2', 'tag3'] == article.props.tag
+
+    def test_references(self, monkeypatch, site):
+        content = """
+        tag:
+            - tag1
+            - tag2
+            - tag3        
+                """
+
+        # Monkeypatch the site to have some tags already registered
+        article = Article('d1/a1', 'article', 'Some Article', content)
+        site_references = dict(
+            tag=dict(
+                tag1=101,
+                tag2=202,
+                tag3=303
+            )
+        )
+        gr = lambda fn, label: site_references[fn][label]
+        monkeypatch.setattr(site, 'get_reference', gr)
+
+        references = article.references(site)
+        assert [101, 202, 303] == references['tag']

@@ -6,6 +6,7 @@ class Site:
         self.resources = {}
         self.widgets = {}
         self.config = config
+        self.references = {}
 
     @property
     def is_debug(self):
@@ -75,6 +76,23 @@ class Site:
 
         return [s for s in self.resources.values()
                 if s.kbtype == 'section' and s.is_published()]
+
+    def get_reference(self, kbtype: str, label: str):
+        """ Return reference filed under kbtype/label
+
+         The references are organized by field/label, e.g. category/cat1.
+         This lets us use a shorthand notation to go the resource, e.g.
+         ref:category:cat1 instead of folder1/folder2/cat1.
+         """
+
+        return self.references[kbtype][label]
+
+    def add_reference(self, kbtype: str, label: str, target):
+        """ Add reference object in references under kbtype/label=target """
+
+        if kbtype not in self.references:
+            self.references[kbtype] = dict()
+        self.references[kbtype][label] = target
 
     @property
     def navmenu(self):

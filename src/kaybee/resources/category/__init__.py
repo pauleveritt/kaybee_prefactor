@@ -14,3 +14,17 @@ class Category(BaseResource):
     @property
     def navmenu_href(self):
         return self.name + '.html'
+
+    @property
+    def label(self):
+        """ Enable reference behavior
+
+         Implementing this allows this resource to be indexed as a
+         "reference" using the return-value label as a shorthand
+         pointer to this resource. E.g. ref:category:thislabel
+
+         By default, return the title. It's expected that the RST
+         title matches the shorthand label.
+         """
+
+        return self.title

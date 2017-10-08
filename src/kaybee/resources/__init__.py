@@ -44,8 +44,14 @@ class BaseDirective(Directive):
         this_resource = resource_class(env.docname, kbtype,
                                        title, resource_content)
 
+        # Add this to the site, and if it is a reference, index it
         site = self.state.document.settings.env.site
         site.resources[this_resource.name] = this_resource
+        if hasattr(this_resource, 'label'):
+            # This resource is a reference. Find all of the fields
+            # that
+            label = this_resource.label
+            site.add_reference(kbtype, label)
 
         # Don't need to return a resource "node", the
         # document is the node
@@ -166,6 +172,15 @@ class BaseResource(CoreType):
             return published < now
         return False
 
+    def reference_fieldnames(self):
+        """ Look in model and return each fieldname that is a reference """
+
+        return [
+            field.name
+            for field in self.props.fields.values()
+            if field.type_ == ReferencesType
+        ]
+
     def references(self, site) -> Mapping[str, List[Any]]:
         """ Resolve and return references
 
@@ -181,23 +196,19 @@ class BaseResource(CoreType):
          """
 
         references = dict()
-        for field in self.model.values():
+        for field in self.props.fields.values():
+            if field.type_ != ReferencesType:
+                continue
+
             field_name = field.name
-            field_values = []
+            references[field_name] = []
 
             # Iterate over each value on this field, e.g.
             # tags: tag1, tag2, tag3
-            for target_name in getattr(self.model, field_name):
+            for target_label in getattr(self.props, field_name):
                 # Ask the site to get the object
-                target = site.get_reference(field_name, target_name)
-
-                # If we haven't encountered this reference type
-                # (e.g. tag or author), add it to the dict first
-                if field.type_ == ReferencesType:
-                    if field_name not in references:
-                        references[field_name] = [target, ]
-                    else:
-                        references[field_name].append(target)
+                target = site.get_reference(field_name, target_label)
+                references[field_name].append(target)
 
         return references
 

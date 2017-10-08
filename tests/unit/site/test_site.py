@@ -2,6 +2,7 @@ import pytest
 
 from kaybee.core.core_type import CorePropFilterModel
 from kaybee.resources.article import Article
+from kaybee.resources.category import Category
 from kaybee.resources.section import Section
 from kaybee.site import Site
 
@@ -99,3 +100,20 @@ def test_is_debug(site):
     assert not site.is_debug
     site.config.is_debug = True
     assert site.is_debug
+
+
+class TestReferences:
+    def test_instantiation(self, site):
+        assert dict() == site.references
+
+    def test_get_reference(self, site):
+        site.references['category'] = dict(cat1=99)
+        target = site.get_reference('category', 'cat1')
+        assert 99 == target
+
+    def test_add_reference_target(self, site):
+        # Register the shorthand "label" for a category as a reference
+        cat1 = Category('section1/cat1', 'category', 'cat1', '')
+        site.add_reference('category', 'cat1', cat1)
+        target = site.get_reference('category', 'cat1')
+        assert 'cat1' == target.title
