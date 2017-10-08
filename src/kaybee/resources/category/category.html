@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="container">
+        <div class="columns">
+            <div class="column sb_body">
+                <h1 class="title is-1">Category: {{ resource.title }}</h1>
+                {{ body }}
+                <section class="section">
+                    <div class="columns">
+                        <div class="column has-text-centered">
+                            <div>Previous</div>
+                            <div>
+                                <a href="{{ _('previous chapter') }}">
+                                    {{ prev.title }}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="column has-text-centered">
+                            <div>Next</div>
+                            <div>
+                                <a href="{{ _('next chapter') }}">
+                                    {{ next.title }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="column is-3">
+                {% include "sidenav.html" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
