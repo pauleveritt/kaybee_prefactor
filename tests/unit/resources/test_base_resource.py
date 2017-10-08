@@ -162,7 +162,7 @@ class TestReferences:
 
     def test_reference_fieldnames(self):
         article = Article('d1/a1', 'article', 'Some Article', '')
-        field_names = article.reference_fieldnames()
+        field_names = article.reference_fieldnames
         assert ['category', 'tag'] == field_names
 
     def test_valid(self):

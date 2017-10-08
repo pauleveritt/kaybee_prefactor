@@ -65,17 +65,19 @@
         </p>
     {% endif %}
 
-    <p class="menu-label">
-        Categories
-    </p>
     {% if resource.props.category %}
-        <p>
-            {% for category in resource.references(site)['category'] %}
-                <a href="{{ pathto(category.name, 1) + '.html' }}">
-                    <span class="tag">{{ category.title }}</span>
-                </a>
-            {% endfor %}
-        </p>
+        <div id="kb-sidenav-categories-heading">
+            <p class="menu-label">
+                Categories
+            </p>
+            <p>
+                {% for category in resource.references(site)['category'] %}
+                    <a href="{{ pathto(category.name, 1) + '.html' }}">
+                        <span class="tag">{{ category.title }}</span>
+                    </a>
+                {% endfor %}
+            </p>
+        </div>
     {% endif %}
     <p class="menu-label">
         Tags
