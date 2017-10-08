@@ -24,14 +24,11 @@ class TestArticle1:
         content = section.find('p').contents[0].strip()
         assert 'article1-body' in content
 
-    # @pytest.mark.parametrize('propname, propvalue', [
-    #     ('in_nav', None),
-    #     ('weight', None),
-    # ])
-    # def test_direct_props(self, page, propname, propvalue):
-    #     # No props
-    #     node = page.find(id=f'kb-debug-resource-props-{propname}')
-    #     assert node == propvalue
+    def test_published(self, page):
+        # No published field in YAML
+        published = page.find(id='kb-sidenav-published-heading')
+        heading = published.find(class_='menu-label').string.strip()
+        assert 'Draft' == heading
 
 
 @pytest.mark.parametrize('page', ['articles/article2.html', ], indirect=True)
@@ -54,6 +51,12 @@ class TestArticle2:
         node = page.find(id=f'kb-debug-resource-props-in_nav')
         value = node.contents[0].strip()
         assert value == propvalue
+
+    def test_published(self, page):
+        # YAML has published, but in the far future
+        published = page.find(id='kb-sidenav-published-heading')
+        heading = published.find(class_='menu-label').string.strip()
+        assert 'Draft' == heading
 
 
 @pytest.mark.parametrize('page', ['articles/article3.html', ], indirect=True)
@@ -81,6 +84,12 @@ class TestArticle3:
         node = page.find(id=f'kb-debug-resource-props-{propname}')
         value = node.contents[0].strip()
         assert value == propvalue
+
+    def test_published(self, page):
+        # YAML has published, in the past
+        published = page.find(id='kb-sidenav-published-heading')
+        heading = published.find(class_='menu-label').string.strip()
+        assert 'Published' == heading
 
 
 @pytest.mark.parametrize('page', ['articles/article4.html', ], indirect=True)
@@ -124,4 +133,3 @@ class TestArticle5:
         node = page.find(id='kb-debug-resource-template')
         value = node.contents[0].strip()
         assert value == 'article_custom_template2.html'
-
