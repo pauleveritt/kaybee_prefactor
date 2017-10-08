@@ -7,7 +7,8 @@ from pydantic.main import BaseModel
 
 from kaybee.core.core_type import (
     CoreType, CoreContainerModel,
-    CoreResourceModel
+    CoreResourceModel,
+    ReferencesType
 )
 
 
@@ -184,3 +185,18 @@ overrides:
             'someparent/somepage', 'dummycontainer', 'Some Page', content)
         overrides = dc.props.overrides
         assert overrides['article']['template'] == 'sometemplate2.html'
+
+
+class TestReferenceType:
+    def test_import(self):
+        assert 'ReferencesType' == ReferencesType.__name__
+
+    def test_valid(self):
+        tags = ['tag1', 'tag2']
+        article = CoreResourceModel(**dict(tag=tags))
+        assert tags == article.tag
+
+    def test_invalid(self):
+        tags = ['tag1', 9]
+        with pytest.raises(ValidationError):
+            CoreResourceModel(**dict(tag=tags))

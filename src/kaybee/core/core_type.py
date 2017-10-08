@@ -20,6 +20,23 @@ class CoreQueryModel(BaseModel):
     props: List[CorePropFilterModel] = []
 
 
+class ReferencesType(str):
+    @classmethod
+    def get_validators(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v):
+        if not isinstance(v, list):
+            raise ValueError(f'reference: expected list, not {type(v)}')
+        for i in v:
+            if not isinstance(i, str):
+                prefix = 'reference: expected list of strings, '
+                msg = f'{prefix} not {type(i)}'
+                raise ValueError(msg)
+        return v
+
+
 class CoreResourceModel(BaseModel):
     """ Kaybee default schema definitions for resources """
 
@@ -30,6 +47,7 @@ class CoreResourceModel(BaseModel):
     synopsis: str = None
     published: datetime = None
     category: List[str] = []
+    tag: ReferencesType = []
 
 
 class CoreContainerModel(CoreResourceModel):

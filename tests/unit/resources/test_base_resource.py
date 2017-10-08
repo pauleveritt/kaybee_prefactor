@@ -48,6 +48,7 @@ def test_import():
 
 def test_instance():
     da = Article('somepage', 'article', 'Some Page', '')
+    f1 = list(da.model.__fields__.items())[0]
     assert da.__class__.__name__ == 'Article'
     assert da.pagename == 'somepage'
     assert da.name == 'somepage'
