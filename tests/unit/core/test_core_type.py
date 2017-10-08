@@ -1,10 +1,14 @@
 from json import loads
 
+import datetime
 import pytest
 from pydantic import ValidationError
 from pydantic.main import BaseModel
 
-from kaybee.core.core_type import CoreType, CoreContainerModel
+from kaybee.core.core_type import (
+    CoreType, CoreContainerModel,
+    CoreResourceModel
+)
 
 
 class DummyMissingModel(CoreType):
@@ -135,6 +139,17 @@ def test_name_parent(site, pagename, name, parent):
     this_name, this_parent = CoreType.parse_pagename(pagename)
     assert this_name == name
     assert this_parent == parent
+
+
+class TestResource:
+    def test_published_date(self):
+        past = CoreResourceModel(**dict(published='2017-06-01 12:22'))
+        future = CoreResourceModel(**dict(published='2020-11-27 01:43'))
+        no_date = CoreResourceModel(**dict())
+        now = datetime.datetime.now()
+        assert None is no_date.published
+        assert now > past.published
+        assert now < future.published
 
 
 class TestContainer:

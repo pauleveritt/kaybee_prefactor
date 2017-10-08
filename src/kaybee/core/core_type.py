@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from typing import List, Any, Mapping
 
 from pydantic.main import BaseModel
@@ -27,6 +28,7 @@ class CoreResourceModel(BaseModel):
     in_nav: bool = False
     weight: int = 0
     synopsis: str = None
+    published: datetime = None
 
 
 class CoreContainerModel(CoreResourceModel):
