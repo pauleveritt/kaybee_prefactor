@@ -1,7 +1,7 @@
-import datetime
 import pytest
 
 from kaybee.core.core_type import CorePropFilterModel
+from kaybee.core.site_config import SiteConfig
 from kaybee.resources.article import Article
 from kaybee.resources.section import Section
 from kaybee.site import Site
@@ -9,44 +9,6 @@ from kaybee.site import Site
 
 class DummyModel:
     sort_value = 'title'
-
-
-class DummyResource:
-    parent = None
-    kbtype = 'resource'
-    published = datetime.datetime.now() - datetime.timedelta(days=1)
-
-    def __init__(self, name, title, in_nav=False, weight=0):
-        self.name = name
-        self.title = title
-        self.props = DummyModel()
-        self.props.in_nav = in_nav
-        self.props.weight = weight
-        self._parents = []
-
-    def parents(self, site):
-        return self._parents
-
-
-class DummySection:
-    kbtype = 'section'
-    published = datetime.datetime.now() - datetime.timedelta(days=1)
-
-    def __init__(self, name, title,
-                 in_nav=False, weight=0):
-        self.name = name
-        self.title = title
-        self.props = DummyModel()
-        self.props.in_nav = in_nav
-        self.props.weight = weight
-
-        self._parents = []
-
-    def parents(self, site):
-        return self._parents
-
-    def __str__(self):
-        return self.name
 
 
 class DummyQuery:
@@ -58,10 +20,10 @@ class DummyQuery:
 
 @pytest.fixture()
 def site_config():
-    yield DummyModel()
+    yield SiteConfig()
 
 
-@pytest.fixture(name='sample_resources')
+@pytest.fixture()
 def dummy_resources():
     c0 = "published: 2015-01-01 01:23"
     c1 = """
@@ -89,12 +51,12 @@ in_nav: True
     )
 
 
-@pytest.fixture(name='sample_resource')
-def dummy_resource(sample_resources):
-    yield sample_resources[4]
+@pytest.fixture()
+def dummy_resource(dummy_resources):
+    yield dummy_resources[4]
 
 
-@pytest.fixture(name='sample_widgets')
+@pytest.fixture()
 def dummy_widgets():
     # props = dict(template='query1.html', kbtype='section')
     dq = DummyQuery('query1')
@@ -106,18 +68,18 @@ def dummy_widgets():
 
 
 @pytest.fixture(name='sample_widget')
-def dummy_widget(sample_widgets):
-    yield sample_widgets[0]
+def dummy_widget(dummy_widgets):
+    yield dummy_widgets[0]
 
 
 @pytest.fixture()
-def site(site_config, sample_resources, sample_widgets):
+def site(site_config, dummy_resources, dummy_widgets):
     s = Site(site_config)
 
     # Add some sample data
-    for sr in sample_resources:
+    for sr in dummy_resources:
         s.resources[sr.name] = sr
-    for sw in sample_widgets:
+    for sw in dummy_widgets:
         s.widgets[sw.name] = sw
     yield s
 
@@ -130,15 +92,15 @@ def test_construction(site):
     assert site.__class__.__name__ == 'Site'
 
 
-def test_add_resource_succeeds(site, sample_resource):
-    site.resources[sample_resource.name] = sample_resource
-    assert site.resources[sample_resource.name] == sample_resource
+def test_add_resource_succeeds(site, dummy_resource):
+    site.resources[dummy_resource.name] = dummy_resource
+    assert site.resources[dummy_resource.name] == dummy_resource
 
 
-def test_remove_resource(site, sample_resource):
-    site.resources[sample_resource.name] = sample_resource
-    del site.resources[sample_resource.name]
-    assert site.resources.get(sample_resource.name, None) is None
+def test_remove_resource(site, dummy_resource):
+    site.resources[dummy_resource.name] = dummy_resource
+    del site.resources[dummy_resource.name]
+    assert site.resources.get(dummy_resource.name, None) is None
 
 
 def test_section_listing(site):
@@ -199,15 +161,15 @@ def test_filter_resources_sort(site, field, order, expected_title):
     assert first_title == expected_title
 
 
-def test_nav_menu(site, sample_resources):
+def test_nav_menu(site, dummy_resources):
     # Only include things that want to be in the nav menu,
     # sorted by weight then by title
 
     navmenu_ids = [navmenu.name for navmenu in site.navmenu]
     assert 3 == len(navmenu_ids)
-    assert navmenu_ids[0] == sample_resources[3].name
-    assert navmenu_ids[1] == sample_resources[2].name
-    assert navmenu_ids[2] == sample_resources[4].name
+    assert navmenu_ids[0] == dummy_resources[3].name
+    assert navmenu_ids[1] == dummy_resources[2].name
+    assert navmenu_ids[2] == dummy_resources[4].name
 
 
 def test_remove_widget(site, sample_widget):
