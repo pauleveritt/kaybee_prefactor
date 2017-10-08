@@ -71,7 +71,7 @@
     {% if resource.props.category %}
         <p>
             {% for category in resource.references(site)['category'] %}
-                <a>
+                <a href="{{ pathto(category.name, 1) + '.html' }}">
                     <span class="tag">{{ category.title }}</span>
                 </a>
             {% endfor %}
