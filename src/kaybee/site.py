@@ -19,7 +19,7 @@ class Site:
 
     def filter_resources(self, kbtype=None, sort_value='title',
                          order=1, limit=5, parent_name=None,
-                         props=[]):
+                         props=[], is_published=True):
 
         # Start with (hopefully) most common, filter based on resource type
         if kbtype:
@@ -38,6 +38,10 @@ class Site:
             r2 = [r for r in r1 if parent in r.parents(self)]
         else:
             r2 = r1
+
+        # Apply the "is_published" filter, if present
+        if is_published:
+            r2 = [resource for resource in r2 if resource.is_published()]
 
         # Now sorting
         if sort_value:
@@ -67,16 +71,17 @@ class Site:
 
     @property
     def sections(self):
-        """ Listing of resources with kbtype == section """
+        """ Listing of published resources with kbtype == section """
 
-        return [s for s in self.resources.values() if s.kbtype == 'section']
+        return [s for s in self.resources.values()
+                if s.kbtype == 'section' and s.is_published()]
 
     @property
     def navmenu(self):
-        """ Sorted listing of resources with in_nav set to true """
+        """ Sorted listing of published resources with in_nav set to true """
 
         resources = [r for r in self.resources.values() if
-                     r.props.in_nav]
+                     r.props.in_nav and r.is_published()]
 
         # Sort first by title, then by "weight"
         return sorted(resources,

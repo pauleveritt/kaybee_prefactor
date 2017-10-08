@@ -1,6 +1,9 @@
+import datetime
 import pytest
 
 from kaybee.core.core_type import CorePropFilterModel
+from kaybee.resources.article import Article
+from kaybee.resources.section import Section
 from kaybee.site import Site
 
 
@@ -11,6 +14,7 @@ class DummyModel:
 class DummyResource:
     parent = None
     kbtype = 'resource'
+    published = datetime.datetime.now() - datetime.timedelta(days=1)
 
     def __init__(self, name, title, in_nav=False, weight=0):
         self.name = name
@@ -26,6 +30,7 @@ class DummyResource:
 
 class DummySection:
     kbtype = 'section'
+    published = datetime.datetime.now() - datetime.timedelta(days=1)
 
     def __init__(self, name, title,
                  in_nav=False, weight=0):
@@ -58,12 +63,29 @@ def site_config():
 
 @pytest.fixture(name='sample_resources')
 def dummy_resources():
+    c0 = "published: 2015-01-01 01:23"
+    c1 = """
+in_nav: True
+weight: 20
+published: 2015-01-01 01:23
+    """
+    c2 = """
+in_nav: True
+weight: -10
+published: 2015-01-01 01:23
+    """
+    c3 = """
+published: 2015-01-01 01:23
+in_nav: True    
+    """
+
     yield (
-        DummySection('8783', 'The First', in_nav=True),
-        DummySection('1343', 'Second should sort ahead of first'),
-        DummySection('4675', 'Z Last weights first', in_nav=True),
-        DummySection('9856', 'Q Not Last No Weight', in_nav=True, weight=-10),
-        DummyResource('4444', 'About', in_nav=True, weight=20)
+        Section('8783', 'section', 'The First', c0),
+        Section('1343', 'section', 'Second should sort ahead of first', c0),
+        Section('4675', 'section', 'Z Last weights first', c3),
+        Section('9856', 'section', 'Q Not Last No Weight', c2),
+        Article('4444', 'article', 'About', c1),
+        Article('23', 'article', 'Unpublished', 'in_nav: True')
     )
 
 
@@ -119,13 +141,13 @@ def test_remove_resource(site, sample_resource):
     assert site.resources.get(sample_resource.name, None) is None
 
 
-def test_section_listing(site, sample_resources):
-    assert len(site.sections) == len(sample_resources) - 1
+def test_section_listing(site):
+    assert 4 == len(site.sections)
 
 
 @pytest.mark.parametrize('filter_key, filter_value, expected', [
-    (None, 'resource', 'About'),
-    ('kbtype', 'resource', 'About'),
+    (None, 'article', 'About'),
+    ('kbtype', 'article', 'About'),
     ('sort_value', 'title', 'About'),
     ('sort_value', 'weight', 'Q Not Last No Weight'),
     ('order', -1, 'Z Last weights first'),
@@ -137,20 +159,19 @@ def test_filter_resources(site, filter_key, filter_value, expected):
     else:
         kw = {filter_key: filter_value}
     results = site.filter_resources(**kw)
-    assert results[0].title == expected
+    assert expected == results[0].title
 
 
 def test_filter_resources_parent(site):
-    parent = DummySection('section2/index', 'Second Section')
-    parent._parents = []
-    child = DummyResource('section2/article2', 'Second Resource')
-    child._parents = [parent]
+    published = 'published: 2015-01-01 01:23'
+    parent = Section('section2/index', 'section', 'Section 2', published)
+    child = Article('section2/article2', 'article', 'Resource 2', published)
     site.resources[parent.name] = parent
     site.resources[child.name] = child
-    kw = dict(parent_name='section2/index')
+    kw = dict(parent_name='section2')
     results = site.filter_resources(**kw)
     assert len(results) == 1
-    assert results[0].title == 'Second Resource'
+    assert results[0].title == 'Resource 2'
 
 
 def test_filter_resources_props(site):
@@ -183,10 +204,10 @@ def test_nav_menu(site, sample_resources):
     # sorted by weight then by title
 
     navmenu_ids = [navmenu.name for navmenu in site.navmenu]
+    assert 3 == len(navmenu_ids)
     assert navmenu_ids[0] == sample_resources[3].name
-    assert navmenu_ids[1] == sample_resources[0].name
-    assert navmenu_ids[2] == sample_resources[2].name
-    assert navmenu_ids[3] == sample_resources[4].name
+    assert navmenu_ids[1] == sample_resources[2].name
+    assert navmenu_ids[2] == sample_resources[4].name
 
 
 def test_remove_widget(site, sample_widget):
