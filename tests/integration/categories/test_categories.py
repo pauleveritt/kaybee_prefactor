@@ -7,7 +7,7 @@ pytestmark = pytest.mark.sphinx('html', testroot='categories')
 class TestHomepage:
     def test_title(self, page):
         content = page.find('title').contents[0]
-        assert content == 'Category 1'
+        assert 'category1' == content
 
     def test_not_in_nav(self, page):
         navitems = page.find_all('nav-item is-hidden-mobile')

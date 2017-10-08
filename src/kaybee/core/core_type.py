@@ -29,6 +29,7 @@ class CoreResourceModel(BaseModel):
     weight: int = 0
     synopsis: str = None
     published: datetime = None
+    category: List[str] = []
 
 
 class CoreContainerModel(CoreResourceModel):

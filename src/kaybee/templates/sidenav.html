@@ -68,11 +68,15 @@
     <p class="menu-label">
         Categories
     </p>
-    <p>
-        <a><span class="tag">html</span></a>
-        <a><span class="tag">html</span></a>
-        <a><span class="tag">html</span></a>
-    </p>
+    {% if resource.props.category %}
+        <p>
+            {% for category in resource.props.category %}
+                <a>
+                    <span class="tag">{{ category }}</span>
+                </a>
+            {% endfor %}
+        </p>
+    {% endif %}
     <p class="menu-label">
         Tags
     </p>

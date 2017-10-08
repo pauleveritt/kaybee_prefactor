@@ -4,7 +4,7 @@ from kaybee.resources import BaseResource
 
 
 class CategoryModel(CoreResourceModel):
-    label: str
+    pass
 
 
 @registry.resource('category')

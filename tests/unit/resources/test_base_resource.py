@@ -147,3 +147,4 @@ class TestInheritedProperty:
 def test_is_published(content, expected):
     article = Article('d1/a1', 'article', 'Some Article', content)
     assert expected is article.is_published()
+

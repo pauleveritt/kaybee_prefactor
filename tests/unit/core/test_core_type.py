@@ -151,6 +151,16 @@ class TestResource:
         assert now > past.published
         assert now < future.published
 
+    def test_categories(self):
+        no_cats = CoreResourceModel(**dict(categories=[]))
+        assert [] == no_cats.categories
+        c1 = ['python', 'web']
+        cats = CoreResourceModel(**dict(categories=c1))
+        assert c1 == cats.categories
+        c2 = [923, dict(broken=True)]
+        with pytest.raises(ValidationError):
+            CoreResourceModel(**dict(categories=c2))
+
 
 class TestContainer:
     def test_import(self):
