@@ -4,6 +4,7 @@ Articles
 .. section::
 
     style: is-bold is-info
+    published: 2009-10-21 12:23
     in_nav: True
     weight: 10
     overrides:

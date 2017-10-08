@@ -7,6 +7,7 @@ About
     style: ''
     in_nav: True
     weight: 100
+    published: 2009-10-21 12:23
 
 Changing the Site Title
 =======================

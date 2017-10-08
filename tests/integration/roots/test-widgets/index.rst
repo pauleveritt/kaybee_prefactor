@@ -5,6 +5,7 @@ Test Widgets
 .. homepage::
 
     logo: some logo
+    published: 2009-10-21 12:23
 
 
 .. querylist::
