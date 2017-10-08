@@ -156,7 +156,7 @@ class BaseResource(CoreType):
         ul = ET.fromstring(toc)
         return [(a.get('href'), a.text) for a in ul.iter('a')]
 
-    def is_draft(self):
+    def is_published(self):
         """ Return true if this resource has published date in the past """
 
         now = datetime.now()

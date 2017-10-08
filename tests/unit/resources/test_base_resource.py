@@ -144,6 +144,6 @@ class TestInheritedProperty:
     ('published: 2020-12-01 01:23', False),
     ('published: 2012-03-24 11:47', True),
 ])
-def test_is_draft(content, expected):
+def test_is_published(content, expected):
     article = Article('d1/a1', 'article', 'Some Article', content)
-    assert expected is article.is_draft()
+    assert expected is article.is_published()

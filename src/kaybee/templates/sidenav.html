@@ -1,4 +1,22 @@
 <aside id="sidebarCollapseTarget" class="menu sb_sidenav">
+
+    {% if resource.is_published() %}
+        <p class="menu-label">
+            Published
+        </p>
+        <p>
+            Published on
+            {{ resource.props.published.strftime('%Y-%m-%d') }}
+            at
+            {{ resource.props.published.strftime('%H:%M') }}.
+        </p>
+    {% else %}
+        <p class="menu-label">
+            Draft
+        </p>
+        <p>This article does not have a published date in the past.</p>
+    {% endif %}
+
     <p class="menu-label">
         Breadcrumbs
     </p>
