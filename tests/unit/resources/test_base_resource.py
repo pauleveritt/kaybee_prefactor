@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 
 from kaybee.resources import BaseResource
 from kaybee.resources.article import Article
@@ -149,3 +150,39 @@ def test_is_published(content, expected):
     article = Article('d1/a1', 'article', 'Some Article', content)
     assert expected is article.is_published()
 
+
+class TestReferences:
+    def test_empty(self):
+        content = ''
+        article = Article('d1/a1', 'article', 'Some Article', content)
+        assert [] == article.props.tag
+
+    def test_valid(self):
+        content = """
+tag:
+    - tag1
+    - tag2
+    - tag3        
+        """
+        article = Article('d1/a1', 'article', 'Some Article', content)
+        assert ['tag1', 'tag2', 'tag3'] == article.props.tag
+
+    def test_invalid(self):
+        content = """
+tag:
+    - tag1
+    - tag2
+    - 9999999        
+        """
+        with pytest.raises(ValidationError):
+            Article('d1/a1', 'article', 'Some Article', content)
+
+    def test_helper_valid(self):
+        content = """
+tag:
+    - tag1
+    - tag2
+    - tag3        
+        """
+        article = Article('d1/a1', 'article', 'Some Article', content)
+        assert ['tag1', 'tag2', 'tag3'] == article.props.tag

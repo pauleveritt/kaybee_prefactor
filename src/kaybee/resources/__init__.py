@@ -2,11 +2,12 @@ import inspect
 import os
 import xml.etree.ElementTree as ET
 from datetime import datetime
+from typing import Mapping, Any, List
 
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
 
-from kaybee.core.core_type import CoreType
+from kaybee.core.core_type import CoreType, ReferencesType
 from kaybee.core.registry import registry
 
 
@@ -164,6 +165,41 @@ class BaseResource(CoreType):
         if published:
             return published < now
         return False
+
+    def references(self, site) -> Mapping[str, List[Any]]:
+        """ Resolve and return references
+
+         Fields in self.props can flag that they are references by
+         using the references type. This method scans the model,
+         finds any fields that are references, and returns the
+         resources pointed to by those references.
+
+         Note that we shouldn't get to the point of dangling references.
+         Our custom Sphinx event should raise a references error
+         during the build process (though maybe it is just a warning?)
+
+         """
+
+        references = dict()
+        for field in self.model.values():
+            field_name = field.name
+            field_values = []
+
+            # Iterate over each value on this field, e.g.
+            # tags: tag1, tag2, tag3
+            for target_name in getattr(self.model, field_name):
+                # Ask the site to get the object
+                target = site.get_reference(field_name, target_name)
+
+                # If we haven't encountered this reference type
+                # (e.g. tag or author), add it to the dict first
+                if field.type_ == ReferencesType:
+                    if field_name not in references:
+                        references[field_name] = [target, ]
+                    else:
+                        references[field_name].append(target)
+
+        return references
 
 
 def setup(app):
