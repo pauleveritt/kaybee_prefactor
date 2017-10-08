@@ -172,6 +172,7 @@ class BaseResource(CoreType):
             return published < now
         return False
 
+    @property
     def reference_fieldnames(self):
         """ Look in model and return each fieldname that is a reference """
 

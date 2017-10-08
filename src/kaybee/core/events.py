@@ -9,6 +9,7 @@ from sphinx.jinja2glue import SphinxFileSystemLoader
 import kaybee
 from kaybee import resources, widgets
 from kaybee.core.registry import registry
+from kaybee.resources import BaseResource
 from kaybee.site import Site
 
 
@@ -128,3 +129,25 @@ def kaybee_context(app, pagename, templatename, context, doctree):
 
     else:
         return templatename
+
+
+def validate_references(app, env):
+    """ Called on env-check-consistency, make sure references exist """
+
+    site = env.site
+    for resource in site.resources.values():
+        for field_name in resource.reference_fieldnames:
+            for target_label in getattr(resource.props, field_name):
+                # Make sure this label exists in site.reference
+                try:
+                    srfn = site.references[field_name]
+                except KeyError:
+                    msg = f'''\
+Document {resource.name} has unregistered reference "{field_name}"'''
+                    raise KeyError(msg)
+                try:
+                    assert srfn[target_label].label == target_label
+                except AssertionError:
+                    msg = f'''\
+Document {resource.name} has "{field_name}" with orphan {target_label} '''
+                    raise KeyError(msg)
