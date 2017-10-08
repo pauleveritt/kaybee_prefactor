@@ -1,6 +1,7 @@
 import inspect
 import os
 import xml.etree.ElementTree as ET
+from datetime import datetime
 
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
@@ -154,6 +155,15 @@ class BaseResource(CoreType):
 
         ul = ET.fromstring(toc)
         return [(a.get('href'), a.text) for a in ul.iter('a')]
+
+    def is_draft(self):
+        """ Return true if this resource has published date in the past """
+
+        now = datetime.now()
+        published = self.props.published
+        if published:
+            return published < now
+        return False
 
 
 def setup(app):

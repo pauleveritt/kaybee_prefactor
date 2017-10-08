@@ -57,14 +57,6 @@ def test_instance():
     assert da.props.in_nav is False
 
 
-# @pytest.fixture()
-# def dam(monkeypatch):
-#     """ Pretend to load and validate the model """
-#     dam = ArticleModel()
-#     monkeypatch.setattr(CoreType, 'load_model', lambda s, m, c: dam)
-#     yield dam
-
-
 @pytest.mark.parametrize('pagename, parents_len, parentname', [
     ('about', 0, 'site'),
     ('f1', 0, 'site'),
@@ -111,9 +103,6 @@ def test_is_active(site, pagename, nav_href, expected):
     assert a.is_active_section(site, nav_href) == expected
 
 
-#
-# Inheriting template, style, etc.
-
 @pytest.fixture()
 def da(site):
     yield site.resources['f1/f2/f3/about']
@@ -144,7 +133,17 @@ class TestInheritedProperty:
         assert 'f1style' == da.style(site)
 
     def test_style_from_class(self, site):
-        # Delete the lineage-intheried doc_template prop on the section
+        # Delete the lineage-inherited doc_template prop on the section
         del site.resources['f1'].props.overrides['section']
         da = site.resources['f1/f2']
         assert 'section.html' == da.style(site)
+
+
+@pytest.mark.parametrize('content, expected', [
+    ('', False),
+    ('published: 2020-12-01 01:23', False),
+    ('published: 2012-03-24 11:47', True),
+])
+def test_is_draft(content, expected):
+    article = Article('d1/a1', 'article', 'Some Article', content)
+    assert expected is article.is_draft()
