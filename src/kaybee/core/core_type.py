@@ -77,7 +77,7 @@ class CoreType:
     def __init__(self, pagename: str, kbtype: str,
                  title: str, yaml_content: str):
         # Raise custom exception if subclass doesn't have a model attr
-        if not getattr(self, 'model'):
+        if not hasattr(self, 'model'):
             msg = f'Class {self.__class__.__name__} must have model attribute'
             raise AttributeError(msg)
 

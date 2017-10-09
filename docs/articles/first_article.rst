@@ -25,10 +25,3 @@ Video Player
 .. videoplayer::
 
     src: https://www.youtube.com/embed/yzC2TwhER0c
-
-KbToctree
-=========
-
-.. kbtoctree::
-
-    flag: 99

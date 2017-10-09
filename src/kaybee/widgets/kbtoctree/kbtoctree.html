@@ -1,1 +1,9 @@
-<p>Flag is {{ widget.props.flag }}</p>
+<h1>Contents</h1>
+<ul>
+    {% for entry in entries %}
+        <li>
+            <a href="{{ '/' + entry['href'] + '.html' }}">
+                {{ entry['title'] }}</a>
+        </li>
+    {% endfor %}
+</ul>
