@@ -45,6 +45,11 @@ class widget(nodes.General, nodes.Element):
 class BaseWidgetDirective(Directive):
     has_content = True
 
+    @classmethod
+    def get_widget_class(cls, widget_directive):
+        """ Make this easy to mock """
+        return registry.config.widgets[widget_directive]
+
     @property
     def doc_title(self):
         return self.state.parent.parent.children[0].children[0].rawsource
@@ -65,7 +70,7 @@ class BaseWidgetDirective(Directive):
         # Get the info from this directive and make instance
         kbtype = self.name
         widget_content = '\n'.join(self.content)
-        widget_class = registry.config.widgets[kbtype]
+        widget_class = BaseWidgetDirective.get_widget_class(kbtype)
         this_widget = widget_class(
             env.docname,
             kbtype, self.doc_title, widget_content
