@@ -5,11 +5,11 @@ from kaybee.core.registry import registry
 
 @registry.widget('kbtoctree')
 class KbToctree:
-    kind = 'widget'
     template = 'kbtoctree.html'
     entries: List = []
 
     def set_entries(self, entries: List[Tuple[str, str]], titles):
+        """ Provide the template the data for the toc entries """
         self.entries = []
         for flag, pagename in entries:
             title = titles[pagename].children[0]
