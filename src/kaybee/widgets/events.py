@@ -22,9 +22,11 @@ def process_widget_nodes(app: Sphinx, doctree, fromdocname):
         context = builder.globalcontext.copy()
         context['site'] = site
 
-        titles = env.titles
-        output = w.render(builder, context, site,
-                          node, titles)
+        # The challenge here is that some items in a toctree
+        # might not be resources in our "database". So we have
+        # to ask Sphinx to get us the titles.
+        w.set_entries(node.attributes['entries'], env.titles)
+        output = w.render(builder, context, site)
 
         # Put the output into the node contents
         listing = [nodes.raw('', output, format='html')]
