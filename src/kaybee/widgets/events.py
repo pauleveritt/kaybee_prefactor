@@ -1,4 +1,5 @@
 from docutils import nodes
+from sphinx.addnodes import toctree
 from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
 
@@ -11,6 +12,10 @@ def process_widget_nodes(app: Sphinx, doctree, fromdocname):
 
     from kaybee.widgets import widget
 
+    # for n in doctree.traverse(toctree):
+    #     entries = [e[1] for e in n.attributes['entries']]
+    #     x = n.asdom().toprettyxml()
+    #
     for node in doctree.traverse(widget):
         # Render the output
         widget = site.widgets.get(node.name)

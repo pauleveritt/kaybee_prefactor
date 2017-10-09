@@ -54,6 +54,16 @@ class BaseWidgetDirective(Directive):
     def doc_title(self):
         return self.state.parent.parent.children[0].children[0].rawsource
 
+    def get_widget(self, docname):
+        # Get the info from this directive and make instance
+        kbtype = self.name
+        widget_content = '\n'.join(self.content)
+        widget_class = BaseWidgetDirective.get_widget_class(kbtype)
+        return widget_class(
+            docname,
+            kbtype, self.doc_title, widget_content
+        )
+
     def run(self):
         """ Run at parse time.
 
@@ -66,29 +76,19 @@ class BaseWidgetDirective(Directive):
         """
 
         env = self.state.document.settings.env
+        this_widget = self.get_widget(env.docname)
 
-        # Get the info from this directive and make instance
-        kbtype = self.name
-        widget_content = '\n'.join(self.content)
-        widget_class = BaseWidgetDirective.get_widget_class(kbtype)
-        this_widget = widget_class(
-            env.docname,
-            kbtype, self.doc_title, widget_content
-        )
-
-        site = self.state.document.settings.env.site
-        site.widgets[this_widget.name] = this_widget
+        env.site.widgets[this_widget.name] = this_widget
 
         # Now add the node to the doctree
         widget_node = widget()
-        attrs = dict(ids=[this_widget.name], names=[kbtype])
+        attrs = dict(ids=[this_widget.name], names=[self.name])
         widget_node.update_basic_atts(attrs)
         return [widget_node]
 
 
 class BaseWidget(CoreType):
     kind = 'widget'
-    is_toctree = False
 
     @property
     def template(self):
@@ -131,13 +131,7 @@ def setup(app):
     # Loop through the registered widgets and add a directive
     # for each
     app.add_node(widget)
-    for kbtype, widget_class in registry.config.widgets.items():
-        # We need to find a base directive. Most widgets use
-        # BaseWidgetDirective but widgets that extend toctrees
-        # need to subclass Sphinx's Toctree directive.
-        if widget_class.is_toctree:
-            app.add_directive(kbtype, BaseWidgetDirective)
-        else:
-            app.add_directive(kbtype, BaseWidgetDirective)
+    for kbtype in registry.config.widgets.keys():
+        app.add_directive(kbtype, BaseWidgetDirective)
 
     app.connect('doctree-resolved', process_widget_nodes)

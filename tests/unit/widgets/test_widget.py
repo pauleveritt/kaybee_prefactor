@@ -1,7 +1,9 @@
 import pytest
 
 from kaybee.core.core_type import CoreWidgetModel
-from kaybee.widgets import widget, BaseWidgetDirective, BaseWidget
+from kaybee.widgets import (
+    widget, BaseWidgetDirective, BaseWidget
+)
 
 
 class DummyWidgetModel(CoreWidgetModel):
@@ -11,11 +13,11 @@ class DummyWidgetModel(CoreWidgetModel):
 class DummyWidget(BaseWidget):
     model = DummyWidgetModel
 
+
 class SampleWidget:
     def __init__(self, *args, **kw):
         self.name = 'name'
         self.props = dict(template='foo')
-
 
 
 @pytest.fixture(name='base_widget')
@@ -31,6 +33,10 @@ class SampleDirective(BaseWidgetDirective):
     name = 'sample_directive'
 
 
+class SampleTocDirective(BaseWidgetDirective):
+    name = 'sample_tocdirective'
+
+
 class Dummy:
     pass
 
@@ -43,6 +49,25 @@ class DummySite:
 @pytest.fixture()
 def dummy_directive():
     bd = SampleDirective('', [], dict(), '', 0, 0, '', {}, {})
+    bd.state = Dummy()
+    bd.state.document = Dummy()
+    bd.state.document.settings = Dummy()
+    bd.state.document.settings.env = Dummy()
+    bd.state.document.settings.env.site = DummySite()
+    bd.state.document.settings.env.site.validator = Dummy()
+
+    bd.state.document.settings.env.site.validator.validate = lambda x: True
+    bd.state.document.settings.env.docname = 'xyz'
+    bd.state.parent = Dummy()
+    bd.state.parent.parent = Dummy()
+    bd.config = Dummy()
+
+    yield bd
+
+
+@pytest.fixture()
+def dummy_toc_directive():
+    bd = SampleTocDirective('', [], dict(), '', 0, 0, '', {}, {})
     bd.state = Dummy()
     bd.state.document = Dummy()
     bd.state.document.settings = Dummy()
@@ -110,3 +135,4 @@ class TestBaseWidgetDirective:
                             lambda x: 'Some Title')
         result = dummy_directive.run()
         assert 'widget' == result[0].__class__.__name__
+
