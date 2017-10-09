@@ -10,6 +10,12 @@
   border-bottom: 2px solid $grey;
 }
 
+.kb-header.hero .hero-body {
+  .title, .subtitle {
+    color: $grey-light;
+  }
+}
+
 // For each color scheme, make "active" the invert
 .kb-header.hero.is-primary .hero-head .nav-item.is-active {
   border-bottom: 2px solid $primary-invert;
