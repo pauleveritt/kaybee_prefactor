@@ -18,6 +18,9 @@ def process_widget_nodes(app: Sphinx, doctree, fromdocname):
     from kaybee.widgets import widget
 
     for node in doctree.traverse(toctree):
+        if node.attributes['hidden']:
+            continue
+
         w = KbToctree()
         context = builder.globalcontext.copy()
         context['site'] = site
@@ -25,7 +28,7 @@ def process_widget_nodes(app: Sphinx, doctree, fromdocname):
         # The challenge here is that some items in a toctree
         # might not be resources in our "database". So we have
         # to ask Sphinx to get us the titles.
-        w.set_entries(node.attributes['entries'], env.titles)
+        w.set_entries(node.attributes['entries'], env.titles, site.resources)
         output = w.render(builder, context, site)
 
         # Put the output into the node contents

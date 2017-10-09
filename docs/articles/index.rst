@@ -13,13 +13,6 @@ Articles
 
 A list of articles is here.
 
-.. sectionquery::
-
-    template: sectionquery.html
-    query:
-        parent_name: articles
-        kbtype: article
-
 .. toctree::
     :hidden:
 
