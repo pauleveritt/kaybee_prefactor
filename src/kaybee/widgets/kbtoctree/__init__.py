@@ -12,3 +12,4 @@ class KbToctreeModel(BaseModel):
 class KbToctree(BaseWidget):
     model = KbToctreeModel
     template = 'kbtoctree.html'
+    is_toctree = True

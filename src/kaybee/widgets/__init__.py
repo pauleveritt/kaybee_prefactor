@@ -1,8 +1,7 @@
 import inspect
-import json
+import os
 from collections import Mapping
 
-import os
 from docutils import nodes
 from docutils.parsers.rst import Directive
 from ruamel.yaml import load
@@ -84,6 +83,7 @@ class BaseDirective(Directive):
 
 class BaseWidget(CoreType):
     kind = 'widget'
+    is_toctree = False
 
     @property
     def template(self):
@@ -126,7 +126,13 @@ def setup(app):
     # Loop through the registered widgets and add a directive
     # for each
     app.add_node(widget)
-    for kbtype in registry.config.widgets.keys():
-        app.add_directive(kbtype, BaseDirective)
+    for kbtype, widget_class in registry.config.widgets.items():
+        # We need to find a base directive. Most widgets use BaseDirective
+        # but widgets that extend toctrees need to subclass Sphinx's
+        # Toctree directive.
+        if widget_class.is_toctree:
+            app.add_directive(kbtype, BaseDirective)
+        else:
+            app.add_directive(kbtype, BaseDirective)
 
     app.connect('doctree-resolved', process_widget_nodes)
