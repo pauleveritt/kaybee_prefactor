@@ -93,15 +93,17 @@ class BaseWidget(CoreType):
         return self.props.template
 
     def make_context(self, context: Mapping, site):
-        raise NotImplementedError('Subclass must override make_context')
+        pass
 
     def render(self, builder, context, site):
         """ Given a Sphinx builder and context with site in it,
          generate HTML """
 
         context['site'] = site
+        context['widget'] = self
 
-        # make_context is implemented on the concrete class for each widget
+        # make_context is optionally implemented on the concrete class
+        # for each widget
         self.make_context(context, site)
 
         # NOTE: Can use builder.templates.render_string

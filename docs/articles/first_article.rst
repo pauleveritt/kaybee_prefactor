@@ -1,3 +1,4 @@
+=============
 First Article
 =============
 
@@ -17,3 +18,11 @@ Two kinds of references:
 - :ref:`category-python` uses the target as the link title
 
 - :ref:`Link title <category-python>` makes a new link title
+
+Video Player
+============
+
+.. videoplayer::
+
+    src: https://www.youtube.com/embed/yzC2TwhER0c
+

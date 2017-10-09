@@ -80,7 +80,21 @@ Widgets
 
 - Easily write new widgets with new property schemas, logic, and templates
 
--
+References
+==========
+
+- Resources can be marked as a reference value by having a "label"
+  property that returns a shorthand reference marker
+
+- Other resources can point to that resource, e.g. a certain category,
+  via that label as a value on a schema field that is flagged as a reference
+
+- Reference values are then enforced during building
+
+- You can also use a Sphinx reference with this special scheme, e.g.::
+
+    :ref:`category-python`
+    :ref:`A Link Title <category-python>`
 
 Site
 ====
@@ -108,3 +122,5 @@ Miscellaneous
 - Configuration-driven system based on Dectate
 
 - Extensive unit and integration tests
+
+- Video player widget
