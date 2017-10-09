@@ -32,7 +32,11 @@
                                 </p>
                             {% endif %}
                         </td>
-                        <td class="kb-listing-timeago">an hour ago</td>
+                        <td class="kb-listing-timeago">
+                            {% if entry.resource and entry.resource.props.published %}
+                                {{ entry.resource.props.published.strftime('%Y-%m-%d') }}
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
 

@@ -36,12 +36,3 @@ Welcome to kaybee's documentation!
           style: warning
           query:
               limit: 10
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

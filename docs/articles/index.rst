@@ -14,7 +14,6 @@ Articles
 A list of articles is here.
 
 .. toctree::
-    :hidden:
 
     first_article
     first_series/index
