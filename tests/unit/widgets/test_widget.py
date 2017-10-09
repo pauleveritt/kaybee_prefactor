@@ -1,7 +1,7 @@
 import pytest
 
 from kaybee.core.core_type import CoreWidgetModel
-from kaybee.widgets import widget, BaseDirective, BaseWidget
+from kaybee.widgets import widget, BaseWidgetDirective, BaseWidget
 
 
 class DummyWidgetModel(CoreWidgetModel):
@@ -30,10 +30,10 @@ class TestWidgetNode:
         assert base_widget.__class__.__name__ == 'DummyWidget'
 
 
-class TestBaseDirective:
+class TestCategory:
 
     def test_import(self):
-        assert BaseDirective.__name__ == 'BaseDirective'
+        assert BaseWidgetDirective.__name__ == 'BaseWidgetDirective'
 
 
 class TestBaseWidget:

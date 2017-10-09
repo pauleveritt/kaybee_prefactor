@@ -1,6 +1,6 @@
 import pytest
 
-from kaybee.resources import BaseDirective
+from kaybee.resources import BaseResourceDirective
 
 
 class DummySite:
@@ -22,7 +22,7 @@ class SampleAction:
     defaults = dict()
 
 
-class SampleDirective(BaseDirective):
+class SampleDirective(BaseResourceDirective):
     name = 'sample_directive'
 
 
@@ -46,7 +46,7 @@ def dummy_directive():
 
 
 def test_import():
-    assert BaseDirective.__name__ == 'BaseDirective'
+    assert BaseResourceDirective.__name__ == 'BaseResourceDirective'
 
 
 def test_construction(base_directive):
@@ -54,9 +54,9 @@ def test_construction(base_directive):
 
 
 def test_construction_run(monkeypatch, base_directive):
-    monkeypatch.setattr(BaseDirective, 'get_resource_class',
+    monkeypatch.setattr(BaseResourceDirective, 'get_resource_class',
                         lambda x: SampleResource)
-    monkeypatch.setattr(BaseDirective, 'doc_title',
+    monkeypatch.setattr(BaseResourceDirective, 'doc_title',
                         lambda x: 'Some Title')
     result = base_directive.run()
     assert result == []

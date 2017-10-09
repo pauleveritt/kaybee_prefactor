@@ -42,7 +42,7 @@ class widget(nodes.General, nodes.Element):
         return None
 
 
-class BaseDirective(Directive):
+class BaseWidgetDirective(Directive):
     has_content = True
 
     @property
@@ -127,12 +127,12 @@ def setup(app):
     # for each
     app.add_node(widget)
     for kbtype, widget_class in registry.config.widgets.items():
-        # We need to find a base directive. Most widgets use BaseDirective
-        # but widgets that extend toctrees need to subclass Sphinx's
-        # Toctree directive.
+        # We need to find a base directive. Most widgets use
+        # BaseWidgetDirective but widgets that extend toctrees
+        # need to subclass Sphinx's Toctree directive.
         if widget_class.is_toctree:
-            app.add_directive(kbtype, BaseDirective)
+            app.add_directive(kbtype, BaseWidgetDirective)
         else:
-            app.add_directive(kbtype, BaseDirective)
+            app.add_directive(kbtype, BaseWidgetDirective)
 
     app.connect('doctree-resolved', process_widget_nodes)

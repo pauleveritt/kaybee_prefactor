@@ -11,7 +11,7 @@ from kaybee.core.core_type import CoreType, ReferencesType
 from kaybee.core.registry import registry
 
 
-class BaseDirective(Directive):
+class BaseResourceDirective(Directive):
     has_content = True
 
     @classmethod
@@ -40,7 +40,7 @@ class BaseDirective(Directive):
         kbtype = self.name
         title = self.doc_title
         resource_content = '\n'.join(self.content)
-        resource_class = BaseDirective.get_resource_class(kbtype)
+        resource_class = BaseResourceDirective.get_resource_class(kbtype)
         this_resource = resource_class(env.docname, kbtype,
                                        title, resource_content)
 
@@ -218,4 +218,4 @@ def setup(app):
     # Loop through the registered resources and add a directive
     # for each
     for kbtype in registry.config.resources.keys():
-        app.add_directive(kbtype, BaseDirective)
+        app.add_directive(kbtype, BaseResourceDirective)
