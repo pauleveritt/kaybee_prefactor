@@ -5,10 +5,10 @@
             <div class="columns is-vcentered">
                 <div class="column">
                     <p class="title">
-                        Homepage
+                        {{ resource.props.heading }}
                     </p>
                     <p class="subtitle">
-                        Multi-page, multi-section treatments of topics.
+                        {{ resource.props.subheading }}
                     </p>
                 </div>
             </div>
@@ -16,5 +16,7 @@
     </div>
 {% endblock %}
 {% block body %}
-    {{ body }}
+    <div id="kb-homepage-body">
+        {{ body }}
+    </div>
 {% endblock %}

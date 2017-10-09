@@ -180,6 +180,7 @@
 
 // Hide the first heading, where Sphinx inserts the page title
 // into the generated body
-.sb_body .section:first-of-type h1:first-of-type {
+.sb_body .section:first-of-type h1:first-of-type,
+#kb-homepage-body h1:first-of-type {
   display: none;
 }

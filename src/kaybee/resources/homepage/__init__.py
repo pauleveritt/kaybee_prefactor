@@ -6,6 +6,8 @@ from kaybee.resources import BaseResource
 class HomepageModel(CoreResourceModel):
     logo: str = None
     style = 'header-image is-medium'
+    heading: str = None
+    subheading: str = None
 
 
 @registry.resource('homepage')
