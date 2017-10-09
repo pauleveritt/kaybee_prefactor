@@ -3,6 +3,8 @@ Features
 ========
 
 .. article::
+    in_nav: 10
+    published: 2017-10-01 00:00
 
 Templating
 ==========

@@ -8,7 +8,7 @@ Articles
        and diagrams.
     style: 'is-bold is-info'
     in_nav: True
-    weight: 10
+    weight: 20
     published: 2009-10-21 12:23
 
 A list of articles is here.
