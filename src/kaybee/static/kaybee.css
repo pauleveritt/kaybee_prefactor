@@ -5201,6 +5201,15 @@ label.panel-block {
     list-style: none;
     margin: 0; }
 
+.sb_body .section:first-of-type h1:first-of-type p:not(.panel-heading),
+#kb-homepage-body p:not(.panel-heading) {
+  margin: 2rem 10%;
+  font-size: 1.5rem; }
+
 .sb_body .section:first-of-type h1:first-of-type h1:first-of-type,
 #kb-homepage-body h1:first-of-type {
   display: none; }
+
+.section .section {
+  padding-left: 0;
+  padding-right: 0; }

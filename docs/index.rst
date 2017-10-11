@@ -20,7 +20,7 @@ creating your own kinds of documents.
     about
     blog/index
     articles/index
-    features
+    features/index
     categories/index
 
 .. querylist::

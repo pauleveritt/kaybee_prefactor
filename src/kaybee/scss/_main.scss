@@ -190,3 +190,12 @@
     display: none;
   }
 }
+
+.kb-body h1:first-of-type {
+  display: none;
+}
+
+.section .section {
+  // Sphinx sticks in class="section" which triggers Bulma's extra padding
+  padding: 0.75rem 0;
+}

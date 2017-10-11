@@ -2,22 +2,63 @@
 Features
 ========
 
-.. article::
+.. section::
     in_nav: 10
     published: 2017-10-01 00:00
+    style: 'is-bold is-info'
+    subheading: Brief survey of what Kaybee is good for
 
-Templating
+Lots of choices out there for generating static sites. What makes Kaybee
+different? As an author or a customizer, Kaybee has a number of compelling
+features.
+
+Attractive Theme
+================
+
+The default theme for Kaybee based on `Bulma <https://bulma.io/>`_ with
+an emphasis on mobile responsiveness. Out of the box the theme supports
+content organized into nav menus and branded sections with hero blocks
+and rich sidebars.
+
+For Sphinx users, the Kaybee theme uses none of the Jinja2 in Sphinx. The
+templates are written from scratch for the best user experience. The
+JavaScript from Sphinx is curently being re-used, but will likely be
+reimplemented.
+
+Rich Content
+============
+
+Kaybee inherits Sphinx's rich facilities for organizing content into a
+richly-interlinked corpus. Links between documents are automatically
+generated and reported as broken if you rename something. Put a marker
+within a document and link to that spot: in fact, headings are automatically
+link targets.
+
+Kaybee adds even more structure. You can use the hierarchy to push
+common properties up into sections, add rich metadata that can be used
+as queries, and automate your own custom reference system.
+
+Resources
+=========
+
+Put schema-validated metadata into your documents and let Kaybee help
+you generate your site structure and templating. Customizers can even
+create their own kinds of resources, with custom schemas and templates, as
+well as custom logic used in templating.
+
+Widgets
+=======
+
+Insert data-driven blocks into your documents by using widgets. Kaybee ships
+with several and it is easy to register your own.
+
+References
 ==========
 
-- A resource can specify a template in YAML, inherit it from the section,
-  or fall back on getting it from the class name.
-
-- The template file named can be come from the ``_templates`` directory
-  in the conf directory, or from a registered resource's directory, or the
-  kaybee top-level directory
-
-- The site instance, the resource, and its list of parents is available in
-  all resource templates
+Want to build a category system? A tag system? Have authors? Each of these
+are resources with a simple flag that says they can be a reference. Kaybee
+then registers that reference scheme and that reference value, allowing you
+to point at them from schemas or inline references.
 
 Layout and Styling
 ==================
@@ -126,3 +167,7 @@ Miscellaneous
 - Extensive unit and integration tests
 
 - Video player widget
+
+.. toctree::
+
+    theme.rst

@@ -43,5 +43,5 @@ def setup(app):
 
     return dict(
         version=__version__,
-        parallel_read_safe=True
+        parallel_read_safe=False
     )
