@@ -29,14 +29,19 @@ published: 2015-01-01 01:23
 in_nav: True    
     """
 
-    yield (
-        Section('8783', 'section', 'The First', c0),
-        Section('1343', 'section', 'Second should sort ahead of first', c0),
-        Section('4675', 'section', 'Z Last weights first', c3),
-        Section('9856', 'section', 'Q Not Last No Weight', c2),
-        Article('4444', 'article', 'About', c1),
-        Article('23', 'article', 'Unpublished', 'in_nav: True')
-    )
+    s1 = Section('8783', 'section', c0)
+    s1.title = 'The First'
+    s2 = Section('1343', 'section', c0)
+    s2.title = 'Second should sort ahead of first'
+    s3 = Section('4675', 'section', c3)
+    s3.title = 'Z Last weights first'
+    s4 = Section('9856', 'section', c2)
+    s4.title = 'Q Not Last No Weight'
+    a1 = Article('4444', 'article', c1)
+    a1.title = 'About'
+    a2 = Article('23', 'article', 'in_nav: True')
+    a2.title = 'Unpublished'
+    yield (s1, s2, s3, s4, a1, a2,)
 
 
 @pytest.fixture()

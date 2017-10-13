@@ -24,14 +24,14 @@ overrides:
     section:
         style: f1style    
     """
-    about = Article('about', 'article', 'A1', '')
-    f1 = Section('f1', 'section', 'S1', f1_content)
-    f1_about = Article('f1/about', 'article', 'AF1', '')
-    f2 = Section('f1/f2', 'section', 'S2', '')
-    f2_about = Article('f1/f2/about', 'article', 'AF2', '')
-    f3 = Section('f1/f2/f3', 'section', 'S3', 'style: f3style')
-    f3_about = Article('f1/f2/f3/about', 'article', 'AF3', '')
-    f4 = Article('f1/f2/f3/f4', 'article', 'A4', '')
+    about = Article('about', 'article', '')
+    f1 = Section('f1', 'section', f1_content)
+    f1_about = Article('f1/about', 'article', '')
+    f2 = Section('f1/f2', 'section', '')
+    f2_about = Article('f1/f2/about', 'article', '')
+    f3 = Section('f1/f2/f3', 'section', 'style: f3style')
+    f3_about = Article('f1/f2/f3/about', 'article', '')
+    f4 = Article('f1/f2/f3/f4', 'article', '')
     s = Site()
     s.resources = {
         'about': about,
@@ -51,14 +51,13 @@ def test_import():
 
 
 def test_instance():
-    da = Article('somepage', 'article', 'Some Page', '')
-    f1 = list(da.model.__fields__.items())[0]
+    da = Article('somepage', 'article', '')
+    # f1 = list(da.model.__fields__.items())[0]
     assert da.__class__.__name__ == 'Article'
     assert da.pagename == 'somepage'
     assert da.name == 'somepage'
     assert da.parent == '/'
     assert da.kbtype == 'article'
-    assert da.title == 'Some Page'
     assert da.props.in_nav is False
 
 
@@ -80,18 +79,18 @@ def test_root_parents(site, pagename, parents_len, parentname):
 
 
 def test_find_prop_none_local(site):
-    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', '')
+    a = Article('f1/f2/f3/f4/about', 'kbtype', '')
     prop = a.find_prop(site, 'foo')
     assert None is prop
 
 
 def test_section_nonesite(site):
-    a = Article('f1/f2/f3/f4/about', 'kbtype', 'title', '')
+    a = Article('f1/f2/f3/f4/about', 'kbtype', '')
     assert a.section(site) is None
 
 
 def test_section_f1(site):
-    a = Article('f1/f2/f3/another', 'kbtype', 'title', '')
+    a = Article('f1/f2/f3/another', 'kbtype', '')
     assert site.resources['f1/f2/f3'] == a.section(site)
 
 
@@ -104,7 +103,7 @@ def test_section_f1(site):
     ('f1/f2/about', 'f2', False),
 ])
 def test_is_active(site, pagename, nav_href, expected):
-    a = Article(pagename, 'kbtype', 'title', '')
+    a = Article(pagename, 'kbtype', '')
     assert a.is_active_section(site, nav_href) == expected
 
 
@@ -150,18 +149,18 @@ class TestInheritedProperty:
     ('published: 2012-03-24 11:47', True),
 ])
 def test_is_published(content, expected):
-    article = Article('d1/a1', 'article', 'Some Article', content)
+    article = Article('d1/a1', 'article', content)
     assert expected is article.is_published()
 
 
 class TestReferences:
     def test_empty(self):
         content = ''
-        article = Article('d1/a1', 'article', 'Some Article', content)
+        article = Article('d1/a1', 'article', content)
         assert [] == article.props.tag
 
     def test_reference_fieldnames(self):
-        article = Article('d1/a1', 'article', 'Some Article', '')
+        article = Article('d1/a1', 'article', '')
         field_names = article.reference_fieldnames
         assert ['category', 'tag'] == field_names
 
@@ -172,7 +171,7 @@ tag:
     - tag2
     - tag3        
         """
-        article = Article('d1/a1', 'article', 'Some Article', content)
+        article = Article('d1/a1', 'article', content)
         assert ['tag1', 'tag2', 'tag3'] == article.props.tag
 
     def test_invalid(self):
@@ -183,7 +182,7 @@ tag:
     - 9999999        
         """
         with pytest.raises(ValidationError):
-            Article('d1/a1', 'article', 'Some Article', content)
+            Article('d1/a1', 'article', content)
 
     def test_helper_valid(self):
         content = """
@@ -192,7 +191,7 @@ tag:
     - tag2
     - tag3        
         """
-        article = Article('d1/a1', 'article', 'Some Article', content)
+        article = Article('d1/a1', 'article', content)
         assert ['tag1', 'tag2', 'tag3'] == article.props.tag
 
     def test_references(self, monkeypatch, site):
@@ -204,7 +203,7 @@ tag:
                 """
 
         # Monkeypatch the site to have some tags already registered
-        article = Article('d1/a1', 'article', 'Some Article', content)
+        article = Article('d1/a1', 'article', content)
         site_references = dict(
             tag=dict(
                 tag1=101,

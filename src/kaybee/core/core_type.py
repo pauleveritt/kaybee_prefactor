@@ -74,8 +74,7 @@ class CoreType:
     model: BaseModel
     kind: str  # BaseResource and BaseWidget need to fill this in
 
-    def __init__(self, pagename: str, kbtype: str,
-                 title: str, yaml_content: str):
+    def __init__(self, pagename: str, kbtype: str, yaml_content: str):
         # Raise custom exception if subclass doesn't have a model attr
         if not hasattr(self, 'model'):
             msg = f'Class {self.__class__.__name__} must have model attribute'
@@ -84,7 +83,6 @@ class CoreType:
         self.pagename, self.parent = self.parse_pagename(pagename)
         self.name = self.get_name(yaml_content)
         self.kbtype = kbtype
-        self.title = title
         self.props = self.load_model(self.model, yaml_content)
 
     def get_name(self, yaml_content: str):

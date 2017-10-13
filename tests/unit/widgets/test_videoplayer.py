@@ -8,7 +8,7 @@ def dummy_videoplayer():
     content = """
 src: http://foo.com/x
     """
-    yield VideoPlayer('somewidget', 'dummywidget', 'Some Widget', content)
+    yield VideoPlayer('somewidget', 'dummywidget', content)
 
 
 def test_import():

@@ -19,7 +19,7 @@ def dummy_querylist():
               kbtype: section
               limit: 5
     """
-    yield QueryList('somewidget', 'dummywidget', 'Some Widget', content)
+    yield QueryList('somewidget', 'dummywidget', content)
 
 
 @pytest.fixture()

@@ -8,7 +8,7 @@ def dummy_section():
     content = """
 subheading: some subheading text
     """
-    yield Section('s1', 'dummysection', 'S1', content)
+    yield Section('s1', 'dummysection', content)
 
 
 @pytest.fixture()
@@ -19,7 +19,7 @@ overrides:
         template: override_article.html
     """
 
-    yield Section('s1', 'dummysection', 'S1', content)
+    yield Section('s1', 'dummysection', content)
 
 
 def test_import():
@@ -29,7 +29,6 @@ def test_import():
 def test_construction(dummy_section):
     assert dummy_section.name == 's1'
     assert dummy_section.kbtype == 'dummysection'
-    assert dummy_section.title == 'S1'
     assert dummy_section.props.subheading == 'some subheading text'
 
 

@@ -9,7 +9,7 @@ def dummy_homepage():
 template: somehomepage.html
 logo: somelogo.png
     """
-    yield Homepage('somehomepage', 'dummyhomepage', 'Some Homepage', content)
+    yield Homepage('somehomepage', 'dummyhomepage', content)
 
 
 def test_import(dummy_homepage):

@@ -26,7 +26,7 @@ def dummy_base_widget():
 template: widget1.html
 kbtype: section
     """
-    yield DummyWidget('somewidget', 'dummywidget', 'Some Widget', content)
+    yield DummyWidget('somewidget', 'dummywidget', content)
 
 
 class SampleDirective(BaseWidgetDirective):
@@ -108,7 +108,7 @@ class TestBaseWidget:
         content = """
 template: hello
                 """
-        dw = DummyWidget('somewidget', 'dummywidget', 'Some Widget', content)
+        dw = DummyWidget('somewidget', 'dummywidget', content)
         assert dw.__class__.__name__ == 'DummyWidget'
         assert dw.props.template == 'hello'
 

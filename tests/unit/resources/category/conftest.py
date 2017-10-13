@@ -5,5 +5,5 @@ from kaybee.resources.category import Category
 
 @pytest.fixture()
 def dummy_article():
-    yield Category('category1', 'category', 'C1 Title', '')
+    yield Category('category1', 'category', '')
 

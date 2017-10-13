@@ -2,16 +2,13 @@ import pytest
 
 from kaybee.resources.article import Article
 
-"""
 
-
-"""
 @pytest.fixture()
 def dummy_article():
     content = """
     template: somearticle.html
     """
-    yield Article('somearticle', 'dummyarticle', 'Some Article', content)
+    yield Article('somearticle', 'dummyarticle', content)
 
 
 def test_import(dummy_article):

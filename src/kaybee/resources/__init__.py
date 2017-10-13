@@ -38,11 +38,9 @@ class BaseResourceDirective(Directive):
 
         # Get the info from this directive and make instance
         kbtype = self.name
-        title = self.doc_title
         resource_content = '\n'.join(self.content)
         resource_class = BaseResourceDirective.get_resource_class(kbtype)
-        this_resource = resource_class(env.docname, kbtype,
-                                       title, resource_content)
+        this_resource = resource_class(env.docname, kbtype, resource_content)
 
         # Add this to the site, and if it is a reference, index it
         site = self.state.document.settings.env.site

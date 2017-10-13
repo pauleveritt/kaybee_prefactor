@@ -50,5 +50,8 @@ class WidgetAction(dectate.Action):
 
 
 class registry(dectate.App):
-    widget = dectate.directive(WidgetAction)
-    resource = dectate.directive(ResourceAction)
+    pass
+
+
+registry.widget = dectate.directive(WidgetAction)
+registry.resource = dectate.directive(ResourceAction)

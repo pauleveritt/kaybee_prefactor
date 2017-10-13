@@ -49,14 +49,16 @@ def test_filter_resources(site, filter_key, filter_value, expected):
 
 def test_filter_resources_parent(site):
     published = 'published: 2015-01-01 01:23'
-    parent = Section('section2/index', 'section', 'Section 2', published)
-    child = Article('section2/article2', 'article', 'Resource 2', published)
+    parent = Section('section2/index', 'section', published)
+    parent.title = 'Parent'
+    child = Article('section2/article2', 'article', published)
+    child.title = 'Child'
     site.resources[parent.name] = parent
     site.resources[child.name] = child
     kw = dict(parent_name='section2')
     results = site.filter_resources(**kw)
     assert len(results) == 1
-    assert results[0].title == 'Resource 2'
+    assert 'Child' == results[0].title
 
 
 def test_filter_resources_props(site):
@@ -113,7 +115,7 @@ class TestReferences:
 
     def test_add_reference_target(self, site):
         # Register the shorthand "label" for a category as a reference
-        cat1 = Category('section1/cat1', 'category', 'cat1', '')
+        cat1 = Category('section1/cat1', 'category', '')
         site.add_reference('category', 'cat1', cat1)
         target = site.get_reference('category', 'cat1')
-        assert 'cat1' == target.title
+        assert 'section1/cat1' == target.pagename

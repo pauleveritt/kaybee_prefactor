@@ -16,7 +16,7 @@ def dummy_sectionquery():
       kbtype: section
       limit: 5
     """
-    yield SectionQuery('somewidget', 'dummywidget', 'Some Widget', content)
+    yield SectionQuery('somewidget', 'dummywidget', content)
 
 
 @pytest.fixture(name='sample_site')

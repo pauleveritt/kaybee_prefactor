@@ -86,14 +86,12 @@ class TestCoreType:
         assert CoreType.__name__ == 'CoreType'
 
     def test_subclass_and_construct(self):
-        da = DummyArticle('someparent/somepage', 'dummyarticle', 'Some Page',
-                          '')
+        da = DummyArticle('someparent/somepage', 'dummyarticle', '')
         assert da.__class__.__name__ == 'DummyArticle'
         assert da.pagename == 'someparent/somepage'
         assert da.name == 'someparent/somepage'
         assert da.parent == 'someparent'
         assert da.kbtype == 'dummyarticle'
-        assert da.title == 'Some Page'
         assert da.props.in_nav is False
 
     def test_widget_name_construction(self):
@@ -102,14 +100,13 @@ in_nav: True
 weight: 998
         """
 
-        dw = DummyWidget('someparent/somepage', 'dummyarticle', 'Some Page',
-                         yaml_content)
+        dw = DummyWidget('someparent/somepage', 'dummyarticle', yaml_content)
         assert dw.name == '{"in_nav": true, "weight": 998}'
 
     def test_missing_model(self):
         with pytest.raises(AttributeError) as exc:
-            DummyMissingModel('somepage', 'dummyarticle', 'Some Page', '')
-        v = "'DummyMissingModel' object has no attribute 'model'"
+            DummyMissingModel('somepage', 'dummyarticle', '')
+        v = "Class DummyMissingModel must have model attribute"
         assert v == str(exc.value)
 
     def test_failed_validation(self):
@@ -117,8 +114,7 @@ weight: 998
 weight: 'Should Fail'        
         '''
         with pytest.raises(ValidationError) as exc:
-            DummyArticle('somepage', 'dummyarticle', 'Some Page',
-                         yaml_content)
+            DummyArticle('somepage', 'dummyarticle', yaml_content)
         error = loads(exc.value.json())['weight']['error_msg']
         expected = "invalid literal for int() with base 10: 'Should Fail'"
         assert error == expected
@@ -172,7 +168,7 @@ class TestContainer:
         
         """
         dc = DummyContainer(
-            'someparent/somepage', 'dummycontainer', 'Some Page', content)
+            'someparent/somepage', 'dummycontainer', content)
         assert dc.pagename == 'someparent/somepage'
 
     def test_overrides(self):
@@ -182,7 +178,7 @@ overrides:
         template: sometemplate2.html
         """
         dc = DummyContainer(
-            'someparent/somepage', 'dummycontainer', 'Some Page', content)
+            'someparent/somepage', 'dummycontainer', content)
         overrides = dc.props.overrides
         assert overrides['article']['template'] == 'sometemplate2.html'
 
