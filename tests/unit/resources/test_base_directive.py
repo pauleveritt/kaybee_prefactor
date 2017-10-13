@@ -56,7 +56,5 @@ def test_construction(base_directive):
 def test_construction_run(monkeypatch, base_directive):
     monkeypatch.setattr(BaseResourceDirective, 'get_resource_class',
                         lambda x: SampleResource)
-    monkeypatch.setattr(BaseResourceDirective, 'doc_title',
-                        lambda x: 'Some Title')
     result = base_directive.run()
     assert result == []
