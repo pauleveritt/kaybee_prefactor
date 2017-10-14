@@ -4,7 +4,7 @@ from kaybee.resources import BaseResource
 
 
 class CategoryModel(CoreResourceModel):
-    pass
+    label: str
 
 
 @registry.resource('category')
@@ -27,4 +27,4 @@ class Category(BaseResource):
          title matches the shorthand label.
          """
 
-        return self.title
+        return self.props.label

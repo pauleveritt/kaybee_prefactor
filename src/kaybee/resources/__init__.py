@@ -9,6 +9,7 @@ from ruamel.yaml import load
 
 from kaybee.core.core_type import CoreType, ReferencesType
 from kaybee.core.registry import registry
+from kaybee.resources.events import process_resource_nodes
 
 
 class BaseResourceDirective(Directive):
@@ -217,3 +218,5 @@ def setup(app):
     # for each
     for kbtype in registry.config.resources.keys():
         app.add_directive(kbtype, BaseResourceDirective)
+
+    app.connect('doctree-resolved', process_resource_nodes)

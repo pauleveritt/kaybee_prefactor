@@ -131,8 +131,6 @@ class TestBaseWidgetDirective:
     def test_construction_run(self, monkeypatch, dummy_directive):
         monkeypatch.setattr(BaseWidgetDirective, 'get_widget_class',
                             lambda x: SampleWidget)
-        monkeypatch.setattr(BaseWidgetDirective, 'doc_title',
-                            lambda x: 'Some Title')
         result = dummy_directive.run()
         assert 'widget' == result[0].__class__.__name__
 

@@ -50,9 +50,9 @@ class BaseWidgetDirective(Directive):
         """ Make this easy to mock """
         return registry.config.widgets[widget_directive]
 
-    @property
-    def doc_title(self):
-        return self.state.parent.parent.children[0].children[0].rawsource
+    # @property
+    # def doc_title(self):
+    #     return self.state.parent.parent.children[0].children[0].rawsource
 
     def get_widget(self, docname):
         # Get the info from this directive and make instance
@@ -61,7 +61,7 @@ class BaseWidgetDirective(Directive):
         widget_class = BaseWidgetDirective.get_widget_class(kbtype)
         return widget_class(
             docname,
-            kbtype, self.doc_title, widget_content
+            kbtype, widget_content
         )
 
     def run(self):
