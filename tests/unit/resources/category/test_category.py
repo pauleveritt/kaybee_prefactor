@@ -3,4 +3,4 @@ def test_import(dummy_article):
 
 
 def test_construction_success(dummy_article):
-    assert 'category1' == dummy_article.pagename
+    assert 'category1' == dummy_article.docname

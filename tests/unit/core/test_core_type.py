@@ -88,9 +88,9 @@ class TestCoreType:
     def test_subclass_and_construct(self):
         da = DummyArticle('someparent/somepage', 'dummyarticle', '')
         assert da.__class__.__name__ == 'DummyArticle'
-        assert da.pagename == 'someparent/somepage'
+        assert da.docname == 'someparent/somepage'
         assert da.name == 'someparent/somepage'
-        assert da.parent == 'someparent'
+        assert da.parent == 'someparent/index'
         assert da.kbtype == 'dummyarticle'
         assert da.props.in_nav is False
 
@@ -120,22 +120,21 @@ weight: 'Should Fail'
         assert error == expected
 
 
-@pytest.mark.parametrize('pagename, name, parent', [
-    ('index', 'index', '/'),
-    ('about', 'about', '/'),
-    ('blog/index', 'blog', '/'),
-    ('blog/about', 'blog/about', 'blog'),
-    ('blog/s1/index', 'blog/s1', 'blog'),
-    ('blog/s1/about', 'blog/s1/about', 'blog/s1'),
-    ('blog/s1/s2/index', 'blog/s1/s2', 'blog/s1'),
-    ('blog/s1/s2/about', 'blog/s1/s2/about', 'blog/s1/s2'),
-    ('blog/s1/s2/s3/index', 'blog/s1/s2/s3', 'blog/s1/s2'),
-    ('blog/s1/s2/s3/about', 'blog/s1/s2/s3/about', 'blog/s1/s2/s3'),
-])
-def test_name_parent(site, pagename, name, parent):
-    this_name, this_parent = CoreType.parse_pagename(pagename)
-    assert this_name == name
-    assert this_parent == parent
+    @pytest.mark.parametrize('docname, parent', [
+        ('index', None),
+        ('about', 'index'),
+        ('blog/index', 'index'),
+        ('blog/about', 'blog/index'),
+        ('blog/s1/index', 'blog/index'),
+        ('blog/s1/about', 'blog/s1/index'),
+        ('blog/s1/s2/index', 'blog/s1/index'),
+        ('blog/s1/s2/about', 'blog/s1/s2/index'),
+        ('blog/s1/s2/s3/index', 'blog/s1/s2/index'),
+        ('blog/s1/s2/s3/about', 'blog/s1/s2/s3/index'),
+    ])
+    def test_parse_parent(self, site, docname, parent):
+        this_parent = CoreType.parse_parent(docname)
+        assert parent == this_parent
 
 
 class TestResource:
@@ -169,7 +168,7 @@ class TestContainer:
         """
         dc = DummyContainer(
             'someparent/somepage', 'dummycontainer', content)
-        assert dc.pagename == 'someparent/somepage'
+        assert dc.docname == 'someparent/somepage'
 
     def test_overrides(self):
         content = """

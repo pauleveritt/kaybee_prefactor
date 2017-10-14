@@ -101,7 +101,8 @@ class BaseResource(CoreType):
 
     def parents(self, site):
         """ Split the path in name and get parents """
-        if self.name == '/':
+
+        if self.docname == 'index':
             # The root has no parents
             return []
         parents = []
@@ -113,6 +114,10 @@ class BaseResource(CoreType):
 
     def is_active_section(self, site, nav_href):
         """ Given  href of nav item, determine if resource is in it """
+
+        # The navhref might end with '/index' so remove it if so
+        if nav_href.endswith('/index'):
+            nav_href = nav_href[:-6]
 
         return self.name.startswith(nav_href)
 

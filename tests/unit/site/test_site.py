@@ -55,7 +55,7 @@ def test_filter_resources_parent(site):
     child.title = 'Child'
     site.resources[parent.name] = parent
     site.resources[child.name] = child
-    kw = dict(parent_name='section2')
+    kw = dict(parent_name='section2/index')
     results = site.filter_resources(**kw)
     assert len(results) == 1
     assert 'Child' == results[0].title
@@ -115,7 +115,7 @@ class TestReferences:
 
     def test_add_reference_target(self, site):
         # Register the shorthand "label" for a category as a reference
-        cat1 = Category('section1/cat1', 'category', '')
+        cat1 = Category('section1/cat1', 'category', 'label: python')
         site.add_reference('category', 'cat1', cat1)
         target = site.get_reference('category', 'cat1')
-        assert 'section1/cat1' == target.pagename
+        assert 'section1/cat1' == target.docname

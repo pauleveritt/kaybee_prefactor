@@ -74,13 +74,14 @@ class CoreType:
     model: BaseModel
     kind: str  # BaseResource and BaseWidget need to fill this in
 
-    def __init__(self, pagename: str, kbtype: str, yaml_content: str):
+    def __init__(self, docname: str, kbtype: str, yaml_content: str):
         # Raise custom exception if subclass doesn't have a model attr
         if not hasattr(self, 'model'):
             msg = f'Class {self.__class__.__name__} must have model attribute'
             raise AttributeError(msg)
 
-        self.pagename, self.parent = self.parse_pagename(pagename)
+        self.docname = docname
+        self.parent = self.parse_parent(docname)
         self.name = self.get_name(yaml_content)
         self.kbtype = kbtype
         self.props = self.load_model(self.model, yaml_content)
@@ -89,12 +90,12 @@ class CoreType:
         """ The identifier that this instance is stored as """
 
         if self.kind == 'widget':
-            # Resources use the pagename, widgets will do something else,
+            # Resources use the docname, widgets will do something else,
             # since you might have multiple widgets per page
             yaml_props = (load(yaml_content) or {})
             return json.dumps(yaml_props, sort_keys=True)
         else:
-            return self.pagename
+            return self.docname
 
     @staticmethod
     def load_model(model, yaml_content: str):
@@ -107,31 +108,29 @@ class CoreType:
         return m
 
     @staticmethod
-    def parse_pagename(pagename):
-        """ Instead of doing this in the constructor, more testable """
+    def parse_parent(docname):
+        """ Given a docname path, pick apart and return name of parent """
 
-        lineage = pagename.split('/')
+        lineage = docname.split('/')
         lineage_count = len(lineage)
 
-        # Default
-        name = pagename
-
-        if lineage_count == 1:
-            # This is a doc in the root e.g. index or about
-            parent = '/'
+        if docname == 'index':
+            # This is the top of the Sphinx project
+            parent = None
+        elif lineage_count == 1:
+            # This is a non-index doc in root, e.g. about
+            parent = 'index'
         elif lineage_count == 2 and lineage[-1] == 'index':
             # This is blog/index, parent is the root
-            name = lineage[0]
-            parent = '/'
+            parent = 'index'
         elif lineage_count == 2:
             # This is blog/about
-            parent = lineage[0]
+            parent = lineage[0] + '/index'
         elif lineage[-1] == 'index':
             # This is blog/sub/index
-            name = '/'.join(lineage[:-1])
-            parent = '/'.join(lineage[:-2])
+            parent = '/'.join(lineage[:-2]) + '/index'
         else:
             # This should be blog/sub/about
-            parent = '/'.join(lineage[:-1])
+            parent = '/'.join(lineage[:-1]) + '/index'
 
-        return name, parent
+        return parent

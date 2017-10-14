@@ -91,20 +91,20 @@ class TestKbContext:
 
     def test_no_resource(self, app, site):
         app.env.site = site
-        pagename = ''
+        docname = ''
         templatename = 'defaulttemplate'
         context = dict()
         doctree = None
-        result = kaybee_context(app, pagename, templatename, context, doctree)
+        result = kaybee_context(app, docname, templatename, context, doctree)
         assert result == templatename
 
     def test_resource(self, app, site, resource):
         app.env.site = site
-        pagename = 'doc1'
+        docname = 'doc1'
         templatename = 'defaulttemplate'
         context = dict()
         doctree = None
-        result = kaybee_context(app, pagename, templatename, context, doctree)
+        result = kaybee_context(app, docname, templatename, context, doctree)
         assert result == 'dummyresource.html'
         assert context['template'] == 'dummyresource.html'
         assert context['site'] == site
