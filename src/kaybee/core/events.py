@@ -94,15 +94,7 @@ def kaybee_context(app, pagename, templatename, context, doctree):
     site = app.env.site
     context['site'] = site
 
-    ########################
-    # Armageddon...this sucks, looks like articles/index as a pagename
-    # and storing at "articles" in the site isn't going to be a good idea
-    ########################
-
-    pname = pagename
-    if pagename.endswith('/index'):
-        pname = pagename[:-6]
-    resource = site.resources.get(pname)
+    resource = site.resources.get(pagename)
 
     # XXX TODO Make this debug stuff configurable
     dectate.commit(registry)

@@ -9,7 +9,9 @@ from ruamel.yaml import load
 
 from kaybee.core.core_type import CoreType, ReferencesType
 from kaybee.core.registry import registry
-from kaybee.resources.events import process_resource_nodes
+from kaybee.resources.events import (
+    doctree_read_resources
+)
 
 
 class BaseResourceDirective(Directive):
@@ -137,12 +139,7 @@ class BaseResource(CoreType):
     def navmenu_href(self):
         """ Add .html if needed for links in navmenu """
 
-        # Sections don't need the .html as you point to the container.
-        # But if you put a leaf (e.g. an article) in the nav menu,
-        # its template needs the href with .html on the end. By default,
-        # assume container. Leaf types will override this.
-
-        return self.name
+        return self.name + '.html'
 
     @classmethod
     def get_schema(cls):
@@ -224,4 +221,4 @@ def setup(app):
     for kbtype in registry.config.resources.keys():
         app.add_directive(kbtype, BaseResourceDirective)
 
-    app.connect('doctree-resolved', process_resource_nodes)
+    app.connect('doctree-read', doctree_read_resources)

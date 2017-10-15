@@ -10,7 +10,3 @@ class ArticleModel(CoreResourceModel):
 @registry.resource('article')
 class Article(BaseResource):
     model = ArticleModel
-
-    @property
-    def navmenu_href(self):
-        return self.name + '.html'

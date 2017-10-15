@@ -73,7 +73,7 @@ class TestArticle3:
     def test_section_name(self, page):
         node = page.find(id='kb-debug-resource-section')
         value = node.contents[0].strip()
-        assert value == 'articles'
+        assert 'articles/index' == value
 
     @pytest.mark.parametrize('propname, propvalue', [
         ('in_nav', 'True'),

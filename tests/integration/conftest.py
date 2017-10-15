@@ -24,8 +24,8 @@ def remove_sphinx_projects(sphinx_test_tempdir):
     roots_path = Path(sphinx_test_tempdir)
     for d in roots_path.iterdir():
         if d.is_dir():
-            conf = Path(d, 'conf.py')
-            if conf.exists():
+            build_dir = Path(d, '_build')
+            if build_dir.exists():
                 # This directory is a Sphinx project, remove it
                 rmtree(str(d))
 

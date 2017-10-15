@@ -17,7 +17,7 @@ A list of articles is here.
     template: sectionquery.html
     query:
         kbtype: article
-        parent_name: articles2
+        parent_name: articles2/index
 
 .. toctree::
     :maxdepth: 1

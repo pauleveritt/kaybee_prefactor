@@ -1,4 +1,5 @@
 import os
+from pathlib import PurePath
 
 from kaybee.core.events import (
     register,
@@ -35,10 +36,15 @@ def setup(app):
     app.add_config_value('kaybee_config', SiteConfig(), 'html')
     app.connect('builder-inited', register)
     app.connect('builder-inited', add_templates_paths)
-    app.connect('env-check-consistency', validate_references)
-    app.connect('env-before-read-docs', initialize_site)
-    app.connect('missing-reference', missing_reference)
+
     app.connect('env-purge-doc', purge_resources)
+
+    app.connect('env-before-read-docs', initialize_site)
+
+    app.connect('missing-reference', missing_reference)
+
+    app.connect('env-check-consistency', validate_references)
+
     app.connect('html-page-context', kaybee_context)
 
     return dict(
