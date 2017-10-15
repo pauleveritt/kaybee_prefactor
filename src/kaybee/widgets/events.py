@@ -5,6 +5,7 @@ from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.environment import BuildEnvironment
 
 from kaybee.site import Site
+from kaybee.widgets.node import widget
 from kaybee.widgets.kbtoctree import KbToctree
 
 
@@ -14,8 +15,6 @@ def process_widget_nodes(app: Sphinx, doctree, fromdocname):
     builder: StandaloneHTMLBuilder = app.builder
     env: BuildEnvironment = app.env
     site: Site = env.site
-
-    from kaybee.widgets import widget
 
     for node in doctree.traverse(toctree):
         if node.attributes['hidden']:

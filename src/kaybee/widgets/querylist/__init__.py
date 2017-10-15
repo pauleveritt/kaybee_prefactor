@@ -4,7 +4,7 @@ from pydantic.main import BaseModel
 
 from kaybee.core.core_type import CoreQueryModel
 from kaybee.core.registry import registry
-from kaybee.widgets import BaseWidget
+from kaybee.widgets.base import BaseWidget
 
 
 class QuerySectionModel(BaseModel):

@@ -1,7 +1,7 @@
 from pydantic.main import BaseModel
 
 from kaybee.core.registry import registry
-from kaybee.widgets import BaseWidget
+from kaybee.widgets.base import BaseWidget
 
 
 class VideoPlayerModel(BaseModel):
