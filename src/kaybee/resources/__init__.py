@@ -22,10 +22,6 @@ class BaseResourceDirective(Directive):
         """ Make this easy to mock """
         return registry.config.resources[resource_directive]
 
-    # @property
-    # def doc_title(self):
-    #     return self.state.parent.parent.children[0].children[0].rawsource
-
     def run(self):
         """ Run at parse time.
 

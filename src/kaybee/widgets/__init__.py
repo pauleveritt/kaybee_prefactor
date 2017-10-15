@@ -50,10 +50,6 @@ class BaseWidgetDirective(Directive):
         """ Make this easy to mock """
         return registry.config.widgets[widget_directive]
 
-    # @property
-    # def doc_title(self):
-    #     return self.state.parent.parent.children[0].children[0].rawsource
-
     def get_widget(self, docname):
         # Get the info from this directive and make instance
         kbtype = self.name
