@@ -17,10 +17,20 @@ class BaseWidgetDirective(Directive):
         kbtype = self.name
         widget_content = '\n'.join(self.content)
         widget_class = BaseWidgetDirective.get_widget_class(kbtype)
-        return widget_class(
-            docname,
-            kbtype, widget_content
-        )
+        return widget_class(docname, kbtype, widget_content)
+
+    @property
+    def docname(self):
+        """ Easier to mock by abstracting Sphinx environment """
+
+        return self.state.document.settings.env.docname
+
+    @property
+    def widgets(self):
+        """ Easier to mock by abstracting Sphinx environment """
+
+        env = self.state.document.settings.env
+        return env.site.widgets
 
     def run(self):
         """ Run at parse time.
@@ -33,10 +43,9 @@ class BaseWidgetDirective(Directive):
 
         """
 
-        env = self.state.document.settings.env
-        this_widget = self.get_widget(env.docname)
+        this_widget = self.get_widget(self.docname)
 
-        env.site.widgets[this_widget.name] = this_widget
+        self.widgets[this_widget.name] = this_widget
 
         # Now add the node to the doctree
         widget_node = widget()
