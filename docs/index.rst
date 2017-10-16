@@ -22,6 +22,7 @@ creating your own kinds of documents.
     articles/index
     features/index
     categories/index
+    README
 
 .. querylist::
 

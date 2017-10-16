@@ -17,7 +17,8 @@
 </head>
 <body>
 <section
-        class="kb-header hero {{ resource['style'](site) if resource else '' }}">
+        class="kb-header hero
+            {{ resource.style(site) if (resource and resource.style) else '' }}">
     <div class="hero-head">
         {% include "navbar.html" %}
     </div>

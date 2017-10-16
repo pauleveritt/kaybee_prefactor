@@ -32,6 +32,7 @@ class DummyEnv:
 class DummySite:
     def __init__(self):
         self.resources = dict(doc1='doc1')
+        self.genericpages = dict()
 
     def remove_resource(self, docname):
         self.resources.pop(docname, None)
