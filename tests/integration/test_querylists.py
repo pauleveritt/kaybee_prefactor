@@ -15,7 +15,7 @@ class TestQuery:
         assert headings[2].contents[0].strip() == 'Recent Tutorials'
 
 
-@pytest.mark.parametrize('json_page', ['debug.html', ], indirect=True)
+@pytest.mark.parametrize('json_page', ['debug_dump.json', ], indirect=True)
 class TestDebugpage:
     def test_title(self, json_page):
         registry = json_page['registry']

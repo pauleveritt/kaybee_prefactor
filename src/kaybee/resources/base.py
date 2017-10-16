@@ -164,3 +164,11 @@ class BaseResource(CoreType):
 
         return references
 
+    def to_json(self, site):
+        d = super().to_json(site)
+        d['template'] = self.template(site)
+        d['style'] = self.style(site)
+        d['section'] = getattr(self.section(site), 'name', '')
+        d['in_nav'] = self.props.in_nav
+        d['weight'] = self.props.weight
+        return d

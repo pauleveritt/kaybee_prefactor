@@ -18,7 +18,7 @@ class TestHomepage:
         assert len(div) == 1
 
 
-@pytest.mark.parametrize('json_page', ['debug.html', ], indirect=True)
+@pytest.mark.parametrize('json_page', ['debug_dump.json', ], indirect=True)
 class TestDebugpage:
     def test_title(self, json_page):
         registry = json_page['registry']

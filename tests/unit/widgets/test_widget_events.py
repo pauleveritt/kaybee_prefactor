@@ -13,7 +13,7 @@ def app(mocker):
 
 
 @pytest.fixture()
-def nodes(monkeypatch):
+def nodes():
     node1 = MagicMock()
     node1.attributes = dict(
         hidden=0,
@@ -33,4 +33,3 @@ def doctree(monkeypatch, nodes):
 class TestWidgetEvents:
     def test_process_widget_nodes(self, app, doctree, nodes):
         process_widget_nodes(app, doctree, 'fromdocname22')
-        assert 1 == 2

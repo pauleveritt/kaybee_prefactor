@@ -83,15 +83,6 @@
     </div>
 {% endblock %}
 {% block debug %}
-    <div id="kb-debug-resource-template">
-        Template: {{ resource.template(site) }}</div>
-    <div id="kb-debug-resource-name">Resource: {{ resource.name }}</div>
-    <div>Section:
-        <span id="kb-debug-resource-section">{{ resource.section(site).name }}</span>
-    </div>
-    <div>Style:
-        <span id="kb-debug-resource-style">{{ resource.style(site) }}</span>
-    </div>
     <h2>Props</h2>
     <div>in_nav:
         <span id="kb-debug-resource-props-in_nav">{{ resource.props.in_nav }}</span>

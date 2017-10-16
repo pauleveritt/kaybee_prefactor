@@ -10,3 +10,4 @@ Test Articles
 .. toctree::
 
     articles/index
+    articles2/index

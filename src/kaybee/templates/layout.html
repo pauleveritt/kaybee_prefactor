@@ -33,12 +33,5 @@
 {% include "document_settings.html" %}
 <script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
 
-{% if site_config.is_debug %}
-    <div class="container kb-debug">
-        <h1>Debug Info</h1>
-        {% block debug %}
-        {% endblock %}
-    </div>
-{% endif %}
 </body>
 </html>

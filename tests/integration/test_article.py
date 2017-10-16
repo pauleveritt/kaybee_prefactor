@@ -43,20 +43,28 @@ class TestArticle2:
             content = ni.contents[0].strip()
             assert content != 'Article 2'
 
-    @pytest.mark.parametrize('propname, propvalue', [
-        ('in_nav', 'False'),
-    ])
-    def test_direct_props(self, page, propname, propvalue):
-        # No props
-        node = page.find(id=f'kb-debug-resource-props-in_nav')
-        value = node.contents[0].strip()
-        assert value == propvalue
-
     def test_published(self, page):
         # YAML has published, but in the far future
         published = page.find(id='kb-sidenav-published-heading')
         heading = published.find(class_='menu-label').string.strip()
         assert 'Draft' == heading
+
+
+@pytest.mark.parametrize('json_page', ['debug_dump.json', ], indirect=True)
+class TestJsonDebug:
+    def test_article2(self, json_page):
+        resources = json_page['site']['resources']
+        article2 = resources['articles/article2']
+        assert 'articles/article2' == article2['docname']
+        assert False is article2['in_nav']
+
+    def test_article3(self, json_page):
+        resources = json_page['site']['resources']
+        article3 = resources['articles/article3']
+        assert 'articles/article3' == article3['docname']
+        assert 'articles/index' == article3['section']
+        assert True is article3['in_nav']
+        assert 10 == article3['weight']
 
 
 @pytest.mark.parametrize('page', ['articles/article3.html', ], indirect=True)
@@ -69,21 +77,6 @@ class TestArticle3:
         nav_items = menu.find_all(class_='nav-item')
         content = nav_items[3].contents[0].strip()
         assert content != 'Article 3'
-
-    def test_section_name(self, page):
-        node = page.find(id='kb-debug-resource-section')
-        value = node.contents[0].strip()
-        assert 'articles/index' == value
-
-    @pytest.mark.parametrize('propname, propvalue', [
-        ('in_nav', 'True'),
-        ('weight', '10'),
-    ])
-    def test_direct_props(self, page, propname, propvalue):
-        # No props
-        node = page.find(id=f'kb-debug-resource-props-{propname}')
-        value = node.contents[0].strip()
-        assert value == propvalue
 
     def test_published(self, page):
         # YAML has published, in the past

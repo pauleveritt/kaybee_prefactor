@@ -130,7 +130,9 @@ def missing_reference(app, env, node, contnode):
 def generate_debug_info(builder, env):
     """ html-collect-pages event to dump some JSON to a file """
 
-    if not getattr(env.site.config, 'is_debug'):
+    site = env.site
+
+    if not getattr(site.config, 'is_debug'):
         return
 
     debug = dict()
@@ -140,9 +142,17 @@ def generate_debug_info(builder, env):
         resources=[i[0].name for i in list(qr(registry))],
         widgets=[i[0].name for i in list(qw(registry))],
     )
+    r = {
+        k: v.to_json(site)
+        for (k, v) in site.resources.items()
+    }
+    w = {
+        k: v.to_json(site)
+        for (k, v) in site.widgets.items()
+    }
     debug['site'] = dict(
-        resources=[r.__json__() for r in env.site.resources.values()],
-        widgets=[w.__json__() for w in env.site.widgets.values()],
+        resources=r,
+        widgets=w,
         pages=[p.docname for p in env.site.genericpages.values()]
     )
 

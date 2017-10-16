@@ -19,6 +19,7 @@ kaybee_config = SiteConfig(
         twitter='kbtest',
         github='kbtest'
     ),
+    is_debug=True
 )
 
 html_additional_pages = {

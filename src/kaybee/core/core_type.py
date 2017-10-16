@@ -135,8 +135,9 @@ class CoreType:
 
         return parent
 
-    def __json__(self):
+    def to_json(self, site):
         return dict(
+            name=self.name,
             docname=self.docname,
             parent=self.parent,
             kbtype=self.kbtype,
