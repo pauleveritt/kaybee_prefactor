@@ -24,21 +24,9 @@ def register(app):
     # First, scan for decorators in kaybee core and commit
     importscan.scan(resources)
     importscan.scan(widgets)
-    dectate.commit(registry)
 
     # If the site has a kaybee_config, get it
     kc = app.config.kaybee_config
-
-    # TODO OO2 We are yanking this out
-    # if kc:
-    #     # First the typedefs.yaml files in the doc project
-    #     typedefs = kc.get('typedefs')
-    #     if typedefs:
-    #         for typedef_fn in typedefs:
-    #             full_fn = os.path.join(app.confdir, typedef_fn)
-    #             assert os.path.exists(full_fn)
-    #             yaml_typedef = YamlTypedef(full_fn)
-    #             yaml_typedef.register(registry)
 
     dectate.commit(registry)
 
@@ -95,45 +83,6 @@ def purge_resources(app, env, docname):
         env.site.resources.pop(docname, None)
 
 
-def kaybee_context(app, pagename, templatename, context, doctree):
-    site = app.env.site
-    context['site'] = site
-
-    resource = site.resources.get(pagename)
-
-    # XXX TODO Make this debug stuff configurable
-    dectate.commit(registry)
-    debug = dict()
-    qr = dectate.Query('resource')
-    qw = dectate.Query('widget')
-    debug['registry'] = dict(
-        resources=[i[0].name for i in list(qr(registry))],
-        widgets=[i[0].name for i in list(qw(registry))],
-    )
-    context['debug'] = json.dumps(debug)
-
-    context['site_config'] = app.config.kaybee_config
-
-    if resource:
-        # We return a custom template
-        context['resource'] = resource
-        context['parents'] = resource.parents(site)
-        context['template'] = resource.template(site)
-
-        # Also, replace sphinx "title" with the title from this resource
-        context['title'] = resource.title
-        return resource.template(site)
-
-    else:
-        # Should have a genericpage in the dict
-        genericpage = site.genericpages.get(pagename)
-        if genericpage:
-            context['page'] = genericpage
-            return genericpage.template()
-
-    return templatename
-
-
 def validate_references(app, env):
     """ Called on env-check-consistency, make sure references exist """
 
@@ -176,3 +125,58 @@ def missing_reference(app, env, node, contnode):
     newnode.append(emp)
     emp.append(nodes.Text(dispname))
     return newnode
+
+
+def generate_debug_info(builder, env):
+    """ html-collect-pages event to dump some JSON to a file """
+
+    if not getattr(env.site.config, 'is_debug'):
+        return
+
+    debug = dict()
+    qr = dectate.Query('resource')
+    qw = dectate.Query('widget')
+    debug['registry'] = dict(
+        resources=[i[0].name for i in list(qr(registry))],
+        widgets=[i[0].name for i in list(qw(registry))],
+    )
+    debug['site'] = dict(
+        resources=[r.__json__() for r in env.site.resources.values()],
+        widgets=[w.__json__() for w in env.site.widgets.values()],
+        pages=[p.docname for p in env.site.genericpages.values()]
+    )
+
+    # Write info
+    output_filename = os.path.join(builder.outdir, 'debug_dump.json')
+    with open(output_filename, 'w') as f:
+        json.dump(debug, f)
+
+
+def kaybee_context(app, pagename, templatename, context, doctree):
+    site = app.env.site
+    context['site'] = site
+
+    resource = site.resources.get(pagename)
+
+    dectate.commit(registry)
+
+    context['site_config'] = app.config.kaybee_config
+
+    if resource:
+        # We return a custom template
+        context['resource'] = resource
+        context['parents'] = resource.parents(site)
+        context['template'] = resource.template(site)
+
+        # Also, replace sphinx "title" with the title from this resource
+        context['title'] = resource.title
+        return resource.template(site)
+
+    else:
+        # Should have a genericpage in the dict
+        genericpage = site.genericpages.get(pagename)
+        if genericpage:
+            context['page'] = genericpage
+            return genericpage.template()
+
+    return templatename

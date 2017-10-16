@@ -134,3 +134,10 @@ class CoreType:
             parent = '/'.join(lineage[:-1]) + '/index'
 
         return parent
+
+    def __json__(self):
+        return dict(
+            docname=self.docname,
+            parent=self.parent,
+            kbtype=self.kbtype,
+        )

@@ -145,4 +145,5 @@ kaybee_config = SiteConfig(
         twitter='kbtest',
         github='kbtest'
     ),
+    is_debug=True
 )
