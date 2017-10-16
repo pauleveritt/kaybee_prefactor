@@ -15,7 +15,7 @@ class TestSite:
         assert site.__class__.__name__ == 'Site'
         assert '1343' in site.resources
         assert dict() == site.widgets
-        assert dict() == site.pages
+        assert dict() == site.genericpages
 
     def test_add_resource_succeeds(self, site, dummy_resource):
         site.resources[dummy_resource.name] = dummy_resource

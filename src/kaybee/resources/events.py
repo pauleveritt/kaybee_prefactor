@@ -24,3 +24,6 @@ def doctree_read_resources(app: Sphinx, doctree: document):
     if resource:
         title = doctree.children[0].children[0].rawsource
         resource.title = title
+    else:
+        # This is a genericpage
+        pass
