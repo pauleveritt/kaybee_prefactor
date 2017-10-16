@@ -7,7 +7,7 @@ from kaybee.resources.events import (
 
 
 def setup(app):
-    # Loop through the registered resources and add a directive
+    # Loop through the registered resources and register a directive
     # for each
     for kbtype in registry.config.resources.keys():
         app.add_directive(kbtype, BaseResourceDirective)
