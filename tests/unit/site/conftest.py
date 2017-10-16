@@ -1,9 +1,9 @@
 import pytest
 
+from kaybee.core.site import Site
 from kaybee.core.site_config import SiteConfig
 from kaybee.resources.article import Article
 from kaybee.resources.section import Section
-from kaybee.site import Site
 
 
 @pytest.fixture()

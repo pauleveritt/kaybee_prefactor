@@ -1,11 +1,10 @@
 from pathlib import PurePath
 
 from docutils.nodes import document
-from sphinx.addnodes import toctree
 from sphinx.application import Sphinx
 from sphinx.environment import BuildEnvironment
 
-from kaybee.site import Site
+from kaybee.core.site import Site
 
 
 def doctree_read_resources(app: Sphinx, doctree: document):

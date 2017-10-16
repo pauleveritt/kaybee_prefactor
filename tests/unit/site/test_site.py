@@ -1,10 +1,10 @@
 import pytest
 
 from kaybee.core.core_type import CorePropFilterModel
+from kaybee.core.site import Site
 from kaybee.resources.article import Article
 from kaybee.resources.category import Category
 from kaybee.resources.section import Section
-from kaybee.site import Site
 
 
 def test_import():

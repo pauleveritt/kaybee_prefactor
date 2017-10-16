@@ -4,9 +4,9 @@ from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.environment import BuildEnvironment
 
-from kaybee.site import Site
-from kaybee.widgets.node import widget
+from kaybee.core.site import Site
 from kaybee.widgets.kbtoctree import KbToctree
+from kaybee.widgets.node import widget
 
 
 def process_widget_nodes(app: Sphinx, doctree, fromdocname):

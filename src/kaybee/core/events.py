@@ -10,7 +10,7 @@ from sphinx.jinja2glue import SphinxFileSystemLoader
 import kaybee
 from kaybee import resources, widgets
 from kaybee.core.registry import registry
-from kaybee.site import Site
+from kaybee.core.site import Site
 
 
 def register(app):
