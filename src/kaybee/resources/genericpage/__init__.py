@@ -1,2 +1,3 @@
 class Genericpage:
-    pass
+    def __init__(self, docname):
+        self.docname = docname
