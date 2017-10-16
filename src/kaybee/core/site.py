@@ -5,6 +5,7 @@ class Site:
     def __init__(self, config):
         self.resources = {}
         self.widgets = {}
+        self.pages = {}
         self.config = config
         self.references = {}
 
