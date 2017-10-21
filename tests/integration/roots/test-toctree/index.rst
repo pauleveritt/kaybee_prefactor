@@ -8,3 +8,9 @@ Test Homepage
     published: 2009-10-21 12:23
 
 Content after YAML.
+
+.. toctree::
+
+    article1
+    article2
+    page1

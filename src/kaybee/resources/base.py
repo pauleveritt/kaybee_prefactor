@@ -173,4 +173,5 @@ class BaseResource(CoreType):
         d['in_nav'] = self.props.in_nav
         d['weight'] = self.props.weight
         d['toctree'] = self.toctree
+        d['title'] = self.title
         return d
