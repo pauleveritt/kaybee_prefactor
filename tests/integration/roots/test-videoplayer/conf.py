@@ -20,7 +20,3 @@ kaybee_config = SiteConfig(
         github='kbtest'
     ),
 )
-
-html_additional_pages = {
-    'debug': 'debug.json',
-}

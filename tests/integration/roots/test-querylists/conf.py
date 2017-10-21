@@ -21,7 +21,3 @@ kaybee_config = SiteConfig(
     ),
     is_debug=True
 )
-
-html_additional_pages = {
-    'debug': 'debug.json',
-}
