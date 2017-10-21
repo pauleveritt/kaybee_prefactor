@@ -11,6 +11,7 @@ from kaybee.core.core_type import CoreType, ReferencesType
 
 class BaseResource(CoreType):
     kind = 'resource'
+    toctree = []
 
     def section(self, site):
         """ Which section is this in, if any """
@@ -171,4 +172,5 @@ class BaseResource(CoreType):
         d['section'] = getattr(self.section(site), 'name', '')
         d['in_nav'] = self.props.in_nav
         d['weight'] = self.props.weight
+        d['toctree'] = self.toctree
         return d

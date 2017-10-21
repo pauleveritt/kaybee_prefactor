@@ -1,6 +1,7 @@
 from pathlib import PurePath
 
 from docutils.nodes import document
+from sphinx.addnodes import toctree
 from sphinx.application import Sphinx
 from sphinx.environment import BuildEnvironment
 
@@ -23,8 +24,16 @@ def doctree_read_resources(app: Sphinx, doctree: document):
 
     # Get the title out of the RST and assign to the resource
     if resource:
+        # Step 1: Stamp the title on the resource
         title = doctree.children[0].children[0].rawsource
         resource.title = title
+
+        # Step 2: Find any toctrees (at most one, hopefully) and record
+        for node in doctree.traverse(toctree):
+            resource.toctree = [
+                target for (flag, target) in node.attributes['entries']
+            ]
+
     else:
         # This is a genericpage
         genericpage = Genericpage(docname)
