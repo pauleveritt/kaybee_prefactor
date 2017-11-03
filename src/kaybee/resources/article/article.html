@@ -28,51 +28,18 @@
 
                 <section class="section kb-listing">
                     <h1 class="title kb-section-heading">This Series</h1>
-                    <p>
-                    <div class="kb-listing-title">
-                        <a href="#">This is a title that
-                            might be
-                            kind of long,
-                            but we will never chop it off.</a>
-                    </div>
-                    <div class="kb-listing-synopsis">
-                        The synopses that goes with it. The
-                        synopses might
-                        be
-                        long.
-                        The synopses that goes with it. The
-                        synopses might
-                        be
-                        long.
-                        The synopses that goes with it. The
-                        synopses might
-                        be
-                        long.
-                    </div>
-                    </p>
-                    <p>
-                    <div class="kb-listing-title">
-                        <a href="#">This is a title that
-                            might be
-                            kind of long,
-                            but we will never chop it off.</a>
-                    </div>
-                    <div class="kb-listing-synopsis">
-                        The synopses that goes with it. The
-                        synopses might
-                        be
-                        long.
-                        The synopses that goes with it. The
-                        synopses might
-                        be
-                        long.
-                        The synopses that goes with it. The
-                        synopses might
-                        be
-                        long.
-                    </div>
-                    </p>
-
+                    {% for r in resource.series(site) %}
+                        <p>
+                            <div class="kb-listing-title">
+                                <a href="{{ '/' + r.docname + '.html' }}">{{ r.title }}</a>
+                            </div>
+                            {% if r.synopsis %}
+                                <div class="kb-listing-synopsis">
+                                    {{ r.synopsis }}
+                                </div>
+                            {% endif %}
+                        </p>
+                    {% endfor %}
                 </section>
             </div>
 
