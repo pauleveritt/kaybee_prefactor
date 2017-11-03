@@ -57,6 +57,7 @@ class TestJsonDebug:
         article2 = resources['articles/article2']
         assert 'articles/article2' == article2['docname']
         assert False is article2['in_nav']
+        assert 'Article 11' == article2['series'][0]['title']
 
     def test_article3(self, json_page):
         resources = json_page['site']['resources']

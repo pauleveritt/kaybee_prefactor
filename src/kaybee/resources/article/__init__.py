@@ -10,3 +10,17 @@ class ArticleModel(CoreResourceModel):
 @registry.resource('article')
 class Article(BaseResource):
     model = ArticleModel
+
+    def series(self, site):
+        parent = site.resources[self.parent]
+        results = []
+        for docname in parent.toctree:
+            resource = site.resources[docname]
+            results.append(
+                dict(
+                    docname=docname,
+                    title=resource.title,
+                    synopsis=resource.props.synopsis
+                )
+            )
+        return results

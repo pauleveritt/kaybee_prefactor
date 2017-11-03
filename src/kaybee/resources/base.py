@@ -174,4 +174,8 @@ class BaseResource(CoreType):
         d['weight'] = self.props.weight
         d['toctree'] = self.toctree
         d['title'] = self.title
+        try:
+            d['series'] = self.series(site)
+        except AttributeError:
+            d['series'] = []
         return d

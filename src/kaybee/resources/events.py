@@ -33,6 +33,7 @@ def doctree_read_resources(app: Sphinx, doctree: document):
             resource.toctree = [
                 target for (flag, target) in node.attributes['entries']
             ]
+            pass
 
     else:
         # This is a genericpage
