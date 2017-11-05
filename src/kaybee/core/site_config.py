@@ -17,5 +17,3 @@ class SiteConfig(BaseModel):
     # social_media: SocialMedia = None
     # copyright = 'All Rights Reserved'
     is_debug = False
-    use_genericpage = False
-    use_toctree = False

@@ -58,7 +58,9 @@ def add_templates_paths(app):
 
     # Add the widgets and resources
     values = list(registry.config.widgets.values()) + \
-             list(registry.config.resources.values())
+             list(registry.config.resources.values()) + \
+             list(registry.config.cores.values())
+
     for v in values:
         f = os.path.dirname(inspect.getfile(v))
         template_bridge.loaders.append(SphinxFileSystemLoader(f))
@@ -180,13 +182,9 @@ def kaybee_context(app, pagename, templatename, context, doctree):
 
     else:
         # Should have a genericpage in the dict
-
-        # TODO For now, turn on genericpage support in the config. Later,
-        # make the theme register the class that acts as the "generic page".
-        if app.config.kaybee_config.use_genericpage:
-            genericpage = site.genericpages.get(pagename)
-            if genericpage:
-                context['page'] = genericpage
-                return genericpage.template()
+        genericpage = site.genericpages.get(pagename)
+        if genericpage:
+            context['page'] = genericpage
+            return genericpage.template()
 
     return templatename

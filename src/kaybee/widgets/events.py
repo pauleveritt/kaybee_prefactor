@@ -4,6 +4,7 @@ from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.environment import BuildEnvironment
 
+from kaybee.core.registry import registry
 from kaybee.core.site import Site
 from kaybee.widgets.node import widget
 
@@ -15,13 +16,15 @@ def process_widget_nodes(app: Sphinx, doctree, fromdocname):
     env: BuildEnvironment = app.env
     site: Site = env.site
 
-    if app.config.kaybee_config.use_toctree:
-        from kaybee.widgets.kbtoctree import KbToctree
+    # Toctree support. First, get the registered toctree class, if any
+    registered_toctree = registry.config.cores.get('toctree')
+
+    if registered_toctree:
         for node in doctree.traverse(toctree):
             if node.attributes['hidden']:
                 continue
 
-            w = KbToctree()
+            w = registered_toctree()
             context = builder.globalcontext.copy()
             context['site'] = site
 

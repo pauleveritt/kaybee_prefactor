@@ -1,2 +1,6 @@
-<h1>DemoType Typedef from Class</h1>
-<p>{{ resource.props['flag'] }}</p>
+{% extends "layout.html" %}
+{% block body %}
+    <h1>DemoType Typedef from Class</h1>
+    <p>{{ resource.props['flag'] }}</p>
+    {{ body }}
+{% endblock %}

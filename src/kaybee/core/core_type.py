@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from typing import List, Any, Mapping
+from typing import List, Any, Mapping, Tuple
 
 from pydantic.main import BaseModel
 from ruamel.yaml import load
@@ -142,3 +142,37 @@ class CoreType:
             parent=self.parent,
             kbtype=self.kbtype,
         )
+
+
+class CoreTocTree:
+    """ Basis for a subclass with a model and template """
+    entries: List = []
+    result_count = 0
+
+    @classmethod
+    def template(cls):
+        return cls.__name__.lower() + '.html'
+
+    def set_entries(self, entries: List[Tuple[str, str]], titles, resources):
+        """ Provide the template the data for the toc entries """
+        self.entries = []
+        for flag, pagename in entries:
+            title = titles[pagename].children[0]
+            resource = resources.get(pagename.split('/index')[0], None)
+            if resource and not resource.is_published():
+                continue
+            self.entries.append(dict(
+                title=title, href=pagename, resource=resource
+            ))
+
+        self.result_count = len(self.entries)
+
+    def render(self, builder, context, site):
+        """ Given a Sphinx builder and context with site in it,
+         generate HTML """
+
+        context['site'] = site
+        context['widget'] = self
+
+        html = builder.templates.render(self.template(), context)
+        return html

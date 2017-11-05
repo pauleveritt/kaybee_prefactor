@@ -17,6 +17,9 @@ class ResourceAction(dectate.Action):
     }
 
     def __init__(self, name, schema=None, defaults=None, references=None):
+        # TODO
+        # !!!!!
+        # Get rid of schema/defaults/references, probably no longer used
         super().__init__()
         self.name = name
         self.schema = schema
@@ -49,6 +52,23 @@ class WidgetAction(dectate.Action):
         widgets[self.name] = obj
 
 
+class CoreAction(dectate.Action):
+    config = {
+        'cores': dict
+    }
+
+    def __init__(self, name):
+        super().__init__()
+        self.name = name
+
+    def identifier(self, cores):
+        return self.name
+
+    def perform(self, obj, cores):
+        cores[self.name] = obj
+
+
 class registry(dectate.App):
     widget = dectate.directive(WidgetAction)
     resource = dectate.directive(ResourceAction)
+    core = dectate.directive(CoreAction)

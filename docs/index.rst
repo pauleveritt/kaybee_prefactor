@@ -10,3 +10,4 @@ creating your own kinds of documents.
     :caption: Contents:
 
     about
+    demopage

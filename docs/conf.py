@@ -17,6 +17,8 @@ from kaybee.core.site_config import SiteConfig
 here = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(here, 'typedefs'))
 from demotype import DemoType
+from genericpage import Genericpage
+from toctree import Toctree
 
 extensions = ['sphinx.ext.intersphinx',
               kaybee.__title__,
@@ -138,4 +140,3 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 # intersphinx_mapping = {'https://docs.python.org/': None}
-

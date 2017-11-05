@@ -5,6 +5,7 @@ from sphinx.addnodes import toctree
 from sphinx.application import Sphinx
 from sphinx.environment import BuildEnvironment
 
+from kaybee.core.registry import registry
 from kaybee.core.site import Site
 
 
@@ -21,6 +22,9 @@ def doctree_read_resources(app: Sphinx, doctree: document):
     docname = str(source.relative_to(confdir)).split('.rst')[0]
     resource = site.resources.get(docname)
 
+    # Get the class registered as the genericpage handler
+    gp = registry.config.cores.get('genericpage')
+
     # Get the title out of the RST and assign to the resource
     if resource:
         # Step 1: Stamp the title on the resource
@@ -36,7 +40,6 @@ def doctree_read_resources(app: Sphinx, doctree: document):
 
     else:
         # This is a genericpage
-        if app.config.kaybee_config.use_genericpage:
-            pass
-            # genericpage = Genericpage(docname)
-            # site.genericpages[docname] = genericpage
+        if gp:
+            genericpage = gp(docname)
+            site.genericpages[docname] = genericpage

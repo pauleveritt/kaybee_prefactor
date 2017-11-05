@@ -1,0 +1,9 @@
+<h1>This is a toctree</h1>
+<ul>
+    {% for entry in widget.entries %}
+        <li>
+            <a href="{{ '/' + entry.href + '.html' }}">{{ entry.title }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
