@@ -31,9 +31,6 @@ INSTALL_REQUIRES = [
 ]
 
 ENTRY_POINTS = {
-    'sphinx_themes': [
-        'path = kaybee:get_path',
-    ]
 }
 ########
 

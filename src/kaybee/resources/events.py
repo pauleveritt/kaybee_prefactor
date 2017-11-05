@@ -6,7 +6,6 @@ from sphinx.application import Sphinx
 from sphinx.environment import BuildEnvironment
 
 from kaybee.core.site import Site
-from kaybee.resources.genericpage import Genericpage
 
 
 def doctree_read_resources(app: Sphinx, doctree: document):
@@ -37,5 +36,7 @@ def doctree_read_resources(app: Sphinx, doctree: document):
 
     else:
         # This is a genericpage
-        genericpage = Genericpage(docname)
-        site.genericpages[docname] = genericpage
+        if app.config.kaybee_config.use_genericpage:
+            pass
+            # genericpage = Genericpage(docname)
+            # site.genericpages[docname] = genericpage

@@ -63,8 +63,7 @@ todo_include_todos = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
-html_theme = 'kaybee'
+html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -134,7 +133,7 @@ texinfo_documents = [
 # intersphinx_mapping = {'https://docs.python.org/': None}
 
 # kaybee config
-kaybee_config = SiteConfig(
+XXX_kaybee_config = SiteConfig(
     logo=dict(
         # img_url='http://bulma.io/images/bulma-logo.png',
         img_file='kaybee_logo.png',

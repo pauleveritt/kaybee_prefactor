@@ -25,18 +25,10 @@ __license__ = "Apache License 2.0"
 __copyright__ = "Copyright (c) 2017 Paul Everitt"
 
 
-def get_path():
-    """
-    Called from the entry point in setup.py
-    """
-    # Theme directory is defined as our parent directory
-    return os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-
-
 def setup(app):
     app.add_config_value('kaybee_config', SiteConfig(), 'html')
     app.connect('builder-inited', register)
-    app.connect('builder-inited', add_templates_paths)
+    # app.connect('builder-inited', add_templates_paths)
 
     app.connect('env-purge-doc', purge_resources)
 

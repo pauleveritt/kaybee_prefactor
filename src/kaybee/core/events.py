@@ -24,10 +24,6 @@ def register(app):
     # First, scan for decorators in kaybee core and commit
     importscan.scan(resources)
     importscan.scan(widgets)
-
-    # If the site has a kaybee_config, get it
-    kc = app.config.kaybee_config
-
     dectate.commit(registry)
 
     # Once config is setup, use it to drive various Sphinx registrations
@@ -49,7 +45,7 @@ def add_templates_paths(app):
 
     # Add the root of kaybee
     f = os.path.join(os.path.dirname(inspect.getfile(kaybee)), 'templates')
-    template_bridge.loaders.append(SphinxFileSystemLoader(f))
+    # template_bridge.loaders.append(SphinxFileSystemLoader(f))
 
     # Add _templates in the conf directory
     confdir = os.path.join(app.confdir, '_templates')
@@ -72,9 +68,9 @@ def initialize_site(app, env, docnames):
     """ Create the Site instance if it is not in the pickle """
 
     if not hasattr(env, 'site'):
-        # Load and validate the config
-        config = app.config.kaybee_config
-        env.site = Site(config)
+        config = getattr(app.config, 'kaybee_config')
+        if config:
+            env.site = Site(config)
 
 
 def purge_resources(app, env, docname):
@@ -184,9 +180,13 @@ def kaybee_context(app, pagename, templatename, context, doctree):
 
     else:
         # Should have a genericpage in the dict
-        genericpage = site.genericpages.get(pagename)
-        if genericpage:
-            context['page'] = genericpage
-            return genericpage.template()
+
+        # TODO For now, turn on genericpage support in the config. Later,
+        # make the theme register the class that acts as the "generic page".
+        if app.config.kaybee_config.use_genericpage:
+            genericpage = site.genericpages.get(pagename)
+            if genericpage:
+                context['page'] = genericpage
+                return genericpage.template()
 
     return templatename
