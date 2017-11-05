@@ -44,7 +44,7 @@ def add_templates_paths(app):
     template_bridge = app.builder.templates
 
     # Add the root of kaybee
-    f = os.path.join(os.path.dirname(inspect.getfile(kaybee)), 'templates')
+    # f = os.path.join(os.path.dirname(inspect.getfile(kaybee)), 'templates')
     # template_bridge.loaders.append(SphinxFileSystemLoader(f))
 
     # Add _templates in the conf directory
@@ -52,9 +52,9 @@ def add_templates_paths(app):
     template_bridge.loaders.append(SphinxFileSystemLoader(confdir))
 
     # Genericpage is not a registered resource, add its templatedir
-    gp_dir = os.path.join(os.path.dirname(inspect.getfile(kaybee)),
-                          'resources/genericpage')
-    template_bridge.loaders.append(SphinxFileSystemLoader(gp_dir))
+    # gp_dir = os.path.join(os.path.dirname(inspect.getfile(kaybee)),
+    #                       'resources/genericpage')
+    # template_bridge.loaders.append(SphinxFileSystemLoader(gp_dir))
 
     # Add the widgets and resources
     values = list(registry.config.widgets.values()) + \

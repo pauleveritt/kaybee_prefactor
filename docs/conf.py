@@ -1,3 +1,6 @@
+import os
+import sys
+
 import kaybee
 
 # -- General configuration ------------------------------------------------
@@ -10,6 +13,10 @@ import kaybee
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 from kaybee.core.site_config import SiteConfig
+
+here = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(here, 'typedefs'))
+from demotype import DemoType
 
 extensions = ['sphinx.ext.intersphinx',
               kaybee.__title__,
@@ -132,17 +139,3 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 # intersphinx_mapping = {'https://docs.python.org/': None}
 
-# kaybee config
-XXX_kaybee_config = SiteConfig(
-    logo=dict(
-        # img_url='http://bulma.io/images/bulma-logo.png',
-        img_file='kaybee_logo.png',
-        alt='Kaybee Logo Alt'
-    ),
-    copyright='2017, All Rights Reserved',
-    social_media=dict(
-        twitter='kbtest',
-        github='kbtest'
-    ),
-    is_debug=True
-)

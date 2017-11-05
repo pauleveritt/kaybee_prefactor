@@ -2,6 +2,10 @@
 About
 =====
 
+.. demotype::
+
+    flag: 93
+
 Changing the Site Title
 =======================
 
