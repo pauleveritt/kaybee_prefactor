@@ -26,7 +26,7 @@ class CustomWatcher(Watcher):
 
 
 server = Server(watcher=CustomWatcher())
-server.watch('docs/**', shell(sphinx, cwd='docs'),
+server.watch('docs/**', shell(sphinx),
              ignore=lambda s: '_build' in s)
 # server.watch('docs/*.rst', shell(sphinx))
 # server.watch('docs/*/*.rst', shell(sphinx))
