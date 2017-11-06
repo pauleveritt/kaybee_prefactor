@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+    <h1>Custom Article</h1>
+    <p>
+        <div>Flag: <span id="prop-flag">{{ resource.props['flag'] }}</span>
+        </div>
+        <div>Logo: <span id="siteconfig-logo">{{ site_config.logo.img_url }}</span>
+        </div>
+    </p>
+    {{ body }}
+{% endblock %}

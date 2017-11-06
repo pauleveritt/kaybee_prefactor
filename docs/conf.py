@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.join(here, 'typedefs'))
 from demotype import DemoType
 from genericpage import Genericpage
 from toctree import Toctree
+from category import Category
 
 extensions = ['sphinx.ext.intersphinx',
               kaybee.__title__,

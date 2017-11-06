@@ -2,6 +2,7 @@ import inspect
 import json
 import os
 
+import datetime
 import dectate
 import importscan
 from docutils import nodes
@@ -11,6 +12,12 @@ import kaybee
 from kaybee import resources, widgets
 from kaybee.core.registry import registry
 from kaybee.core.site import Site
+
+
+def datetime_handler(x):
+    if isinstance(x, datetime.datetime):
+        return x.isoformat()
+    raise TypeError("Unknown type")
 
 
 def register(app):
@@ -140,15 +147,23 @@ def generate_debug_info(builder, env):
         resources=[i[0].name for i in list(qr(registry))],
         widgets=[i[0].name for i in list(qw(registry))],
     )
+
+    # Navmenu
+    nm = [nm.docname for nm in site.navmenu]
+
+    # Resources
     r = {
         k: v.to_json(site)
         for (k, v) in site.resources.items()
     }
+
+    # Widgets
     w = {
         k: v.to_json(site)
         for (k, v) in site.widgets.items()
     }
     debug['site'] = dict(
+        navmenu=nm,
         resources=r,
         widgets=w,
         pages=[p.docname for p in env.site.genericpages.values()]
@@ -157,7 +172,7 @@ def generate_debug_info(builder, env):
     # Write info
     output_filename = os.path.join(builder.outdir, 'debug_dump.json')
     with open(output_filename, 'w') as f:
-        json.dump(debug, f)
+        json.dump(debug, f, default=datetime_handler)
 
 
 def kaybee_context(app, pagename, templatename, context, doctree):

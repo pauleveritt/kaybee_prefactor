@@ -6,7 +6,7 @@ from typing import Mapping, Any, List
 
 from ruamel.yaml import load
 
-from kaybee.core.core_type import CoreType, ReferencesType
+from kaybee.core.core_type import CoreType, ReferencesType, CoreResourceModel
 
 
 class BaseResource(CoreType):
@@ -39,13 +39,14 @@ class BaseResource(CoreType):
                     if prop_override:
                         return prop_override
 
-        # Class name
-        return self.__class__.__name__.lower() + '.html'
-
     def template(self, site):
         """ Get the template from: YAML, hierarchy, or class """
 
-        return self.get_override(site, self.kbtype, 'template')
+        override = self.get_override(site, self.kbtype, 'template')
+        if override:
+            return override
+        else:
+            return self.__class__.__name__.lower() + '.html'
 
     def style(self, site):
         """ Get the style from: YAML, hierarchy, or class """
@@ -168,14 +169,40 @@ class BaseResource(CoreType):
     def to_json(self, site):
         d = super().to_json(site)
         d['template'] = self.template(site)
+        d['title'] = self.title
         d['style'] = self.style(site)
         d['section'] = getattr(self.section(site), 'name', '')
         d['in_nav'] = self.props.in_nav
         d['weight'] = self.props.weight
         d['toctree'] = self.toctree
-        d['title'] = self.title
+        d['published'] = self.props.published
+        d['references'] = [r.docname for r in self.references(site)['category']]
         try:
             d['series'] = self.series(site)
         except AttributeError:
             d['series'] = []
         return d
+
+
+class BaseArticle(BaseResource):
+    """ A building-block for custom articles """
+
+    model = CoreResourceModel
+
+    def series(self, site):
+        parent = site.resources[self.parent]
+        results = []
+        for docname in parent.toctree:
+            resource = site.resources.get(docname)
+            if resource:
+                # We might have a non-resource page in the toctree,
+                # so skip it if true
+                synopsis = getattr(resource.props, 'synopsis', False)
+                results.append(
+                    dict(
+                        docname=docname,
+                        title=resource.title,
+                        synopsis=synopsis
+                    )
+                )
+        return results

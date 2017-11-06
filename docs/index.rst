@@ -1,3 +1,4 @@
+=======================================
 Kaybee: Knowledge Base for Static Sites
 =======================================
 
@@ -11,3 +12,4 @@ creating your own kinds of documents.
 
     about
     demopage
+    category1
