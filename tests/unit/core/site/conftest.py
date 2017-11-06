@@ -1,9 +1,21 @@
 import pytest
 
+from kaybee.core.core_type import CoreResourceModel, CoreContainerModel
 from kaybee.core.site import Site
 from kaybee.core.site_config import SiteConfig
-from kaybee.resources.article import Article
-from kaybee.resources.section import Section
+from kaybee.resources import BaseResource
+
+
+class Article(BaseResource):
+    model = CoreResourceModel
+
+
+class Homepage(BaseResource):
+    model = CoreContainerModel
+
+
+class Section(BaseResource):
+    model = CoreContainerModel
 
 
 @pytest.fixture()

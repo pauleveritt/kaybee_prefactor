@@ -1,10 +1,20 @@
 import pytest
 from pydantic import ValidationError
 
+from kaybee.core.core_type import CoreResourceModel, CoreContainerModel
 from kaybee.resources import BaseResource
-from kaybee.resources.article import Article
-from kaybee.resources.homepage import Homepage
-from kaybee.resources.section import Section
+
+
+class Article(BaseResource):
+    model = CoreResourceModel
+
+
+class Homepage(BaseResource):
+    model = CoreContainerModel
+
+
+class Section(BaseResource):
+    model = CoreContainerModel
 
 
 class Site:
@@ -57,7 +67,6 @@ def test_instance():
     da = Article('somepage', 'article', '')
     assert da.__class__.__name__ == 'Article'
     assert da.docname == 'somepage'
-    assert da.name == 'somepage'
     assert da.parent == 'index'
     assert da.kbtype == 'article'
     assert da.props.in_nav is False

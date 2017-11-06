@@ -26,9 +26,9 @@ class TestSiteConfig:
     def test_empty_config(self):
         config_data = dict()
         config = SiteConfig(**config_data)
-        assert config.copyright == 'All Rights Reserved'
+        assert False is config.is_debug
 
     def test_logo_img_url(self):
-        config_data = dict(logo=dict(img_url='iu'))
+        config_data = dict(is_debug=True)
         config = SiteConfig(**config_data)
-        assert config.logo.img_url == 'iu'
+        assert True is config.is_debug

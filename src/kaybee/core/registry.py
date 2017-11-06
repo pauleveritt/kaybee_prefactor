@@ -22,9 +22,9 @@ class ResourceAction(dectate.Action):
         # Get rid of schema/defaults/references, probably no longer used
         super().__init__()
         self.name = name
-        self.schema = schema
-        self.defaults = defaults
-        self.references = references
+        # self.schema = schema
+        # self.defaults = defaults
+        # self.references = references
 
     def identifier(self, resources):
         return self.name
@@ -41,9 +41,9 @@ class WidgetAction(dectate.Action):
     def __init__(self, name, schema=None, defaults=None, references=None):
         super().__init__()
         self.name = name
-        self.schema = schema
-        self.defaults = defaults
-        self.references = references
+        # self.schema = schema
+        # self.defaults = defaults
+        # self.references = references
 
     def identifier(self, widgets):
         return self.name

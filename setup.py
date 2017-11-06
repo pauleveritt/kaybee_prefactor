@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 NAME = "kaybee"
 PACKAGES = find_packages(where="src")
 META_PATH = os.path.join("src", "kaybee", "__init__.py")
-KEYWORDS = ["sphinx", "theme"]
+KEYWORDS = ["sphinx"]
 CLASSIFIERS = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
