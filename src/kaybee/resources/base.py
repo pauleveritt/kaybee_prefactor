@@ -39,14 +39,12 @@ class BaseResource(CoreType):
                     if prop_override:
                         return prop_override
 
+        return self.__class__.__name__.lower() + '.html'
+
     def template(self, site):
         """ Get the template from: YAML, hierarchy, or class """
 
-        override = self.get_override(site, self.kbtype, 'template')
-        if override:
-            return override
-        else:
-            return self.__class__.__name__.lower() + '.html'
+        return self.get_override(site, self.kbtype, 'template')
 
     def style(self, site):
         """ Get the style from: YAML, hierarchy, or class """
@@ -176,7 +174,8 @@ class BaseResource(CoreType):
         d['weight'] = self.props.weight
         d['toctree'] = self.toctree
         d['published'] = self.props.published
-        d['references'] = [r.docname for r in self.references(site)['category']]
+        d['references'] = [r.docname for r in
+                           self.references(site)['category']]
         try:
             d['series'] = self.series(site)
         except AttributeError:
