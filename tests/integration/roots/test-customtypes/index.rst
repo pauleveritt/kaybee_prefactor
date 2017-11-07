@@ -11,3 +11,4 @@ Test Articles
     articles/index
     articles2/index
     genericpage1
+    category1

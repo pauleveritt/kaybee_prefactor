@@ -1,16 +1,17 @@
+import datetime
 import inspect
 import json
 import os
 
-import datetime
 import dectate
-import importscan
 from docutils import nodes
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
 from kaybee import resources, widgets
 from kaybee.registry import registry
+from kaybee.resources import BaseResourceDirective
 from kaybee.site import Site
+from kaybee.widgets import BaseWidgetDirective
 
 
 def datetime_handler(x):
@@ -26,7 +27,13 @@ def builder_init(app):
     widgets.setup(app)
 
 
-def add_templates_paths(app):
+def purge_resources(app, env, docname):
+    if hasattr(env, 'site'):
+        # TODO need to remove widgets when the document has one
+        env.site.resources.pop(docname, None)
+
+
+def add_templates_paths(app, env, docnames):
     """ Add the kaybee template directories
 
      Using Sphinx's conf.py support for registering new template
@@ -60,10 +67,14 @@ def initialize_site(app, env, docnames):
             env.site = Site(config)
 
 
-def purge_resources(app, env, docname):
-    if hasattr(env, 'site'):
-        # TODO need to remove widgets when the document has one
-        env.site.resources.pop(docname, None)
+def register_directives(app, env, docnames):
+    """ Walk the registry and add sphinx directives """
+
+    for kbtype in registry.config.resources.keys():
+        app.add_directive(kbtype, BaseResourceDirective)
+
+    for kbtype in registry.config.widgets.keys():
+        app.add_directive(kbtype, BaseWidgetDirective)
 
 
 def validate_references(app, env):
