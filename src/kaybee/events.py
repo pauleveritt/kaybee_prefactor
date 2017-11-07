@@ -41,11 +41,6 @@ def add_templates_paths(app):
     confdir = os.path.join(app.confdir, '_templates')
     template_bridge.loaders.append(SphinxFileSystemLoader(confdir))
 
-    # Genericpage is not a registered resource, add its templatedir
-    # gp_dir = os.path.join(os.path.dirname(inspect.getfile(kaybee)),
-    #                       'resources/genericpage')
-    # template_bridge.loaders.append(SphinxFileSystemLoader(gp_dir))
-
     # Add the widgets and resources
     values = list(registry.config.widgets.values()) + \
              list(registry.config.resources.values()) + \
