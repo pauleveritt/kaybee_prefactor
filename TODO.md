@@ -6,6 +6,12 @@
 
 - Icon for LiveSearch box
 
+- Pluggable SiteConfig
+
+- Pluggable toctree
+
+- Pluggable "layout"
+
 # Next
 
 - Release a package
