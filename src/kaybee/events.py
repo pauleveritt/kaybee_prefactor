@@ -37,10 +37,6 @@ def add_templates_paths(app):
 
     template_bridge = app.builder.templates
 
-    # Add the root of kaybee
-    # f = os.path.join(os.path.dirname(inspect.getfile(kaybee)), 'templates')
-    # template_bridge.loaders.append(SphinxFileSystemLoader(f))
-
     # Add _templates in the conf directory
     confdir = os.path.join(app.confdir, '_templates')
     template_bridge.loaders.append(SphinxFileSystemLoader(confdir))
