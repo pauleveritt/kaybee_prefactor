@@ -19,21 +19,9 @@ def datetime_handler(x):
     raise TypeError("Unknown type")
 
 
-def register(app):
-    """ Load the resources, types, etc. from the registry
-
-    We can get resources etc. from 3 location: classes in kaybee itself,
-    classes in the doc project, and YAML "typedef" files in the doc
-    project.
-    """
-
-    # First, scan for decorators in kaybee core and commit
-    importscan.scan(resources)
-    importscan.scan(widgets)
+def builder_init(app):
+    """ On the builder init event, commit registry and pass setup """
     dectate.commit(registry)
-
-    # Once config is setup, use it to drive various Sphinx registrations
-    # (nodes, directives)
     resources.setup(app)
     widgets.setup(app)
 

@@ -1,10 +1,10 @@
 from kaybee.events import (
-    register,
     kaybee_context, add_templates_paths,
     initialize_site, purge_resources,
     validate_references,
     missing_reference,
-    generate_debug_info
+    generate_debug_info,
+    builder_init
 )
 from kaybee.site_config import SiteConfig
 
@@ -24,7 +24,7 @@ __copyright__ = "Copyright (c) 2017 Paul Everitt"
 
 def setup(app):
     app.add_config_value('kaybee_config', SiteConfig(), 'html')
-    app.connect('builder-inited', register)
+    app.connect('builder-inited', builder_init)
     app.connect('builder-inited', add_templates_paths)
 
     app.connect('env-purge-doc', purge_resources)
