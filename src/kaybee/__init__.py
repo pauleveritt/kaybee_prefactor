@@ -24,6 +24,8 @@ __copyright__ = "Copyright (c) 2017 Paul Everitt"
 
 
 def setup(app):
+    app.config['template_bridge'] = 'kaybee.template_bridge.KaybeeBridge'
+
     app.add_config_value('kaybee_config', SiteConfig(), 'html')
 
     app.connect('builder-inited', builder_init)
