@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List, Any, Mapping, Tuple
 
 from pydantic.main import BaseModel
-from ruamel.yaml import load
+from ruamel.yaml import load, Loader
 
 
 class CorePropFilterModel(BaseModel):
@@ -92,7 +92,7 @@ class CoreType:
         if self.kind == 'widget':
             # Resources use the docname, widgets will do something else,
             # since you might have multiple widgets per page
-            yaml_props = (load(yaml_content) or {})
+            yaml_props = (load(yaml_content, Loader=Loader) or {})
             return json.dumps(yaml_props, sort_keys=True)
         else:
             return self.docname
@@ -101,7 +101,7 @@ class CoreType:
     def load_model(model, yaml_content: str):
         # If yaml_content is an empty string and parses to None, return
         # empty dic instead
-        yaml_props = (load(yaml_content) or {})
+        yaml_props = (load(yaml_content, Loader=Loader) or {})
 
         # Make the model, which validates, then do any extra validation
         m = model(**yaml_props)

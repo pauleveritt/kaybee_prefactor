@@ -27,7 +27,10 @@ CLASSIFIERS = [
 INSTALL_REQUIRES = [
     'sphinx',
     'dectate',
-    'importscan'
+    'importscan',
+    'ruamel.yaml',
+    'pydantic',
+    'livereload'
 ]
 
 ENTRY_POINTS = {
