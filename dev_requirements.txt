@@ -1,0 +1,4 @@
+livereload
+pytest
+pytest-mock
+beautifulsoup4
