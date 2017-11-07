@@ -1,6 +1,6 @@
 from docutils.parsers.rst import Directive
 
-from kaybee.core.registry import registry
+from kaybee.registry import registry
 
 
 class BaseResourceDirective(Directive):

@@ -5,7 +5,7 @@ import pytest
 from pydantic import ValidationError
 from pydantic.main import BaseModel
 
-from kaybee.core.core_type import (
+from kaybee.base_types import (
     CoreType, CoreContainerModel,
     CoreResourceModel,
     ReferencesType

@@ -1,6 +1,6 @@
 import pytest
 
-from kaybee.core.core_type import CoreWidgetModel
+from kaybee.base_types import CoreWidgetModel
 from kaybee.widgets import BaseWidgetDirective, widget
 from kaybee.widgets.base import BaseWidget
 

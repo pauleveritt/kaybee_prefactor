@@ -1,10 +1,10 @@
 import pytest
 
-from kaybee.core.core_type import (
+from kaybee.base_types import (
     CorePropFilterModel, CoreResourceModel,
     CoreContainerModel
 )
-from kaybee.core.site import Site
+from kaybee.site import Site
 from kaybee.resources import BaseResource
 
 

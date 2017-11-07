@@ -4,8 +4,8 @@ from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.environment import BuildEnvironment
 
-from kaybee.core.registry import registry
-from kaybee.core.site import Site
+from kaybee.registry import registry
+from kaybee.site import Site
 from kaybee.widgets.node import widget
 
 

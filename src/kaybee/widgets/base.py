@@ -4,7 +4,7 @@ from collections import Mapping
 
 from ruamel.yaml import load
 
-from kaybee.core.core_type import CoreType
+from kaybee.base_types import CoreType
 
 
 class BaseWidget(CoreType):

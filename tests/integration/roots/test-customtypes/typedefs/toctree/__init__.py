@@ -1,5 +1,5 @@
-from kaybee.core.core_type import CoreTocTree
-from kaybee.core.registry import registry
+from kaybee.base_types import CoreTocTree
+from kaybee.registry import registry
 
 
 @registry.core('toctree')

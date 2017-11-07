@@ -1,4 +1,4 @@
-from kaybee.core.events import initialize_site, purge_resources
+from kaybee.events import initialize_site, purge_resources
 from kaybee.resources.events import doctree_read_resources
 
 

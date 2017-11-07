@@ -1,4 +1,4 @@
-from kaybee.core.registry import registry
+from kaybee.registry import registry
 from kaybee.widgets.directive import BaseWidgetDirective
 from kaybee.widgets.events import process_widget_nodes
 from kaybee.widgets.node import widget

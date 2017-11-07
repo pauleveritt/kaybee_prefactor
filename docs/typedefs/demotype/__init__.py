@@ -1,5 +1,5 @@
-from kaybee.core.core_type import CoreResourceModel
-from kaybee.core.registry import registry
+from kaybee.base_types import CoreResourceModel
+from kaybee.registry import registry
 from kaybee.resources import BaseResource
 
 

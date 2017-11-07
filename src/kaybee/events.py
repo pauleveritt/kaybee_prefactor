@@ -8,10 +8,9 @@ import importscan
 from docutils import nodes
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
-import kaybee
 from kaybee import resources, widgets
-from kaybee.core.registry import registry
-from kaybee.core.site import Site
+from kaybee.registry import registry
+from kaybee.site import Site
 
 
 def datetime_handler(x):

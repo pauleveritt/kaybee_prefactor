@@ -1,6 +1,6 @@
 from pydantic.main import BaseModel
 
-from kaybee.core.registry import registry
+from kaybee.registry import registry
 from kaybee.widgets.base import BaseWidget
 
 

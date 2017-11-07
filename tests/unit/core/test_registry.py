@@ -1,7 +1,7 @@
 import dectate
 import pytest
 
-from kaybee.core.registry import (
+from kaybee.registry import (
     ResourceAction, WidgetAction,
     CoreAction
 )

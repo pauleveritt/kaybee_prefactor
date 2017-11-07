@@ -1,5 +1,5 @@
 from kaybee.resources.base import BaseResource
-from kaybee.core.registry import registry
+from kaybee.registry import registry
 from kaybee.resources.directive import BaseResourceDirective
 from kaybee.resources.events import (
     doctree_read_resources

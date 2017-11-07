@@ -3,16 +3,17 @@ import os
 import sys
 
 import kaybee
-from kaybee.core.site_config import SiteConfig
+from kaybee.site_config import SiteConfig
 
 here = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(here, 'typedefs'))
 from article import Article
-from section import Section
+from category import Category
 from genericpage import Genericpage
 from hellowidget import HelloWidget
+from section import Section
 from toctree import Toctree
-from category import Category
+
 
 extensions = [kaybee.__title__]
 

@@ -1,4 +1,4 @@
-from kaybee.core.site_config import SiteConfig, Logo
+from kaybee.site_config import SiteConfig, Logo
 
 
 # Not necessary to write tests to cover all the validation. It's

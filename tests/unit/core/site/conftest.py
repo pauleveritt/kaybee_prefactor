@@ -1,8 +1,8 @@
 import pytest
 
-from kaybee.core.core_type import CoreResourceModel, CoreContainerModel
-from kaybee.core.site import Site
-from kaybee.core.site_config import SiteConfig
+from kaybee.base_types import CoreResourceModel, CoreContainerModel
+from kaybee.site import Site
+from kaybee.site_config import SiteConfig
 from kaybee.resources import BaseResource
 
 

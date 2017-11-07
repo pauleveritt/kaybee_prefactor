@@ -6,7 +6,7 @@ from typing import Mapping, Any, List
 
 from ruamel.yaml import load
 
-from kaybee.core.core_type import CoreType, ReferencesType, CoreResourceModel
+from kaybee.base_types import CoreType, ReferencesType, CoreResourceModel
 
 
 class BaseResource(CoreType):

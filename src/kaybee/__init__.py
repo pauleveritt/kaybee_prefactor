@@ -1,7 +1,4 @@
-import os
-from pathlib import PurePath
-
-from kaybee.core.events import (
+from kaybee.events import (
     register,
     kaybee_context, add_templates_paths,
     initialize_site, purge_resources,
@@ -9,7 +6,7 @@ from kaybee.core.events import (
     missing_reference,
     generate_debug_info
 )
-from kaybee.core.site_config import SiteConfig
+from kaybee.site_config import SiteConfig
 
 __version__ = "0.0.1"
 
