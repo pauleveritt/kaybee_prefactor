@@ -43,22 +43,6 @@ class WidgetAction(dectate.Action):
         widgets[self.name] = obj
 
 
-class ReferenceAction(dectate.Action):
-    config = {
-        'references': dict
-    }
-
-    def __init__(self, name):
-        super().__init__()
-        self.name = name
-
-    def identifier(self, references):
-        return self.name
-
-    def perform(self, obj, references):
-        references[self.name] = obj
-
-
 class CoreAction(dectate.Action):
     config = {
         'cores': dict
@@ -78,5 +62,4 @@ class CoreAction(dectate.Action):
 class registry(dectate.App):
     widget = dectate.directive(WidgetAction)
     resource = dectate.directive(ResourceAction)
-    reference = dectate.directive(ReferenceAction)
     core = dectate.directive(CoreAction)

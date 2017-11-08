@@ -7,7 +7,7 @@ import dectate
 from docutils import nodes
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
-from kaybee import resources, widgets
+from kaybee import resources, widgets, references
 from kaybee.registry import registry
 from kaybee.resources.directive import BaseResourceDirective
 from kaybee.site import Site
@@ -25,6 +25,7 @@ def builder_init(app):
     dectate.commit(registry)
     resources.setup(app)
     widgets.setup(app)
+    references.setup(app)
 
 
 def purge_resources(app, env, docname):
@@ -92,7 +93,7 @@ def validate_references(app, env):
 Document {resource.name} has unregistered reference "{field_name}"'''
                     raise KeyError(msg)
                 try:
-                    assert srfn[target_label].label == target_label
+                    assert srfn[target_label].props.label == target_label
                 except AssertionError:
                     msg = f'''\
 Document {resource.name} has "{field_name}" with orphan {target_label} '''

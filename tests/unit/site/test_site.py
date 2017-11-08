@@ -127,6 +127,7 @@ class TestSite:
 
     def test_add_reference_target(self, site):
         # Register the shorthand "label" for a category as a reference
+        site.references['category'] = dict()
         cat1 = Category('section1/cat1', 'category', 'label: python')
         site.add_reference('category', 'cat1', cat1)
         target = site.get_reference('category', 'cat1')

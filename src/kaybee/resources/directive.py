@@ -40,12 +40,12 @@ class BaseResourceDirective(Directive):
         resource_class = BaseResourceDirective.get_resource_class(kbtype)
         this_resource = resource_class(self.docname, kbtype, resource_content)
 
-        # Add this to the site, and if it is a reference, index it
+        # Add this resource to the site
         self.site.resources[this_resource.name] = this_resource
-        if hasattr(this_resource, 'label'):
-            # This resource is a reference. Find all of the fields
-            # that
-            label = this_resource.label
+
+        # If this is a reference, add it to site references
+        if getattr(resource_class, 'is_reference', False):
+            label = this_resource.props.label
             self.site.add_reference(kbtype, label, this_resource)
 
         # Don't need to return a resource "node", the

@@ -91,8 +91,8 @@ class Site:
     def add_reference(self, kbtype: str, label: str, target):
         """ Add reference object in references under kbtype/label=target """
 
-        if kbtype not in self.references:
-            self.references[kbtype] = dict()
+        # if kbtype not in self.references:
+        #     self.references[kbtype] = dict()
         self.references[kbtype][label] = target
 
     @property

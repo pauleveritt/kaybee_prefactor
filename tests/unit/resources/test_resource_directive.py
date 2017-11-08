@@ -17,16 +17,23 @@ class Dummy:
     pass
 
 
+class DummyProps:
+    template = 'foo'
+    label = 'somelabel'
+
+
 class SampleResource:
+    is_reference = True
+
     def __init__(self, name, kbtype, content):
         self.name = name
         self.kbtype = kbtype
         self.content = content
-        self.props = dict(template='foo')
+        self.props = DummyProps()
 
 
 class SampleResourceWithLabel(SampleResource):
-    label = 'somelabel'
+    pass
 
 
 class SampleAction:
@@ -77,6 +84,6 @@ class TestBaseResourceDirective:
                                            0, 0, '', {},
                                            {})
 
-        dummy_directive2.label = 'somelabel'
+        dummy_directive2.props = dict(label='somelabel')
         dummy_directive2.run()
         assert 'somelabel' == ds.added_label
