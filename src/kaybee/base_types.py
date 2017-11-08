@@ -1,6 +1,5 @@
 import json
-from datetime import datetime
-from typing import List, Any, Mapping, Tuple
+from typing import List, Any, Tuple
 
 from pydantic.main import BaseModel
 from ruamel.yaml import load, Loader
@@ -35,10 +34,6 @@ class ReferencesType(str):
                 msg = f'{prefix} not {type(i)}'
                 raise ValueError(msg)
         return v
-
-
-class CoreWidgetModel(BaseModel):
-    template: str
 
 
 class CoreType:

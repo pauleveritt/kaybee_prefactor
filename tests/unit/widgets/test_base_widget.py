@@ -1,10 +1,9 @@
 import pytest
 
-from kaybee.base_types import CoreWidgetModel
-from kaybee.widgets.base import BaseWidget
+from kaybee.widgets.base import BaseWidget, BaseWidgetModel
 
 
-class DummyWidgetModel(CoreWidgetModel):
+class DummyWidgetModel(BaseWidgetModel):
     flag: int = None
 
 

@@ -1,11 +1,11 @@
 import pytest
 
-from kaybee.base_types import CoreWidgetModel
-from kaybee.widgets import BaseWidgetDirective, widget
-from kaybee.widgets.base import BaseWidget
+from kaybee.widgets import widget
+from kaybee.widgets.base import BaseWidget, BaseWidgetModel
+from kaybee.widgets.directive import BaseWidgetDirective
 
 
-class DummyWidgetModel(CoreWidgetModel):
+class DummyWidgetModel(BaseWidgetModel):
     flag: int = None
 
 
@@ -132,4 +132,3 @@ class TestBaseWidgetDirective:
                             lambda x: SampleWidget)
         result = dummy_directive.run()
         assert 'widget' == result[0].__class__.__name__
-

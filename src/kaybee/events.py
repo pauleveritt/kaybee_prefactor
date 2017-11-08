@@ -11,7 +11,7 @@ from kaybee import resources, widgets
 from kaybee.registry import registry
 from kaybee.resources.directive import BaseResourceDirective
 from kaybee.site import Site
-from kaybee.widgets import BaseWidgetDirective
+from kaybee.widgets.directive import BaseWidgetDirective
 
 
 def datetime_handler(x):

@@ -2,9 +2,14 @@ import inspect
 import os
 from collections import Mapping
 
+from pydantic import BaseModel
 from ruamel.yaml import load
 
 from kaybee.base_types import CoreType
+
+
+class BaseWidgetModel(BaseModel):
+    template: str
 
 
 class BaseWidget(CoreType):
@@ -45,4 +50,3 @@ class BaseWidget(CoreType):
         with open(schema_filename, 'r') as f:
             schema = load(f)
             return schema
-
