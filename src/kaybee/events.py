@@ -9,7 +9,7 @@ from sphinx.jinja2glue import SphinxFileSystemLoader
 
 from kaybee import resources, widgets
 from kaybee.registry import registry
-from kaybee.resources import BaseResourceDirective
+from kaybee.resources.directive import BaseResourceDirective
 from kaybee.site import Site
 from kaybee.widgets import BaseWidgetDirective
 

@@ -77,7 +77,7 @@ make a Kaybee resource for author:
 
 .. code-block:: python
 
-    class AuthorModel(CoreResourceModel):
+    class AuthorModel(BaseResourceModel):
         first_name: str = None
         last_name: str = None
 

@@ -6,10 +6,10 @@ from pydantic import ValidationError
 from pydantic.main import BaseModel
 
 from kaybee.base_types import (
-    CoreType, CoreContainerModel,
-    CoreResourceModel,
+    CoreType,
     ReferencesType
 )
+from kaybee.resources.base import BaseContainerModel, BaseResourceModel
 
 
 class DummyMissingModel(CoreType):
@@ -26,7 +26,7 @@ class DummyArticle(CoreType):
     model = DummyArticleModel
 
 
-class DummyContainerModel(CoreContainerModel):
+class DummyContainerModel(BaseContainerModel):
     pass
 
 
@@ -119,7 +119,6 @@ weight: 'Should Fail'
         expected = "invalid literal for int() with base 10: 'Should Fail'"
         assert error == expected
 
-
     @pytest.mark.parametrize('docname, parent', [
         ('index', None),
         ('about', 'index'),
@@ -139,28 +138,28 @@ weight: 'Should Fail'
 
 class TestResource:
     def test_published_date(self):
-        past = CoreResourceModel(**dict(published='2017-06-01 12:22'))
-        future = CoreResourceModel(**dict(published='2020-11-27 01:43'))
-        no_date = CoreResourceModel(**dict())
+        past = BaseResourceModel(**dict(published='2017-06-01 12:22'))
+        future = BaseResourceModel(**dict(published='2020-11-27 01:43'))
+        no_date = BaseResourceModel(**dict())
         now = datetime.datetime.now()
         assert None is no_date.published
         assert now > past.published
         assert now < future.published
 
     def test_category(self):
-        no_cats = CoreResourceModel(**dict(category=[]))
+        no_cats = BaseResourceModel(**dict(category=[]))
         assert [] == no_cats.category
         c1 = ['python', 'web']
-        cats = CoreResourceModel(**dict(category=c1))
+        cats = BaseResourceModel(**dict(category=c1))
         assert c1 == cats.category
         c2 = [923, dict(broken=True)]
         with pytest.raises(ValidationError):
-            CoreResourceModel(**dict(category=c2))
+            BaseResourceModel(**dict(category=c2))
 
 
 class TestContainer:
     def test_import(self):
-        assert CoreContainerModel.__name__ == 'CoreContainerModel'
+        assert BaseContainerModel.__name__ == 'BaseContainerModel'
 
     def test_construction(self):
         content = """
@@ -188,10 +187,10 @@ class TestReferenceType:
 
     def test_valid(self):
         tags = ['tag1', 'tag2']
-        article = CoreResourceModel(**dict(tag=tags))
+        article = BaseResourceModel(**dict(tag=tags))
         assert tags == article.tag
 
     def test_invalid(self):
         tags = ['tag1', 9]
         with pytest.raises(ValidationError):
-            CoreResourceModel(**dict(tag=tags))
+            BaseResourceModel(**dict(tag=tags))

@@ -4,9 +4,39 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import Mapping, Any, List
 
+from pydantic import BaseModel
 from ruamel.yaml import load
 
-from kaybee.base_types import CoreType, ReferencesType, CoreResourceModel
+from kaybee.base_types import CoreType, ReferencesType
+
+
+class BaseResourceModel(BaseModel):
+    """ Kaybee default schema definitions for resources """
+
+    template: str = None
+    style: str = None
+    in_nav: bool = False
+    weight: int = 0
+    synopsis: str = None
+    published: datetime = None
+    category: ReferencesType = []
+    tag: ReferencesType = []
+
+
+class BaseContainerModel(BaseResourceModel):
+    """ A resource that is a parent for other resources
+
+     Parents can override child properties based on kbtype
+
+    E.g.
+
+    overrides:
+        article:
+            template: customtemplate.html
+            style: boldestbaddest
+
+     """
+    overrides: Mapping[str, Mapping[str, str]] = None
 
 
 class BaseResource(CoreType):
@@ -186,7 +216,7 @@ class BaseResource(CoreType):
 class BaseArticle(BaseResource):
     """ A building-block for custom articles """
 
-    model = CoreResourceModel
+    model = BaseResourceModel
 
     def series(self, site):
         parent = site.resources[self.parent]

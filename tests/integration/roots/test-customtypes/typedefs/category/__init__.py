@@ -1,9 +1,8 @@
-from kaybee.base_types import CoreResourceModel
 from kaybee.registry import registry
-from kaybee.resources import BaseResource
+from kaybee.resources.base import BaseResourceModel, BaseResource
 
 
-class CategoryModel(CoreResourceModel):
+class CategoryModel(BaseResourceModel):
     label: str
 
 

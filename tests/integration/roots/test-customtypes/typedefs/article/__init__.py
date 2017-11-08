@@ -1,9 +1,8 @@
-from kaybee.base_types import CoreResourceModel
 from kaybee.registry import registry
-from kaybee.resources.base import BaseArticle
+from kaybee.resources.base import BaseArticle, BaseResourceModel
 
 
-class ArticleModel(CoreResourceModel):
+class ArticleModel(BaseResourceModel):
     flag: int = None
 
 

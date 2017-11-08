@@ -1,27 +1,27 @@
 import pytest
 
-from kaybee.base_types import (
-    CorePropFilterModel, CoreResourceModel,
-    CoreContainerModel
+from kaybee.base_types import CorePropFilterModel
+from kaybee.resources.base import (
+    BaseResourceModel, BaseResource,
+    BaseContainerModel
 )
 from kaybee.site import Site
-from kaybee.resources import BaseResource
 
 
-class CategoryModel(CoreResourceModel):
+class CategoryModel(BaseResourceModel):
     label: str
 
 
 class Article(BaseResource):
-    model = CoreResourceModel
+    model = BaseResourceModel
 
 
 class Homepage(BaseResource):
-    model = CoreContainerModel
+    model = BaseContainerModel
 
 
 class Section(BaseResource):
-    model = CoreContainerModel
+    model = BaseContainerModel
 
 
 class Category(BaseResource):

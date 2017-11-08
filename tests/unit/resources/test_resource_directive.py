@@ -1,6 +1,6 @@
 import pytest
 
-from kaybee.resources import BaseResourceDirective
+from kaybee.resources.directive import BaseResourceDirective
 
 
 class DummySite:

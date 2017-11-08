@@ -1,20 +1,22 @@
 import pytest
 from pydantic import ValidationError
 
-from kaybee.base_types import CoreResourceModel, CoreContainerModel
-from kaybee.resources import BaseResource
+from kaybee.resources.base import (
+    BaseResource, BaseResourceModel,
+    BaseContainerModel
+)
 
 
 class Article(BaseResource):
-    model = CoreResourceModel
+    model = BaseResourceModel
 
 
 class Homepage(BaseResource):
-    model = CoreContainerModel
+    model = BaseContainerModel
 
 
 class Section(BaseResource):
-    model = CoreContainerModel
+    model = BaseContainerModel
 
 
 class Site:
