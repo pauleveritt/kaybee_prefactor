@@ -1,6 +1,4 @@
-from kaybee.resources.events import (
-    doctree_read_resources
-)
+from kaybee.resources.events import doctree_read_resources
 
 
 def setup(app):
