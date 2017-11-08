@@ -37,35 +37,6 @@ class ReferencesType(str):
         return v
 
 
-# class CoreResourceModel(BaseModel):
-#     """ Kaybee default schema definitions for resources """
-#
-#     template: str = None
-#     style: str = None
-#     in_nav: bool = False
-#     weight: int = 0
-#     synopsis: str = None
-#     published: datetime = None
-#     category: ReferencesType = []
-#     tag: ReferencesType = []
-#
-#
-# class CoreContainerModel(CoreResourceModel):
-#     """ A resource that is a parent for other resources
-#
-#      Parents can override child properties based on kbtype
-#
-#     E.g.
-#
-#     overrides:
-#         article:
-#             template: customtemplate.html
-#             style: boldestbaddest
-#
-#      """
-#     overrides: Mapping[str, Mapping[str, str]] = None
-#
-
 class CoreWidgetModel(BaseModel):
     template: str
 
