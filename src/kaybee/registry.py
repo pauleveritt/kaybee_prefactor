@@ -16,15 +16,9 @@ class ResourceAction(dectate.Action):
         'resources': dict
     }
 
-    def __init__(self, name, schema=None, defaults=None, references=None):
-        # TODO
-        # !!!!!
-        # Get rid of schema/defaults/references, probably no longer used
+    def __init__(self, name):
         super().__init__()
         self.name = name
-        # self.schema = schema
-        # self.defaults = defaults
-        # self.references = references
 
     def identifier(self, resources):
         return self.name
@@ -38,12 +32,9 @@ class WidgetAction(dectate.Action):
         'widgets': dict
     }
 
-    def __init__(self, name, schema=None, defaults=None, references=None):
+    def __init__(self, name):
         super().__init__()
         self.name = name
-        # self.schema = schema
-        # self.defaults = defaults
-        # self.references = references
 
     def identifier(self, widgets):
         return self.name
