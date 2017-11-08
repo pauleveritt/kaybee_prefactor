@@ -7,13 +7,8 @@ from kaybee.site_config import SiteConfig
 
 here = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(here, 'typedefs'))
-from article import Article
-from category import Category
-from genericpage import Genericpage
-from hellowidget import HelloWidget
-from section import Section
-from toctree import Toctree
-
+import article, category, genericpage, hellowidget, section, toctree, \
+    postrenderer
 
 extensions = [kaybee.__title__]
 
