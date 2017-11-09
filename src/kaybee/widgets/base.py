@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from ruamel.yaml import load
 
 from kaybee.base_types import CoreType
+from kaybee.utils import rst_to_html
 
 
 class BaseWidgetModel(BaseModel):
@@ -39,6 +40,10 @@ class BaseWidget(CoreType):
         # NOTE: Can use builder.templates.render_string
         html = builder.templates.render(self.template, context)
         return html
+
+    def render_rst(self, rst_string: str) -> str:
+        """ Given a field of RST, convert to HTML """
+        return rst_to_html(rst_string)
 
     @classmethod
     def get_schema(cls):
