@@ -1,7 +1,5 @@
 # Now
 
-- Finish series (indicate active)
-
 - Feeds
 
 - Redo sidebars as widgets
