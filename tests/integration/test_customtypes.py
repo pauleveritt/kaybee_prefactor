@@ -21,6 +21,14 @@ class TestArticle1:
         content = logo.contents[0].strip()
         assert 'xyz.png' in content
 
+    def test_series(self, page):
+        series_items = page.find_all(class_='article-series')
+        assert 4 == len(series_items)
+        first = series_items[0]
+        assert 'Article 1' == first.string.strip()
+        assert 'current' == first.attrs['data-current']
+        assert '' == series_items[1].attrs['data-current']
+
 
 @pytest.mark.parametrize('json_page', ['debug_dump.json', ], indirect=True)
 class TestArticle1Json:
@@ -30,7 +38,7 @@ class TestArticle1Json:
 
     def test_title(self, json_page):
         article = json_page['site']['resources']['articles/article1']
-        assert 'Article 1' == article['series'][0]['title']
+        assert 'Article 1' == article['title']
 
     def test_in_nav(self, json_page):
         article = json_page['site']['resources']['articles/article1']
@@ -39,6 +47,16 @@ class TestArticle1Json:
     def test_section(self, json_page):
         article = json_page['site']['resources']['articles/article1']
         assert 'articles/index' == article['section']
+
+    def test_series(self, json_page):
+        article = json_page['site']['resources']['articles/article1']
+        series = article['series']
+        first = series[0]
+        second = series[1]
+        assert 'Article 1' == first['title']
+        assert True is first['current']
+        assert 'Article 2' == second['title']
+        assert False is second['current']
 
 
 @pytest.mark.parametrize('json_page', ['debug_dump.json', ], indirect=True)

@@ -232,7 +232,8 @@ class BaseResource(CoreType):
                     dict(
                         docname=docname,
                         title=resource.title,
-                        synopsis=synopsis
+                        synopsis=synopsis,
+                        current=self.docname == docname
                     )
                 )
         return results
