@@ -1,6 +1,22 @@
 # Now
 
-- Make relative/absolute URLs work, e.g. /blog vs. Sphinx rendered
+- Fix the inherited style property
+
+- ReST and Markdown fields in schemas
+
+- Finish series (indicate active)
+
+- Feeds
+
+- Redo sidebars as widgets
+
+
+# Next
+
+- Make relative/absolute URLs work, e.g. /blog vs. Sphinx rendered with 
+  "pathto" available in widgets
+
+- Redirects like ABlog
 
 - Get LiveSearch box working
 
@@ -11,8 +27,6 @@
 - Pluggable toctree
 
 - Pluggable "layout"
-
-# Next
 
 - Release a package
 

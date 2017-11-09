@@ -1,6 +1,0 @@
-type: map
-mapping:
-  in_nav:
-    type: bool
-  weight:
-    type: int

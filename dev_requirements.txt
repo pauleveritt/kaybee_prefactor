@@ -2,3 +2,4 @@ livereload
 pytest
 pytest-mock
 beautifulsoup4
+twine
