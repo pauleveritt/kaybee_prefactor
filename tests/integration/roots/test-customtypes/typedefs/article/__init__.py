@@ -1,5 +1,5 @@
 from kaybee.registry import registry
-from kaybee.resources.base import BaseArticle, BaseResourceModel
+from kaybee.resources.base import BaseResourceModel, BaseResource
 
 
 class ArticleModel(BaseResourceModel):
@@ -7,5 +7,5 @@ class ArticleModel(BaseResourceModel):
 
 
 @registry.resource('article')
-class Article(BaseArticle):
+class Article(BaseResource):
     model = ArticleModel

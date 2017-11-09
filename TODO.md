@@ -1,7 +1,5 @@
 # Now
 
-- ReST and Markdown fields in schemas
-
 - Finish series (indicate active)
 
 - Feeds

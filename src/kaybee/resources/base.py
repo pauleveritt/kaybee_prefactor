@@ -217,6 +217,26 @@ class BaseResource(CoreType):
 
         return references
 
+    def series(self, site):
+        parent = site.resources.get(self.parent)
+        if not parent:
+            return None
+        results = []
+        for docname in parent.toctree:
+            resource = site.resources.get(docname)
+            if resource:
+                # We might have a non-resource page in the toctree,
+                # so skip it if true
+                synopsis = getattr(resource.props, 'synopsis', False)
+                results.append(
+                    dict(
+                        docname=docname,
+                        title=resource.title,
+                        synopsis=synopsis
+                    )
+                )
+        return results
+
     def to_json(self, site):
         d = super().to_json(site)
         d['template'] = self.template(site)
@@ -234,27 +254,3 @@ class BaseResource(CoreType):
         except AttributeError:
             d['series'] = []
         return d
-
-
-class BaseArticle(BaseResource):
-    """ A building-block for custom articles """
-
-    model = BaseResourceModel
-
-    def series(self, site):
-        parent = site.resources[self.parent]
-        results = []
-        for docname in parent.toctree:
-            resource = site.resources.get(docname)
-            if resource:
-                # We might have a non-resource page in the toctree,
-                # so skip it if true
-                synopsis = getattr(resource.props, 'synopsis', False)
-                results.append(
-                    dict(
-                        docname=docname,
-                        title=resource.title,
-                        synopsis=synopsis
-                    )
-                )
-        return results

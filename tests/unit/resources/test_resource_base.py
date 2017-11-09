@@ -44,7 +44,10 @@ overrides:
     f1 = Section('f1/index', 'section', f1_content)
     f1_about = Article('f1/about', 'article', '')
     f2 = Section('f1/f2/index', 'section', '')
+    f2.title = 'F2 Index'
     f2_about = Article('f1/f2/about', 'article', '')
+    f2_about.title = 'F2 About'
+    f2_about.props.synopsis = 'F2 Synopsis'
     f3 = Section('f1/f2/f3/index', 'section', 'style: f3style')
     f3_about = Article('f1/f2/f3/about', 'article', '')
     f4 = Section('f1/f2/f3/f4/index', 'section', '')
@@ -166,6 +169,31 @@ class TestInheritedProperty:
 def test_is_published(content, expected):
     article = Article('d1/a1', 'article', content)
     assert expected is article.is_published()
+
+
+class TestSeries:
+    def test_method_exists(self, site):
+        resource = site.resources['f1/f2/about']
+        assert 'series' == resource.series.__name__
+
+    def test_series_values(self, site):
+        # Assign a toctree
+        site.resources['f1/f2/index'].toctree = [
+            'f1/f2/index',
+            'f1/f2/about'
+        ]
+        resource = site.resources['f1/f2/about']
+        series = resource.series(site)
+        assert 'F2 Index' == series[0]['title']
+        # assert None is series[0]['synopsis']
+        assert 'F2 About' == series[1]['title']
+        assert 'F2 Synopsis' == series[1]['synopsis']
+
+    def test_series_empty(self, site):
+        # Do NOT assign a toctree
+        resource = site.resources['f1/f2/about']
+        series = resource.series(site)
+        assert [] == series
 
 
 class TestReferences:
