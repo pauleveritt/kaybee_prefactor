@@ -35,7 +35,9 @@ overrides:
     article:
         template: override_article.html
     section:
-        style: f1style    
+        style: f1style
+    all:
+        flag: 9933
     """
     index = Homepage('index', 'homepage', '')
     about = Article('about', 'article', '')
@@ -93,17 +95,6 @@ def test_root_parents(site, docname, parents_len, parentname):
         assert parentname == parents[0].name
 
 
-class TestFindProp:
-    def test_find_prop_none_local(self, site):
-        a = Article('f1/f2/f3/f4/about', 'kbtype', '')
-        prop = a.find_prop(site, 'foo')
-        assert None is prop
-
-    def test_section_nonesite(self, site):
-        a = Article('xxx1/xxx2/xxx3/about', 'kbtype', '')
-        assert None is a.section(site)
-
-
 def test_section_f1(site):
     a = Article('f1/f2/f3/another', 'kbtype', '')
     assert 'f1/f2/f3/index' == a.section(site).docname
@@ -134,6 +125,14 @@ class TestInheritedProperty:
         expected = 'f1_section_template.html'
         assert expected == site.resources['f1/index'].template(site)
 
+    def test_article_style_from_props(self, site, da):
+        da = site.resources['f1/f2/index']
+        assert 'f1style' == da.style(site)
+
+    def test_section_style_from_props(self, site):
+        da = site.resources['f1/f2/f3/index']
+        assert 'f3style' == da.style(site)
+
     def test_template_from_section(self, site, da):
         expected = 'override_article.html'
         assert expected == da.template(site)
@@ -144,19 +143,19 @@ class TestInheritedProperty:
         del f1.props.overrides['article']
         assert 'article.html' == da.template(site)
 
-    def test_style_from_props(self, site):
-        da = site.resources['f1/f2/f3/index']
-        assert 'f3style' == da.style(site)
-
     def test_style_from_section(self, site):
         da = site.resources['f1/f2/index']
         assert 'f1style' == da.style(site)
 
-    def test_style_from_class(self, site):
-        # Delete the lineage-inherited article template prop on the section
-        del site.resources['f1/index'].props.overrides['section']
-        da = site.resources['f1/f2/index']
-        assert 'section.html' == da.style(site)
+    def test_nostyle_type_override(self, site):
+        # override is for section, not article
+        da = site.resources['f1/f2/about']
+        assert None is da.style(site)
+
+    def test_flag_from_all_overrides(self, site):
+        # Get a flag from the "all" section of overrides
+        da = site.resources['f1/f2/f3/index']
+        assert '9933' == da.find_prop(site, 'flag')
 
 
 @pytest.mark.parametrize('content, expected', [

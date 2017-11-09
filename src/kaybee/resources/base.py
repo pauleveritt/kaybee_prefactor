@@ -51,11 +51,34 @@ class BaseResource(CoreType):
             return section[0]
         return None
 
-    def get_override(self, site, kbtype, propname):
-        """ Find a prop either local, overrides, or from class  """
+    # def get_override(self, site, kbtype, propname):
+    #     """ Find a prop either local, overrides, or from class  """
+    #
+    #     # Instance
+    #     custom_prop = getattr(self.props, propname)
+    #     if custom_prop:
+    #         return custom_prop
+    #
+    #     # Parents...can't use find_prop as have to keep going on overrides
+    #     for parent in self.parents(site):
+    #         overrides = parent.props.overrides
+    #         if overrides:
+    #             kbtype_override = parent.props.overrides.get(self.kbtype)
+    #             if kbtype_override:
+    #                 prop_override = kbtype_override.get(propname)
+    #                 if prop_override:
+    #                     return prop_override
+    #
+    #     return self.__class__.__name__.lower() + '.html'
+    #
+    def find_prop(self, site, prop_name):
+        """ Starting with self, walk until you find prop or None """
+
+        # Props in parents can be overridden on per-type basis
+        kbtype = self.kbtype
 
         # Instance
-        custom_prop = getattr(self.props, propname)
+        custom_prop = getattr(self.props, prop_name, None)
         if custom_prop:
             return custom_prop
 
@@ -63,23 +86,35 @@ class BaseResource(CoreType):
         for parent in self.parents(site):
             overrides = parent.props.overrides
             if overrides:
-                kbtype_override = parent.props.overrides.get(self.kbtype)
-                if kbtype_override:
-                    prop_override = kbtype_override.get(propname)
+                # First try in the per-type overrides
+                kbtype_overrides = overrides.get(self.kbtype)
+                if kbtype_overrides:
+                    prop_override = kbtype_overrides.get(prop_name)
                     if prop_override:
                         return prop_override
 
-        return self.__class__.__name__.lower() + '.html'
+                # Next in the "all" section of overrides
+                all_overrides = overrides.get('all')
+                if all_overrides:
+                    prop_override = all_overrides.get(prop_name)
+                    if prop_override:
+                        return prop_override
+
+        return
 
     def template(self, site):
         """ Get the template from: YAML, hierarchy, or class """
 
-        return self.get_override(site, self.kbtype, 'template')
+        template_name = self.find_prop(site, 'template')
+        if template_name:
+            return template_name
+        else:
+            return self.__class__.__name__.lower() + '.html'
 
     def style(self, site):
-        """ Get the style from: YAML, hierarchy, or class """
+        """ Get the style from: YAML or hierarchy """
 
-        return self.get_override(site, self.kbtype, 'style')
+        return self.find_prop(site, 'style')
 
     def parents(self, site):
         """ Split the path in name and get parents """
@@ -102,18 +137,6 @@ class BaseResource(CoreType):
             nav_href = nav_href[:-6]
 
         return self.name.startswith(nav_href)
-
-    def find_prop(self, site, prop_name):
-        """ Starting with self, walk until you find prop or None """
-
-        lineage = self.parents(site)
-        lineage.insert(0, self)
-        for resource in lineage:
-            v = getattr(resource.props, prop_name, None)
-            if v:
-                # This resource has the prop, return it
-                return v
-        return None
 
     @property
     def navmenu_href(self):

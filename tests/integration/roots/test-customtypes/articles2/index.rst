@@ -10,6 +10,8 @@ Articles
     overrides:
         article:
             template: article_custom_template2.html
+        all:
+            style: is-bold is-info
 
 Content after YAML.
 

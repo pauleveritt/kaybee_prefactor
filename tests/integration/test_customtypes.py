@@ -98,7 +98,7 @@ class TestArticle5:
         # No props
         node = page.find(id=f'kb-debug-lineage-{propname}')
         value = node.contents[0].strip()
-        assert value == propvalue
+        assert propvalue == value
 
     def test_custom_template(self, page):
         node = page.find(id='kb-debug-resource-template')
@@ -108,9 +108,10 @@ class TestArticle5:
 
 @pytest.mark.parametrize('json_page', ['debug_dump.json', ], indirect=True)
 class TestArticle5Json:
-    # def test_override_style(self, json_page):
-    #     article = json_page['site']['resources']['articles2/article5']
-    #     assert 'is-bold is-info' == article['style']
+    def test_override_style(self, json_page):
+        article = json_page['site']['resources']['articles2/article5']
+        assert 'is-bold is-info' == article['style']
+
     def test_override_template(self, json_page):
         article = json_page['site']['resources']['articles2/article5']
         assert 'article_custom_template2.html' == article['template']
