@@ -1,7 +1,5 @@
 # Now
 
-- Fix the inherited style property
-
 - ReST and Markdown fields in schemas
 
 - Finish series (indicate active)
@@ -9,7 +7,6 @@
 - Feeds
 
 - Redo sidebars as widgets
-
 
 # Next
 
