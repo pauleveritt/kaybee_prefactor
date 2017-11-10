@@ -1,7 +1,5 @@
 # Now
 
-- Redo sidebars as widgets
-
 # Next
 
 - Make relative/absolute URLs work, e.g. /blog vs. Sphinx rendered with 
