@@ -51,31 +51,8 @@ class BaseResource(CoreType):
             return section[0]
         return None
 
-    # def get_override(self, site, kbtype, propname):
-    #     """ Find a prop either local, overrides, or from class  """
-    #
-    #     # Instance
-    #     custom_prop = getattr(self.props, propname)
-    #     if custom_prop:
-    #         return custom_prop
-    #
-    #     # Parents...can't use find_prop as have to keep going on overrides
-    #     for parent in self.parents(site):
-    #         overrides = parent.props.overrides
-    #         if overrides:
-    #             kbtype_override = parent.props.overrides.get(self.kbtype)
-    #             if kbtype_override:
-    #                 prop_override = kbtype_override.get(propname)
-    #                 if prop_override:
-    #                     return prop_override
-    #
-    #     return self.__class__.__name__.lower() + '.html'
-    #
     def find_prop(self, site, prop_name):
         """ Starting with self, walk until you find prop or None """
-
-        # Props in parents can be overridden on per-type basis
-        kbtype = self.kbtype
 
         # Instance
         custom_prop = getattr(self.props, prop_name, None)

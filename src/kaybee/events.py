@@ -5,6 +5,7 @@ import os
 
 import dectate
 from docutils import nodes
+from feedgen.feed import FeedGenerator
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
 from kaybee import resources, widgets, references
@@ -163,6 +164,34 @@ def generate_debug_info(builder, env):
     output_filename = os.path.join(builder.outdir, 'debug_dump.json')
     with open(output_filename, 'w') as f:
         json.dump(debug, f, default=datetime_handler)
+import pytz
+
+def generate_feeds(app):
+    site = app.env.site
+    feed_url = site.config.feed_url
+    if feed_url:
+        feed_filename = os.path.join(app.builder.outdir, 'atom.xml')
+        fg = FeedGenerator()
+        fg.id(feed_url)
+        fg.link(href=feed_url)
+        fg.title(app.config.project)
+        for resource in site.filter_resources(
+                sort_value='published',
+                order=-1,
+                limit=99
+        ):
+            fe = fg.add_entry()
+            fe.id(os.path.join(feed_url, resource.docname))
+            fe.link(href=os.path.join(feed_url, resource.docname + '.html'))
+            fe.title(resource.title)
+            fe.content(resource.props.synopsis)
+            # published = resource.props.published
+            # fe.published(published)
+
+        fg.atom_file(feed_filename)
+
+    if 0:
+        yield
 
 
 def kaybee_context(app, pagename, templatename, context, doctree):

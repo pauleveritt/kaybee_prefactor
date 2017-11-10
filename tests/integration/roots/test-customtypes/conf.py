@@ -18,5 +18,6 @@ exclude_patterns = ['_build']
 
 kaybee_config = SiteConfig(
     logo=dict(img_url='xyz.png'),
+    feed_url='http://some.where',
     is_debug=True
 )

@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 from shutil import rmtree
+from xml.etree import ElementTree
 
 import pytest
 from bs4 import BeautifulSoup
@@ -18,7 +19,6 @@ pytest_plugins = 'sphinx.testing.fixtures'
 
 @pytest.fixture(scope='session')
 def remove_sphinx_projects(sphinx_test_tempdir):
-
     # Even upon exception, remove any directory from temp area
     # which looks like a Sphinx project. This ONLY runs once.
     roots_path = Path(sphinx_test_tempdir)
@@ -30,6 +30,7 @@ def remove_sphinx_projects(sphinx_test_tempdir):
                 rmtree(str(d))
 
     yield
+
 
 @pytest.fixture()
 def rootdir(remove_sphinx_projects):
@@ -57,3 +58,9 @@ def json_page(content, request):
     c = (content.outdir / pagename).text()
 
     yield json.loads(c)
+
+
+@pytest.fixture()
+def atom_page(content, request):
+    c = (content.outdir / 'atom.xml').text()
+    yield ElementTree.fromstring(c)

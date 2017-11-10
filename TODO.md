@@ -1,13 +1,13 @@
 # Now
 
-- Feeds
-
 - Redo sidebars as widgets
 
 # Next
 
 - Make relative/absolute URLs work, e.g. /blog vs. Sphinx rendered with 
   "pathto" available in widgets
+
+- Feed publish dates with configurable timezones
 
 - Redirects like ABlog
 

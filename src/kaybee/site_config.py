@@ -16,4 +16,5 @@ class SiteConfig(BaseModel):
     logo: Logo = None
     social_media: SocialMedia = None
     copyright = 'All Rights Reserved'
+    feed_url: str = None
     is_debug = False

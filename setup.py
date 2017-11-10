@@ -26,6 +26,7 @@ CLASSIFIERS = [
 ]
 INSTALL_REQUIRES = [
     'sphinx',
+    'feedgen',
     'dectate',
     'importscan',
     'ruamel.yaml',

@@ -5,7 +5,8 @@ from kaybee.events import (
     missing_reference,
     generate_debug_info,
     builder_init,
-    register_directives
+    register_directives,
+    generate_feeds
 )
 from kaybee.site_config import SiteConfig
 
@@ -41,6 +42,8 @@ def setup(app):
     app.connect('env-check-consistency', validate_references)
 
     app.connect('env-check-consistency', generate_debug_info)
+
+    app.connect('html-collect-pages', generate_feeds)
 
     app.connect('html-page-context', kaybee_context)
 
