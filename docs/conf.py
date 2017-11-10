@@ -1,24 +1,22 @@
-import os
-import sys
-
-import kaybee
-
-# -- General configuration ------------------------------------------------
-
-# If your documentation needs a minimal Sphinx version, state it here.
-#
-# needs_sphinx = '1.0'
-
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
+# here = os.path.abspath(os.path.dirname(__file__))
+# sys.path.insert(0, os.path.join(here, 'typedefs'))
+# noinspection PyUnresolvedReferences
+import docs.typedefs.category
+# noinspection PyUnresolvedReferences
+import docs.typedefs.demotype
+# noinspection PyUnresolvedReferences
+import docs.typedefs.genericpage
+# noinspection PyUnresolvedReferences
+import docs.typedefs.toctree
+import kaybee
 
-here = os.path.abspath(os.path.dirname(__file__))
-sys.path.insert(0, os.path.join(here, 'typedefs'))
-from demotype import DemoType
-from genericpage import Genericpage
-from toctree import Toctree
-from category import Category
+# -- General configuration ------------------------------------------------
+# If your documentation needs a minimal Sphinx version, state it here.
+#
+# needs_sphinx = '1.0'
 
 extensions = ['sphinx.ext.intersphinx',
               kaybee.__title__,

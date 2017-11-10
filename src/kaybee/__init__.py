@@ -8,7 +8,7 @@ from kaybee.events import (
     register_directives,
     generate_feeds
 )
-from kaybee.site_config import SiteConfig
+from kaybee.siteconfig import SiteConfig
 
 __version__ = "0.0.2"
 

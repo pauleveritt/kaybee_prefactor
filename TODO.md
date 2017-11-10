@@ -1,5 +1,7 @@
 # Now
 
+- Change from feedgen to something not requiring lxml
+
 # Next
 
 - Make relative/absolute URLs work, e.g. /blog vs. Sphinx rendered with 

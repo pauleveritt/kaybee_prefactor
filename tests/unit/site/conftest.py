@@ -5,7 +5,7 @@ from kaybee.resources.base import (
     BaseContainerModel
 )
 from kaybee.site import Site
-from kaybee.site_config import SiteConfig
+from kaybee.siteconfig import SiteConfig
 
 
 class Article(BaseResource):

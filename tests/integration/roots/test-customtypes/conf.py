@@ -3,7 +3,7 @@ import os
 import sys
 
 import kaybee
-from kaybee.site_config import SiteConfig
+from kaybee.siteconfig import SiteConfig
 
 here = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(here, 'typedefs'))
