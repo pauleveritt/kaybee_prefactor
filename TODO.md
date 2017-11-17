@@ -17,6 +17,10 @@
 
 - Make relative/absolute URLs work, e.g. /blog vs. Sphinx rendered with 
   "pathto" available in widgets
+  
+- Break resources, widgets, etc. into plugin packages
+
+- Have a basic "resource" that can be used in docs
 
 - Feed publish dates with configurable timezones
 
@@ -39,3 +43,7 @@
     - Running app.py
     
     - npm start
+
+# Later
+
+- Restructure everything to make it easy to jump from code -> test
