@@ -1,7 +1,5 @@
 # Now
 
-- Change from feedgen to something not requiring lxml
-
 - Docutils unit test
 
 - "excerpt" support, like ablog
@@ -47,3 +45,8 @@
 # Later
 
 - Restructure everything to make it easy to jump from code -> test
+
+# Done 
+
+- Change from feedgen to something not requiring lxml
+
