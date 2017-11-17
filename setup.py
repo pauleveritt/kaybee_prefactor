@@ -29,7 +29,8 @@ INSTALL_REQUIRES = [
     'dectate',
     'importscan',
     'ruamel.yaml',
-    'pydantic'
+    'pydantic',
+    'werkzeug'
 ]
 
 ENTRY_POINTS = {
