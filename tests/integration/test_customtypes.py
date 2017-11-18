@@ -14,7 +14,7 @@ class TestArticle1:
     def test_correct_content(self, page):
         section = page.find(id='article-1')
         content = section.find('p').contents[0].strip()
-        assert 'article1-body' in content
+        assert 'First paragraph.' == content
 
     def test_siteconfig_value(self, page):
         logo = page.find(id='siteconfig-logo')
@@ -40,6 +40,11 @@ class TestArticle1Json:
         article = json_page['site']['resources']['articles/article1']
         assert 'Article 1' == article['title']
 
+    def test_default_excerpt(self, json_page):
+        # Get the excerpt from the first paragraph
+        article = json_page['site']['resources']['articles/article1']
+        assert 'First paragraph.' == article['excerpt']
+
     def test_in_nav(self, json_page):
         article = json_page['site']['resources']['articles/article1']
         assert False is article['in_nav']
@@ -61,6 +66,11 @@ class TestArticle1Json:
 
 @pytest.mark.parametrize('json_page', ['debug_dump.json', ], indirect=True)
 class TestArticle2Json:
+    def test_manual_excerpt(self, json_page):
+        # Get the excerpt from the YAML
+        article = json_page['site']['resources']['articles/article2']
+        assert 'Manual excerpt' == article['excerpt']
+
     def test_in_nav(self, json_page):
         article = json_page['site']['resources']['articles/article2']
         assert False is article['in_nav']
@@ -72,6 +82,11 @@ class TestArticle2Json:
 
 @pytest.mark.parametrize('json_page', ['debug_dump.json', ], indirect=True)
 class TestArticle3Json:
+    def test_auto_excerpt_zero(self, json_page):
+        # Get the excerpt from the YAML
+        article = json_page['site']['resources']['articles/article3']
+        assert None is article['excerpt']
+
     def test_weight(self, json_page):
         article = json_page['site']['resources']['articles/article3']
         assert 10 == article['weight']
@@ -86,6 +101,12 @@ class TestArticle4:
 
 @pytest.mark.parametrize('json_page', ['debug_dump.json', ], indirect=True)
 class TestArticle4Json:
+    def test_auto_excerpt_two(self, json_page):
+        # Get the excerpt from the YAML
+        article = json_page['site']['resources']['articles/article4']
+        assert 'First paragraph' in article['excerpt']
+        assert 'Second paragraph' in article['excerpt']
+
     def test_in_nav(self, json_page):
         article = json_page['site']['resources']['articles/article4']
         assert True is article['in_nav']

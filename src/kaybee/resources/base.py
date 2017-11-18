@@ -44,6 +44,8 @@ class BaseContainerModel(BaseResourceModel):
 class BaseResource(CoreType):
     kind = 'resource'
     toctree = []
+    title = None
+    excerpt = None
 
     def section(self, site):
         """ Which section is this in, if any """
@@ -221,6 +223,7 @@ class BaseResource(CoreType):
         d = super().to_json(site)
         d['template'] = self.template(site)
         d['title'] = self.title
+        d['excerpt'] = self.excerpt
         d['style'] = self.style(site)
         d['section'] = getattr(self.section(site), 'name', '')
         d['in_nav'] = self.props.in_nav
