@@ -123,7 +123,6 @@ def da(site):
 
 
 class TestInheritedProperty:
-
     def test_template_from_props(self, site, da):
         expected = 'f1_section_template.html'
         assert expected == site.resources['f1/index'].template(site)
@@ -259,3 +258,41 @@ tag:
 
         references = article.references(site)
         assert [101, 202, 303] == references['tag']
+
+
+class TestExcerpt:
+    def test_default(self, site: Site):
+        # This is auto excerpt using default of 1 paragraph
+        content = """
+                """
+        article: Article = Article('d1/a1', 'article', content)
+
+    def test_props_has_excerpt(self, site: Site):
+        # Resource props has an excerpt string
+        content = """
+        tag:
+            - tag1
+            - tag2
+            - tag3        
+                """
+        article: Article = Article('d1/a1', 'article', content)
+
+    def test_auto_excerpt_zero(self, site: Site):
+        # Resource says no excerpt, auto_excerpt = 0
+        content = """
+        tag:
+            - tag1
+            - tag2
+            - tag3        
+                """
+        article: Article = Article('d1/a1', 'article', content)
+
+    def test_auto_excerpt_two(self, site: Site):
+        # auto_excerpt > default of 1
+        content = """
+        tag:
+            - tag1
+            - tag2
+            - tag3        
+                """
+        article: Article = Article('d1/a1', 'article', content)

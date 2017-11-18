@@ -57,8 +57,3 @@ class TestGetRstExcerpt:
 
         result = get_rst_excerpt(excerpt, 2)
         assert 'First paragraph. Second paragraph.' == result
-
-# Other excerpt policies, outside of RST extraction:
-# - exclude_excerpt, on a single resource
-# - exclude_excerpt site-wide
-# - Getting the value from synopsis in the model

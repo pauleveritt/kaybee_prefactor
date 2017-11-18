@@ -21,6 +21,8 @@ class BaseResourceModel(BaseModel):
     published: datetime = None
     category: ReferencesType = []
     tag: ReferencesType = []
+    excerpt: str = None
+    auto_excerpt: int = 1
 
 
 class BaseContainerModel(BaseResourceModel):
