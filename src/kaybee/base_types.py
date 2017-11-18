@@ -124,7 +124,8 @@ class CoreTocTree:
         self.entries = []
         for flag, pagename in entries:
             title = titles[pagename].children[0]
-            resource = resources.get(pagename.split('/index')[0], None)
+            # resource = resources.get(pagename.split('/index')[0], None)
+            resource = resources.get(pagename, None)
             if resource and not resource.is_published():
                 continue
             self.entries.append(dict(
