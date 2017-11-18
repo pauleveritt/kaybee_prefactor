@@ -47,7 +47,6 @@ overrides:
     f2.title = 'F2 Index'
     f2_about = Article('f1/f2/about', 'article', '')
     f2_about.title = 'F2 About'
-    f2_about.props.synopsis = 'F2 Synopsis'
     f3 = Section('f1/f2/f3/index', 'section', 'style: f3style')
     f3_about = Article('f1/f2/f3/about', 'article', '')
     f4 = Section('f1/f2/f3/f4/index', 'section', '')
@@ -184,9 +183,7 @@ class TestSeries:
         resource = site.resources['f1/f2/about']
         series = resource.series(site)
         assert 'F2 Index' == series[0]['title']
-        # assert None is series[0]['synopsis']
         assert 'F2 About' == series[1]['title']
-        assert 'F2 Synopsis' == series[1]['synopsis']
 
     def test_series_empty(self, site):
         # Do NOT assign a toctree

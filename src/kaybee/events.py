@@ -197,7 +197,7 @@ def generate_feeds(app):
                 website_url, app.builder.get_target_uri(post.docname))
 
             # content = post.to_html(pagename, fulltext=feed_fulltext)
-            content = post.props.synopsis
+            content = post.props.excerpt
             feed.add(post.title,
                      content=content,
                      title_type='text',

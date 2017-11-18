@@ -17,7 +17,6 @@ class BaseResourceModel(BaseModel):
     style: str = None
     in_nav: bool = False
     weight: int = 0
-    synopsis: str = None
     published: datetime = None
     category: ReferencesType = []
     tag: ReferencesType = []
@@ -208,12 +207,12 @@ class BaseResource(CoreType):
             if resource:
                 # We might have a non-resource page in the toctree,
                 # so skip it if true
-                synopsis = getattr(resource.props, 'synopsis', False)
+                excerpt = getattr(resource.excerpt, 'excerpt', False)
                 results.append(
                     dict(
                         docname=docname,
                         title=resource.title,
-                        synopsis=synopsis,
+                        excerpt=excerpt,
                         current=self.docname == docname
                     )
                 )
