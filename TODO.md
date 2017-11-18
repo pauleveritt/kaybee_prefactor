@@ -1,8 +1,6 @@
 # Now
 
-- Docutils unit test
-
-- "excerpt" support, like ablog
+# Next
 
 - Have a date format in config like ablog line 280 post.py
 
@@ -10,8 +8,6 @@
   _get_section_title
   
 - Multiple feeds  
-
-# Next
 
 - Make relative/absolute URLs work, e.g. /blog vs. Sphinx rendered with 
   "pathto" available in widgets
