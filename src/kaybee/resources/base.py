@@ -212,7 +212,7 @@ class BaseResource(CoreType):
                     dict(
                         docname=docname,
                         title=resource.title,
-                        excerpt=excerpt,
+                        excerpt=resource.excerpt,
                         current=self.docname == docname
                     )
                 )
