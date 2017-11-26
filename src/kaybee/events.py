@@ -74,8 +74,6 @@ def kaybee_context(app, pagename, templatename, context, doctree):
 
     resource = site.resources.get(pagename)
 
-    dectate.commit(kb)
-
     context['site_config'] = app.config.kaybee_config
 
     if resource:
