@@ -1,7 +1,7 @@
-from kaybee.registry import registry
+from kaybee import kb
 from kaybee.resources.base import BaseContainerModel, BaseResource
 
 
-@registry.resource('section')
+@kb.resource('section')
 class Section(BaseResource):
     model = BaseContainerModel

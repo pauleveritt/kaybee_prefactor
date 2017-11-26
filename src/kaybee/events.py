@@ -8,9 +8,9 @@ from docutils import nodes
 from sphinx.jinja2glue import SphinxFileSystemLoader
 from werkzeug.contrib.atom import AtomFeed
 
+from kaybee import kb
 import kaybee
 from kaybee import resources, widgets, references
-from kaybee.registry import registry
 from kaybee.resources.directive import BaseResourceDirective
 from kaybee.site import Site
 from kaybee.widgets.directive import BaseWidgetDirective
@@ -24,7 +24,7 @@ def datetime_handler(x):
 
 def builder_init(app):
     """ On the builder init event, commit registry and pass setup """
-    dectate.commit(registry)
+    dectate.commit(kb)
     resources.setup(app)
     widgets.setup(app)
     references.setup(app)
@@ -52,9 +52,9 @@ def add_templates_paths(app, env, docnames):
     template_bridge.loaders.append(SphinxFileSystemLoader(confdir))
 
     # Add the widgets and resources
-    values = list(registry.config.widgets.values()) + \
-             list(registry.config.resources.values()) + \
-             list(registry.config.cores.values())
+    values = list(kb.config.widgets.values()) + \
+             list(kb.config.resources.values()) + \
+             list(kb.config.cores.values())
 
     for v in values:
         f = os.path.dirname(inspect.getfile(v))
@@ -73,10 +73,10 @@ def initialize_site(app, env, docnames):
 def register_directives(app, env, docnames):
     """ Walk the registry and add sphinx directives """
 
-    for kbtype in registry.config.resources.keys():
+    for kbtype in kb.config.resources.keys():
         app.add_directive(kbtype, BaseResourceDirective)
 
-    for kbtype in registry.config.widgets.keys():
+    for kbtype in kb.config.widgets.keys():
         app.add_directive(kbtype, BaseWidgetDirective)
 
 
@@ -135,9 +135,9 @@ def generate_debug_info(builder, env):
     debug = dict()
     qr = dectate.Query('resource')
     qw = dectate.Query('widget')
-    debug['registry'] = dict(
-        resources=[i[0].name for i in list(qr(registry))],
-        widgets=[i[0].name for i in list(qw(registry))],
+    debug['kb'] = dict(
+        resources=[i[0].name for i in list(qr(kb))],
+        widgets=[i[0].name for i in list(qw(kb))],
     )
 
     # Navmenu
@@ -226,7 +226,7 @@ def kaybee_context(app, pagename, templatename, context, doctree):
 
     resource = site.resources.get(pagename)
 
-    dectate.commit(registry)
+    dectate.commit(kb)
 
     context['site_config'] = app.config.kaybee_config
 

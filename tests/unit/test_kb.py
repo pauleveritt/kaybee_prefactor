@@ -1,11 +1,9 @@
 import dectate
 import pytest
 
-from kaybee.registry import (
-    ResourceAction,
-    WidgetAction,
-    CoreAction,
-)
+from kaybee.core_action import CoreAction
+from kaybee.resources.action import ResourceAction
+from kaybee.widgets.action import WidgetAction
 
 
 class DummySection:

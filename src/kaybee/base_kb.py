@@ -15,7 +15,7 @@ from kaybee.resources.action import ResourceAction
 from kaybee.widgets.action import WidgetAction
 
 
-class registry(dectate.App):
+class kb(dectate.App):
     core = dectate.directive(CoreAction)
     resource = dectate.directive(ResourceAction)
     widget = dectate.directive(WidgetAction)

@@ -1,3 +1,4 @@
+from kaybee.base_kb import kb
 from kaybee.events import (
     kaybee_context, add_templates_paths,
     initialize_site, purge_resources,

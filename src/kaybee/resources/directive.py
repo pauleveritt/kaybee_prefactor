@@ -1,6 +1,6 @@
 from docutils.parsers.rst import Directive
 
-from kaybee.registry import registry
+from kaybee import kb
 
 
 class BaseResourceDirective(Directive):
@@ -9,7 +9,7 @@ class BaseResourceDirective(Directive):
     @classmethod
     def get_resource_class(cls, resource_directive):
         """ Make this easy to mock """
-        return registry.config.resources[resource_directive]
+        return kb.config.resources[resource_directive]
 
     @property
     def docname(self):

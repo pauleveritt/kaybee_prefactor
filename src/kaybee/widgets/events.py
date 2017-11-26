@@ -11,14 +11,15 @@ from kaybee.widgets.node import widget
 def process_widget_nodes(app: Sphinx, doctree, fromdocname):
     """ Callback registered with Sphinx's doctree-resolved event """
     # Setup a template and context
-    from kaybee.registry import registry
+
+    from kaybee import kb
 
     builder: StandaloneHTMLBuilder = app.builder
     env: BuildEnvironment = app.env
     site: Site = env.site
 
     # Toctree support. First, get the registered toctree class, if any
-    registered_toctree = registry.config.cores.get('toctree')
+    registered_toctree = kb.config.cores.get('toctree')
 
     if registered_toctree:
         for node in doctree.traverse(toctree):
@@ -32,7 +33,8 @@ def process_widget_nodes(app: Sphinx, doctree, fromdocname):
             # The challenge here is that some items in a toctree
             # might not be resources in our "database". So we have
             # to ask Sphinx to get us the titles.
-            w.set_entries(node.attributes['entries'], env.titles, site.resources)
+            w.set_entries(node.attributes['entries'], env.titles,
+                          site.resources)
             output = w.render(builder, context, site)
 
             # Put the output into the node contents

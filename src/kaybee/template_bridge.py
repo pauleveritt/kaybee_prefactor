@@ -11,7 +11,7 @@ an XSLT transform.
 
 from sphinx.jinja2glue import BuiltinTemplateLoader
 
-from kaybee.registry import registry
+from kaybee import kb
 
 
 class KaybeeBridge(BuiltinTemplateLoader):
@@ -20,7 +20,7 @@ class KaybeeBridge(BuiltinTemplateLoader):
         output = super().render(template, context)
 
         # If there is a registered postrenderer, apply it
-        postrenderer = registry.config.cores.get('postrenderer')
+        postrenderer = kb.config.cores.get('postrenderer')
         if postrenderer:
             pr = postrenderer()
             output = pr(output)

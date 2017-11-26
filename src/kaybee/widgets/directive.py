@@ -1,6 +1,6 @@
 from docutils.parsers.rst import Directive
 
-from kaybee.registry import registry
+from kaybee import kb
 from kaybee.widgets.node import widget
 
 
@@ -10,7 +10,7 @@ class BaseWidgetDirective(Directive):
     @classmethod
     def get_widget_class(cls, widget_directive):
         """ Make this easy to mock """
-        return registry.config.widgets[widget_directive]
+        return kb.config.widgets[widget_directive]
 
     def get_widget(self, docname):
         # Get the info from this directive and make instance

@@ -1,7 +1,7 @@
-from kaybee.registry import registry
+from kaybee import kb
 
 
-@registry.core('postrenderer')
+@kb.core('postrenderer')
 class Injector:
     def __call__(self, html):
         return html + '\n<div id="postrenderer-flag">987</div>'

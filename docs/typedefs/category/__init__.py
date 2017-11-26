@@ -1,7 +1,7 @@
+from kaybee import kb
 from kaybee.references import BaseReference
-from kaybee.registry import registry
 
 
-@registry.resource('category')
+@kb.resource('category')
 class Category(BaseReference):
     pass

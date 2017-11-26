@@ -1,7 +1,7 @@
-from kaybee.registry import registry
+from kaybee import kb
 
 
-@registry.core('genericpage')
+@kb.core('genericpage')
 class Genericpage:
     def __init__(self, docname):
         self.docname = docname

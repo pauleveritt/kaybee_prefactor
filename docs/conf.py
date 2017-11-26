@@ -1,16 +1,12 @@
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-# here = os.path.abspath(os.path.dirname(__file__))
-# sys.path.insert(0, os.path.join(here, 'typedefs'))
+import os
+import sys
+here = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(here))
 # noinspection PyUnresolvedReferences
-import docs.typedefs.category
-# noinspection PyUnresolvedReferences
-import docs.typedefs.demotype
-# noinspection PyUnresolvedReferences
-import docs.typedefs.genericpage
-# noinspection PyUnresolvedReferences
-import docs.typedefs.toctree
+from typedefs import category, demotype, genericpage, toctree
 import kaybee
 
 # -- General configuration ------------------------------------------------
