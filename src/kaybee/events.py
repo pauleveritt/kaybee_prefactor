@@ -10,8 +10,9 @@ from werkzeug.contrib.atom import AtomFeed
 
 from kaybee import kb
 import kaybee
-from kaybee import resources, widgets, references
+from kaybee import resources, widgets
 from kaybee.resources.directive import BaseResourceDirective
+from kaybee.plugins import references
 from kaybee.site import Site
 from kaybee.widgets.directive import BaseWidgetDirective
 

@@ -1,5 +1,5 @@
 from kaybee import kb
-from kaybee.references import BaseReference
+from kaybee.plugins.references import BaseReference
 
 
 @kb.resource('category')
