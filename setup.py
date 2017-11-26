@@ -27,7 +27,6 @@ CLASSIFIERS = [
 INSTALL_REQUIRES = [
     'sphinx',
     'dectate',
-    'importscan',
     'ruamel.yaml',
     'pydantic',
     'werkzeug'
