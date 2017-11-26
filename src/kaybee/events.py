@@ -50,24 +50,14 @@ def purge_resources(app, env, docname):
 def call_env_before_read_docs(app, env, docnames):
     """ Single event handler which dispatches to kb events"""
 
-    for callback in EventAction.get_callbacks(kb, 'env-before-read-docs'):
-        callback(kb, app, env, docnames)
-
-
-def add_templates_paths(app, env, docnames):
-    """ Add the kaybee template directories
-
-     Using Sphinx's conf.py support for registering new template
-     directories is both cumbersome and, for us, wrong. We don't
-     want to do it at import time. Instead, we want to do it at
-     Dectate-configure time.
-     """
-
     template_bridge = app.builder.templates
 
     # Add _templates in the conf directory
     confdir = os.path.join(app.confdir, '_templates')
     template_bridge.loaders.append(SphinxFileSystemLoader(confdir))
+
+    for callback in EventAction.get_callbacks(kb, 'env-before-read-docs'):
+        callback(kb, app, env, docnames)
 
 
 def initialize_site(app, env, docnames):
