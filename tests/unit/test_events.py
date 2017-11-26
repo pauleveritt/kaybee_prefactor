@@ -4,7 +4,8 @@ Test the html context event handler
 import pytest
 
 from kaybee.events import (
-    initialize_site, kaybee_context, purge_resources
+    initialize_site,
+    kaybee_context,
 )
 
 
@@ -75,15 +76,15 @@ class TestInitializeSite:
         assert env.site.config['flag'] == 9
 
 
-class TestPurgeResources:
-    def test_import(self):
-        assert purge_resources.__name__ == 'purge_resources'
-
-    def test_has_site(self, app, env, site):
-        env.site = site
-        assert 'doc1' in env.site.resources
-        purge_resources(app, env, 'doc1')
-        assert 'doc1' not in env.site.resources
+# class TestPurgeResources:
+#     def test_import(self):
+#         assert purge_resources.__name__ == 'purge_resources'
+#
+#     def test_has_site(self, app, env, site):
+#         env.site = site
+#         assert 'doc1' in env.site.resources
+#         purge_resources(app, env, 'doc1')
+#         assert 'doc1' not in env.site.resources
 
 
 class TestKbContext:

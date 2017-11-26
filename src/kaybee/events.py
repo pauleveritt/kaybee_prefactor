@@ -41,10 +41,9 @@ def builder_init(app):
     references.setup(app)
 
 
-def purge_resources(app, env, docname):
-    if hasattr(env, 'site'):
-        # TODO need to remove widgets when the document has one
-        env.site.resources.pop(docname, None)
+def call_purge_doc(app, env, docname):
+    for callback in EventAction.get_callbacks(kb, 'env-purge-doc'):
+        callback(kb, app, env, docname)
 
 
 def call_env_before_read_docs(app, env, docnames):

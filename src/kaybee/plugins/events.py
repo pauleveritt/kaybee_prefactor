@@ -8,6 +8,7 @@ import dectate
 
 class EventAction(dectate.Action):
     _sphinx_event_names = [
+        'env-purge-doc',
         'env-before-read-docs'
     ]
     config = {

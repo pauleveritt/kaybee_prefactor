@@ -2,7 +2,7 @@ from kaybee.base_kb import kb
 from kaybee.events import (
     kaybee_context,
     initialize_site,
-    purge_resources,
+    call_purge_doc,
     validate_references,
     missing_reference,
     generate_debug_info,
@@ -34,7 +34,7 @@ def setup(app):
 
     app.connect('builder-inited', builder_init)
 
-    app.connect('env-purge-doc', purge_resources)
+    app.connect('env-purge-doc', call_purge_doc)
 
     app.connect('env-before-read-docs', initialize_site)
 

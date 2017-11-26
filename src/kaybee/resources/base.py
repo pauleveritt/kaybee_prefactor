@@ -241,6 +241,13 @@ class BaseResource(CoreType):
         return d
 
     @staticmethod
+    @kb.event('env-purge-doc', 'resources')
+    def purge_resources(app, env, docname):
+        if hasattr(env, 'site'):
+            # TODO need to remove widgets when the document has one
+            env.site.resources.pop(docname, None)
+
+    @staticmethod
     @kb.event('env-before-read-docs', 'resources')
     def register_templates(kb, app, env, docnames):
         """ Called from event dispatch, add resource dir to templates """
