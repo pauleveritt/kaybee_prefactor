@@ -14,13 +14,14 @@ class EventAction(dectate.Action):
         'events': dict
     }
 
-    def __init__(self, name):
+    def __init__(self, name, scope):
         assert name in self._sphinx_event_names
         super().__init__()
         self.name = name
+        self.scope = scope
 
     def identifier(self, events):
-        return self.name
+        return self.name + '-' + self.scope
 
     def perform(self, obj, events):
         events[self.name] = obj

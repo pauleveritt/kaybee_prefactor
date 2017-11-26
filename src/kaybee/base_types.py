@@ -1,8 +1,13 @@
+import inspect
+import os
 import json
 from typing import List, Any, Tuple
 
 from pydantic.main import BaseModel
 from ruamel.yaml import load, Loader
+from sphinx.jinja2glue import SphinxFileSystemLoader
+
+from kaybee import kb
 
 
 class CorePropFilterModel(BaseModel):
@@ -109,6 +114,17 @@ class CoreType:
             kbtype=self.kbtype,
         )
 
+    @staticmethod
+    @kb.event('env-before-read-docs', 'coretype')
+    def register_templates(kb, app, env, docnames):
+        """ Called from event dispatch, add resource dir to templates """
+
+        template_bridge = app.builder.templates
+
+        for v in list(kb.config.resources.values()):
+            f = os.path.dirname(inspect.getfile(v))
+            template_bridge.loaders.append(SphinxFileSystemLoader(f))
+
 
 class CoreTocTree:
     """ Basis for a subclass with a model and template """
@@ -143,3 +159,13 @@ class CoreTocTree:
 
         html = builder.templates.render(self.template(), context)
         return html
+
+    @kb.event('env-before-read-docs', 'coretoctree')
+    def register_templates(kb, app, env, docnames):
+        """ Called from event dispatch, add resource dir to templates """
+
+        template_bridge = app.builder.templates
+
+        for v in list(kb.config.cores.values()):
+            f = os.path.dirname(inspect.getfile(v))
+            template_bridge.loaders.append(SphinxFileSystemLoader(f))

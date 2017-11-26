@@ -11,7 +11,7 @@ class BaseReference(BaseResource):
     is_reference = True
 
 
-@kb.event('env-before-read-docs')
+@kb.event('env-before-read-docs', 'references')
 def register_references(kb, app, env, docnames):
     """ Walk the registry and add sphinx directives """
 

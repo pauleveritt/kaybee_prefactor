@@ -36,7 +36,7 @@ def setup(app):
     app.connect('env-purge-doc', purge_resources)
 
     app.connect('env-before-read-docs', initialize_site)
-    
+
     app.connect('env-before-read-docs', add_templates_paths)
     app.connect('env-before-read-docs', call_env_before_read_docs)
     app.connect('env-before-read-docs', register_directives)

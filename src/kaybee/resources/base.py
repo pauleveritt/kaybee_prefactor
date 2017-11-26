@@ -6,6 +6,9 @@ from typing import Mapping, Any, List
 
 from pydantic import BaseModel
 from ruamel.yaml import load
+from sphinx.jinja2glue import SphinxFileSystemLoader
+
+from kaybee import kb
 
 from kaybee.base_types import CoreType, ReferencesType
 
@@ -236,3 +239,14 @@ class BaseResource(CoreType):
         except AttributeError:
             d['series'] = []
         return d
+
+    @staticmethod
+    @kb.event('env-before-read-docs', 'resources')
+    def register_templates(kb, app, env, docnames):
+        """ Called from event dispatch, add resource dir to templates """
+
+        template_bridge = app.builder.templates
+
+        for v in list(kb.config.resources.values()):
+            f = os.path.dirname(inspect.getfile(v))
+            template_bridge.loaders.append(SphinxFileSystemLoader(f))

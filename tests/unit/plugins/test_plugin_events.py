@@ -14,7 +14,7 @@ def kb():
 
 @pytest.fixture()
 def register_invalid_event(kb):
-    @kb.event('xxx')
+    @kb.event('xxx', 'somescope')
     def handle_event():
         return
 
@@ -23,7 +23,7 @@ def register_invalid_event(kb):
 
 @pytest.fixture()
 def register_valid_event(kb):
-    @kb.event('env-before-read-docs')
+    @kb.event('env-before-read-docs', 'somescope')
     def handle_event():
         return
 
@@ -45,10 +45,10 @@ class TestEventAction:
 
     def test_invalid_event_name(self):
         with pytest.raises(AssertionError):
-            EventAction('xxx')
+            EventAction('xxx', 'somescope')
 
     def test_valid_event_name(self):
-        ea = EventAction('env-before-read-docs')
+        ea = EventAction('env-before-read-docs', 'somescope')
         assert 'env-before-read-docs' == ea.name
 
     def test_get_callbacks(self, kb, register_valid_event):

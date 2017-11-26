@@ -4,7 +4,9 @@ from collections import Mapping
 
 from pydantic import BaseModel
 from ruamel.yaml import load
+from sphinx.jinja2glue import SphinxFileSystemLoader
 
+from kaybee import kb
 from kaybee.base_types import CoreType
 from kaybee.utils import rst_to_html
 
@@ -55,3 +57,14 @@ class BaseWidget(CoreType):
         with open(schema_filename, 'r') as f:
             schema = load(f)
             return schema
+
+    @staticmethod
+    @kb.event('env-before-read-docs', 'widgets')
+    def register_templates(kb, app, env, docnames):
+        """ Called from event dispatch, add resource dir to templates """
+
+        template_bridge = app.builder.templates
+
+        for v in list(kb.config.widgets.values()):
+            f = os.path.dirname(inspect.getfile(v))
+            template_bridge.loaders.append(SphinxFileSystemLoader(f))

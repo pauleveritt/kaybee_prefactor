@@ -57,3 +57,4 @@ def doctree_read_resources(app: Sphinx, doctree: document):
         if gp:
             genericpage = gp(docname)
             site.genericpages[docname] = genericpage
+

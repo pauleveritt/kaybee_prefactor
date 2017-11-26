@@ -69,15 +69,6 @@ def add_templates_paths(app, env, docnames):
     confdir = os.path.join(app.confdir, '_templates')
     template_bridge.loaders.append(SphinxFileSystemLoader(confdir))
 
-    # Add the widgets and resources
-    values = list(kb.config.widgets.values()) + \
-             list(kb.config.resources.values()) + \
-             list(kb.config.cores.values())
-
-    for v in values:
-        f = os.path.dirname(inspect.getfile(v))
-        template_bridge.loaders.append(SphinxFileSystemLoader(f))
-
 
 def initialize_site(app, env, docnames):
     """ Create the Site instance if it is not in the pickle """
