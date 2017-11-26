@@ -4,6 +4,7 @@ from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.environment import BuildEnvironment
 
+from kaybee import kb
 from kaybee.site import Site
 from kaybee.widgets.node import widget
 
@@ -12,7 +13,6 @@ def process_widget_nodes(app: Sphinx, doctree, fromdocname):
     """ Callback registered with Sphinx's doctree-resolved event """
     # Setup a template and context
 
-    from kaybee import kb
 
     builder: StandaloneHTMLBuilder = app.builder
     env: BuildEnvironment = app.env

@@ -5,13 +5,13 @@ from sphinx.addnodes import toctree
 from sphinx.application import Sphinx
 from sphinx.environment import BuildEnvironment
 
+from kaybee import kb
 from kaybee.site import Site
 from kaybee.utils import get_rst_title, get_rst_excerpt
 
 
 def doctree_read_resources(app: Sphinx, doctree: document):
     # Called during the 'doctree-read' Sphinx event
-    from kaybee import kb
 
     env: BuildEnvironment = app.env
     site: Site = env.site
