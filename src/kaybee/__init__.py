@@ -1,6 +1,5 @@
 from kaybee.base_kb import kb
 from kaybee.events import (
-    kaybee_context,
     call_purge_doc,
     call_env_check_consistency,
     call_missing_reference,
@@ -8,9 +7,17 @@ from kaybee.events import (
     call_env_before_read_docs,
     call_doctree_read,
     call_doctree_resolved,
-    call_html_collect_pages
+    call_html_collect_pages,
+    call_html_context
 )
 from kaybee.siteconfig import SiteConfig
+
+# Don't remove these, they have directives which configure things
+import kaybee.resources.events
+import kaybee.widgets.events
+import kaybee.plugins.feeds
+import kaybee.plugins.references
+
 
 __version__ = "0.0.3"
 
@@ -32,21 +39,14 @@ def setup(app):
     app.add_config_value('kaybee_config', SiteConfig(), 'html')
 
     app.connect('builder-inited', call_builder_init)
-
     app.connect('env-purge-doc', call_purge_doc)
-
     app.connect('env-before-read-docs', call_env_before_read_docs)
-
     app.connect('doctree-read', call_doctree_read)
     app.connect('doctree-resolved', call_doctree_resolved)
-
     app.connect('missing-reference', call_missing_reference)
-
     app.connect('env-check-consistency', call_env_check_consistency)
-
     app.connect('html-collect-pages', call_html_collect_pages)
-
-    app.connect('html-page-context', kaybee_context)
+    app.connect('html-page-context', call_html_context)
 
     return dict(
         version=__version__,

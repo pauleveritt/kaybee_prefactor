@@ -3,9 +3,7 @@ Test the html context event handler
 """
 import pytest
 
-from kaybee.events import (
-    kaybee_context,
-)
+from kaybee.resources.base import BaseResource
 
 
 class DummyResource:
@@ -67,16 +65,13 @@ def dummy_site(resource):
 
 
 class TestKbContext:
-    def test_import(self):
-        assert kaybee_context.__name__ == 'kaybee_context'
-
     def test_no_resource(self, app, site):
         app.env.site = site
         docname = ''
         templatename = 'defaulttemplate'
         context = dict()
         doctree = None
-        result = kaybee_context(app, docname, templatename, context, doctree)
+        result = BaseResource.kaybee_context(app, docname, templatename, context, doctree)
         assert result == templatename
 
     def test_resource(self, app, site, resource):
@@ -85,7 +80,7 @@ class TestKbContext:
         templatename = 'defaulttemplate'
         context = dict()
         doctree = None
-        result = kaybee_context(app, docname, templatename, context, doctree)
+        result = BaseResource.kaybee_context(app, docname, templatename, context, doctree)
         assert result == 'dummyresource.html'
         assert context['template'] == 'dummyresource.html'
         assert context['site'] == site

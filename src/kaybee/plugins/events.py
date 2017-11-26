@@ -15,7 +15,8 @@ class EventAction(dectate.Action):
         'doctree-resolved',
         'missing-reference',
         'html-collect-pages',
-        'env-check-consistency'
+        'env-check-consistency',
+        'html-context'
     ]
     config = {
         'events': dict

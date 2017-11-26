@@ -6,6 +6,7 @@ from typing import Mapping, Any, List
 
 from pydantic import BaseModel
 from ruamel.yaml import load
+from sphinx.application import Sphinx
 from sphinx.jinja2glue import SphinxFileSystemLoader
 
 from kaybee import kb
@@ -256,10 +257,39 @@ class BaseResource(CoreType):
         template_bridge = app.builder.templates
 
         for k, v in list(kb.config.resources.items()):
-
             # Add the template path
             f = os.path.dirname(inspect.getfile(v))
             template_bridge.loaders.append(SphinxFileSystemLoader(f))
 
             # Register a directive
             app.add_directive(k, BaseResourceDirective)
+
+    @staticmethod
+    @kb.event('html-context', 'resources')
+    def kaybee_context(kb: kb, app: Sphinx, pagename, templatename, context,
+                       doctree):
+        site = app.env.site
+        context['site'] = site
+
+        resource = site.resources.get(pagename)
+
+        context['site_config'] = app.config.kaybee_config
+
+        if resource:
+            # We return a custom template
+            context['resource'] = resource
+            context['parents'] = resource.parents(site)
+            context['template'] = resource.template(site)
+
+            # Also, replace sphinx "title" with the title from this resource
+            context['title'] = resource.title
+            return resource.template(site)
+
+        else:
+            # Should have a genericpage in the dict
+            genericpage = site.genericpages.get(pagename)
+            if genericpage:
+                context['page'] = genericpage
+                return genericpage.template()
+
+        return templatename

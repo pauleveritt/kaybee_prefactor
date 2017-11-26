@@ -9,11 +9,6 @@ from kaybee import kb
 from kaybee.plugins.events import EventAction
 from kaybee.site import Site
 
-import kaybee.resources.events
-import kaybee.widgets.events
-import kaybee.plugins.feeds
-import kaybee.plugins.references
-
 
 def call_builder_init(app):
     """ On the builder init event, commit registry and pass setup """
@@ -68,29 +63,6 @@ def call_missing_reference(app: Sphinx, env, node, contnode):
         return callback(kb, app, env, node, contnode)
 
 
-def kaybee_context(app, pagename, templatename, context, doctree):
-    site = app.env.site
-    context['site'] = site
-
-    resource = site.resources.get(pagename)
-
-    context['site_config'] = app.config.kaybee_config
-
-    if resource:
-        # We return a custom template
-        context['resource'] = resource
-        context['parents'] = resource.parents(site)
-        context['template'] = resource.template(site)
-
-        # Also, replace sphinx "title" with the title from this resource
-        context['title'] = resource.title
-        return resource.template(site)
-
-    else:
-        # Should have a genericpage in the dict
-        genericpage = site.genericpages.get(pagename)
-        if genericpage:
-            context['page'] = genericpage
-            return genericpage.template()
-
-    return templatename
+def call_html_context(app, pagename, templatename, context, doctree):
+    for callback in EventAction.get_callbacks(kb, 'html-context'):
+        return callback(kb, app, pagename, templatename, context, doctree)
