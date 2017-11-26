@@ -11,6 +11,7 @@ from werkzeug.contrib.atom import AtomFeed
 import kaybee
 from kaybee import kb
 from kaybee.plugins import references
+from kaybee.plugins.events import EventAction
 from kaybee.resources.directive import BaseResourceDirective
 from kaybee.resources.events import doctree_read_resources
 from kaybee.site import Site
@@ -44,6 +45,13 @@ def purge_resources(app, env, docname):
     if hasattr(env, 'site'):
         # TODO need to remove widgets when the document has one
         env.site.resources.pop(docname, None)
+
+
+def call_env_before_read_docs(app, env, docnames):
+    """ Single event handler which dispatches to kb events"""
+
+    for callback in EventAction.get_callbacks(kb, 'env-before-read-docs'):
+        callback(kb, app, env, docnames)
 
 
 def add_templates_paths(app, env, docnames):

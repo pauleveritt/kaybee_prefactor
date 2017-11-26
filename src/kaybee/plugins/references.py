@@ -1,3 +1,4 @@
+from kaybee import kb
 from kaybee.resources.base import BaseResourceModel, BaseResource
 
 
@@ -10,10 +11,9 @@ class BaseReference(BaseResource):
     is_reference = True
 
 
-def register_references(app, env, docnames):
+@kb.event('env-before-read-docs')
+def register_references(kb, app, env, docnames):
     """ Walk the registry and add sphinx directives """
-
-    from kaybee import kb
 
     site = env.site
 
@@ -26,4 +26,5 @@ def register_references(app, env, docnames):
 
 def setup(app):
     """ Wire up Sphinx events """
-    app.connect('env-before-read-docs', register_references)
+    return
+    # app.connect('env-before-read-docs', register_references)
