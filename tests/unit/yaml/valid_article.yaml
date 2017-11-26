@@ -1,9 +1,0 @@
-# Well-formed AND valid YAML for a custom type "article"
-kind: 'resource'
-kbtype: 'dummyarticle'
-based_on: 'section'
----
-type: map
-mapping:
-  in_nav:
-    type: str

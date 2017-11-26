@@ -1,9 +1,0 @@
-# Well-formed AND valid YAML for a custom type "article"
-kind: 'XXXresource'
-kbtype: 'dummyarticle'
-based_on: 'article'
----
-type: map
-mapping:
-  in_nav:
-    type: str
