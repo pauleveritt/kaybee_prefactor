@@ -1,5 +1,6 @@
 from operator import attrgetter
 
+from kaybee import kb
 
 class Site:
     def __init__(self, config):

@@ -1,6 +1,6 @@
 import pytest
 
-from kaybee.widgets import widget
+from kaybee.widgets.node import widget
 from kaybee.widgets.base import BaseWidget, BaseWidgetModel
 
 

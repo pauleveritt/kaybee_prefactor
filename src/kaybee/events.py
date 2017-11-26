@@ -8,13 +8,15 @@ from docutils import nodes
 from sphinx.jinja2glue import SphinxFileSystemLoader
 from werkzeug.contrib.atom import AtomFeed
 
-from kaybee import kb
 import kaybee
-from kaybee import resources, widgets
-from kaybee.resources.directive import BaseResourceDirective
+from kaybee import kb
 from kaybee.plugins import references
+from kaybee.resources.directive import BaseResourceDirective
+from kaybee.resources.events import doctree_read_resources
 from kaybee.site import Site
 from kaybee.widgets.directive import BaseWidgetDirective
+from kaybee.widgets.events import process_widget_nodes
+from kaybee.widgets.node import widget
 
 
 def datetime_handler(x):
@@ -26,8 +28,15 @@ def datetime_handler(x):
 def builder_init(app):
     """ On the builder init event, commit registry and pass setup """
     dectate.commit(kb)
-    resources.setup(app)
-    widgets.setup(app)
+
+    # Resources
+    app.connect('doctree-read', doctree_read_resources)
+
+    # Widgets
+    app.add_node(widget)
+    app.connect('doctree-resolved', process_widget_nodes)
+
+    # References
     references.setup(app)
 
 

@@ -1,6 +1,6 @@
 import pytest
 
-from kaybee.widgets import widget
+from kaybee.widgets.events import widget
 from kaybee.widgets.base import BaseWidget, BaseWidgetModel
 from kaybee.widgets.directive import BaseWidgetDirective
 
