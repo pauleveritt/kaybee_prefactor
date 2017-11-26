@@ -9,6 +9,7 @@ from sphinx.jinja2glue import SphinxFileSystemLoader
 from kaybee import kb
 from kaybee.base_types import CoreType
 from kaybee.utils import rst_to_html
+from kaybee.widgets.directive import BaseWidgetDirective
 
 
 class BaseWidgetModel(BaseModel):
@@ -65,6 +66,10 @@ class BaseWidget(CoreType):
 
         template_bridge = app.builder.templates
 
-        for v in list(kb.config.widgets.values()):
+        for k, v in list(kb.config.widgets.items()):
+            # Add template directory
             f = os.path.dirname(inspect.getfile(v))
             template_bridge.loaders.append(SphinxFileSystemLoader(f))
+
+            # Register a directive
+            app.add_directive(k, BaseWidgetDirective)

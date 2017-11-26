@@ -11,6 +11,7 @@ from sphinx.jinja2glue import SphinxFileSystemLoader
 from kaybee import kb
 
 from kaybee.base_types import CoreType, ReferencesType
+from kaybee.resources.directive import BaseResourceDirective
 
 
 class BaseResourceModel(BaseModel):
@@ -242,7 +243,7 @@ class BaseResource(CoreType):
 
     @staticmethod
     @kb.event('env-purge-doc', 'resources')
-    def purge_resources(app, env, docname):
+    def purge_resources(kb, app, env, docname):
         if hasattr(env, 'site'):
             # TODO need to remove widgets when the document has one
             env.site.resources.pop(docname, None)
@@ -254,6 +255,11 @@ class BaseResource(CoreType):
 
         template_bridge = app.builder.templates
 
-        for v in list(kb.config.resources.values()):
+        for k, v in list(kb.config.resources.items()):
+
+            # Add the template path
             f = os.path.dirname(inspect.getfile(v))
             template_bridge.loaders.append(SphinxFileSystemLoader(f))
+
+            # Register a directive
+            app.add_directive(k, BaseResourceDirective)

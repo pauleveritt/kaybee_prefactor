@@ -1,3 +1,6 @@
+from sphinx.application import Sphinx
+from docutils import nodes
+
 from kaybee import kb
 from kaybee.resources.base import BaseResourceModel, BaseResource
 
@@ -24,7 +27,45 @@ def register_references(kb, app, env, docnames):
             site.references[name] = dict()
 
 
-def setup(app):
-    """ Wire up Sphinx events """
-    return
-    # app.connect('env-before-read-docs', register_references)
+@kb.event('env-check-consistency', 'references')
+def validate_references(kb: kb, builder, env):
+    site = env.site
+    for resource in site.resources.values():
+        for field_name in resource.reference_fieldnames:
+            for target_label in getattr(resource.props, field_name):
+                # Make sure this label exists in site.reference
+                try:
+                    srfn = site.references[field_name]
+                except KeyError:
+                    msg = f'''\
+    Document {resource.name} has unregistered reference "{field_name}"'''
+                    raise KeyError(msg)
+                try:
+                    assert srfn[target_label].props.label == target_label
+                except AssertionError:
+                    msg = f'''\
+    Document {resource.name} has "{field_name}" with orphan {target_label} '''
+                    raise KeyError(msg)
+
+
+@kb.event('missing-reference', 'references')
+def missing_reference(app, env, node, contnode):
+    site = env.site
+    refdoc = node['refdoc']
+    target_kbtype, target_label = node['reftarget'].split('-')
+    target = site.get_reference(target_kbtype, target_label)
+
+    if node['refexplicit']:
+        # The ref has a title e.g. :ref:`Some Title <category-python>`
+        dispname = contnode.children[0]
+    else:
+        # Use the title from the target
+        dispname = target.title
+    uri = app.builder.get_relative_uri(refdoc, target.name)
+    newnode = nodes.reference('', '', internal=True, refuri=uri,
+                              reftitle=dispname)
+
+    emp = nodes.emphasis()
+    newnode.append(emp)
+    emp.append(nodes.Text(dispname))
+    return newnode

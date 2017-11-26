@@ -1,6 +1,12 @@
+import datetime
+import json
 from operator import attrgetter
+import os
+
+import dectate
 
 from kaybee import kb
+
 
 class Site:
     def __init__(self, config):
@@ -108,3 +114,53 @@ class Site:
                       key=lambda x: (
                           x.props.weight, attrgetter('title')(x))
                       )
+
+
+def datetime_handler(x):
+    if isinstance(x, datetime.datetime):
+        return x.isoformat()
+    raise TypeError("Unknown type")
+
+
+@kb.event('env-check-consistency', 'site')
+def generate_debug_info(kb: kb, builder, env):
+    """ html-collect-pages event to dump some JSON to a file """
+
+    site = env.site
+
+    if not getattr(site.config, 'is_debug'):
+        return
+
+    debug = dict()
+    qr = dectate.Query('resource')
+    qw = dectate.Query('widget')
+    debug['kb'] = dict(
+        resources=[i[0].name for i in list(qr(kb))],
+        widgets=[i[0].name for i in list(qw(kb))],
+    )
+
+    # Navmenu
+    nm = [nm.docname for nm in site.navmenu]
+
+    # Resources
+    r = {
+        k: v.to_json(site)
+        for (k, v) in site.resources.items()
+    }
+
+    # Widgets
+    w = {
+        k: v.to_json(site)
+        for (k, v) in site.widgets.items()
+    }
+    debug['site'] = dict(
+        navmenu=nm,
+        resources=r,
+        widgets=w,
+        pages=[p.docname for p in env.site.genericpages.values()]
+    )
+
+    # Write info
+    output_filename = os.path.join(builder.outdir, 'debug_dump.json')
+    with open(output_filename, 'w') as f:
+        json.dump(debug, f, default=datetime_handler)

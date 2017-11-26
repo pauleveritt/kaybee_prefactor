@@ -9,10 +9,15 @@ from kaybee.site import Site
 from kaybee.widgets.node import widget
 
 
-def process_widget_nodes(app: Sphinx, doctree, fromdocname):
+@kb.event('builder-init', 'widgets')
+def add_widget_node(app: Sphinx):
+    app.add_node(widget)
+
+
+@kb.event('doctree-resolved', 'widgets')
+def process_widget_nodes(kb: kb, app: Sphinx, doctree, fromdocname):
     """ Callback registered with Sphinx's doctree-resolved event """
     # Setup a template and context
-
 
     builder: StandaloneHTMLBuilder = app.builder
     env: BuildEnvironment = app.env

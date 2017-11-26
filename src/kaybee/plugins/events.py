@@ -8,8 +8,14 @@ import dectate
 
 class EventAction(dectate.Action):
     _sphinx_event_names = [
+        'builder-init',
         'env-purge-doc',
-        'env-before-read-docs'
+        'env-before-read-docs',
+        'doctree-read',
+        'doctree-resolved',
+        'missing-reference',
+        'html-collect-pages',
+        'env-check-consistency'
     ]
     config = {
         'events': dict

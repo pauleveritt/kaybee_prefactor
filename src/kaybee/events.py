@@ -1,44 +1,23 @@
-import datetime
-import inspect
-import json
 import os
 
 import dectate
-from docutils import nodes
+from docutils.nodes import document
+from sphinx.application import Sphinx
 from sphinx.jinja2glue import SphinxFileSystemLoader
-from werkzeug.contrib.atom import AtomFeed
 
-import kaybee
 from kaybee import kb
-from kaybee.plugins import references
 from kaybee.plugins.events import EventAction
-from kaybee.resources.directive import BaseResourceDirective
-from kaybee.resources.events import doctree_read_resources
 from kaybee.site import Site
-from kaybee.widgets.directive import BaseWidgetDirective
-from kaybee.widgets.events import process_widget_nodes
-from kaybee.widgets.node import widget
+
+import kaybee.resources.events
+import kaybee.widgets.events
+import kaybee.plugins.feeds
+import kaybee.plugins.references
 
 
-def datetime_handler(x):
-    if isinstance(x, datetime.datetime):
-        return x.isoformat()
-    raise TypeError("Unknown type")
-
-
-def builder_init(app):
+def call_builder_init(app):
     """ On the builder init event, commit registry and pass setup """
     dectate.commit(kb)
-
-    # Resources
-    app.connect('doctree-read', doctree_read_resources)
-
-    # Widgets
-    app.add_node(widget)
-    app.connect('doctree-resolved', process_widget_nodes)
-
-    # References
-    references.setup(app)
 
 
 def call_purge_doc(app, env, docname):
@@ -48,6 +27,11 @@ def call_purge_doc(app, env, docname):
 
 def call_env_before_read_docs(app, env, docnames):
     """ Single event handler which dispatches to kb events"""
+
+    if not hasattr(env, 'site'):
+        config = getattr(app.config, 'kaybee_config')
+        if config:
+            env.site = Site(config)
 
     template_bridge = app.builder.templates
 
@@ -59,163 +43,29 @@ def call_env_before_read_docs(app, env, docnames):
         callback(kb, app, env, docnames)
 
 
-def initialize_site(app, env, docnames):
-    """ Create the Site instance if it is not in the pickle """
-
-    if not hasattr(env, 'site'):
-        config = getattr(app.config, 'kaybee_config')
-        if config:
-            env.site = Site(config)
+def call_doctree_read(app: Sphinx, doctree: document):
+    for callback in EventAction.get_callbacks(kb, 'doctree-read'):
+        callback(kb, app, doctree)
 
 
-def register_directives(app, env, docnames):
-    """ Walk the registry and add sphinx directives """
-
-    for kbtype in kb.config.resources.keys():
-        app.add_directive(kbtype, BaseResourceDirective)
-
-    for kbtype in kb.config.widgets.keys():
-        app.add_directive(kbtype, BaseWidgetDirective)
+def call_doctree_resolved(app: Sphinx, doctree: document, fromdocname):
+    for callback in EventAction.get_callbacks(kb, 'doctree-resolved'):
+        callback(kb, app, doctree, fromdocname)
 
 
-def validate_references(app, env):
-    """ Called on env-check-consistency, make sure references exist """
-
-    site = env.site
-    for resource in site.resources.values():
-        for field_name in resource.reference_fieldnames:
-            for target_label in getattr(resource.props, field_name):
-                # Make sure this label exists in site.reference
-                try:
-                    srfn = site.references[field_name]
-                except KeyError:
-                    msg = f'''\
-Document {resource.name} has unregistered reference "{field_name}"'''
-                    raise KeyError(msg)
-                try:
-                    assert srfn[target_label].props.label == target_label
-                except AssertionError:
-                    msg = f'''\
-Document {resource.name} has "{field_name}" with orphan {target_label} '''
-                    raise KeyError(msg)
+def call_html_collect_pages(app: Sphinx):
+    for callback in EventAction.get_callbacks(kb, 'html-collect-pages'):
+        return callback(kb, app)
 
 
-def missing_reference(app, env, node, contnode):
-    site = env.site
-    refdoc = node['refdoc']
-    target_kbtype, target_label = node['reftarget'].split('-')
-    target = site.get_reference(target_kbtype, target_label)
-
-    if node['refexplicit']:
-        # The ref has a title e.g. :ref:`Some Title <category-python>`
-        dispname = contnode.children[0]
-    else:
-        # Use the title from the target
-        dispname = target.title
-    uri = app.builder.get_relative_uri(refdoc, target.name)
-    newnode = nodes.reference('', '', internal=True, refuri=uri,
-                              reftitle=dispname)
-
-    emp = nodes.emphasis()
-    newnode.append(emp)
-    emp.append(nodes.Text(dispname))
-    return newnode
+def call_env_check_consistency(builder, env):
+    for callback in EventAction.get_callbacks(kb, 'env-check-consistency'):
+        return callback(kb, builder, env)
 
 
-def generate_debug_info(builder, env):
-    """ html-collect-pages event to dump some JSON to a file """
-
-    site = env.site
-
-    if not getattr(site.config, 'is_debug'):
-        return
-
-    debug = dict()
-    qr = dectate.Query('resource')
-    qw = dectate.Query('widget')
-    debug['kb'] = dict(
-        resources=[i[0].name for i in list(qr(kb))],
-        widgets=[i[0].name for i in list(qw(kb))],
-    )
-
-    # Navmenu
-    nm = [nm.docname for nm in site.navmenu]
-
-    # Resources
-    r = {
-        k: v.to_json(site)
-        for (k, v) in site.resources.items()
-    }
-
-    # Widgets
-    w = {
-        k: v.to_json(site)
-        for (k, v) in site.widgets.items()
-    }
-    debug['site'] = dict(
-        navmenu=nm,
-        resources=r,
-        widgets=w,
-        pages=[p.docname for p in env.site.genericpages.values()]
-    )
-
-    # Write info
-    output_filename = os.path.join(builder.outdir, 'debug_dump.json')
-    with open(output_filename, 'w') as f:
-        json.dump(debug, f, default=datetime_handler)
-
-
-def generate_feeds(app):
-    site = app.env.site
-    feed_url = site.config.feed_url
-    if feed_url:
-        website_url = 'the website url'
-        feed_title = 'Some Site'
-        feed_filename = os.path.join(app.builder.outdir, 'atom.xml')
-        feed_posts = site.filter_resources(
-            sort_value='published',
-            order=-1,
-            limit=99
-        )
-
-        def os_path_join(path, *paths):
-
-            return os.path.join(path, *paths).replace(os.path.sep, '/')
-
-        feed = AtomFeed(feed_title,
-                        title_type='text',
-                        url=website_url,
-                        feed_url=feed_url,
-                        generator=(
-                            'Kaybee', 'https://pypi.python.org/pypi/kaybee',
-                            kaybee.__version__))
-
-        for i, post in enumerate(feed_posts):
-            post_url = os_path_join(
-                website_url, app.builder.get_target_uri(post.docname))
-
-            # content = post.to_html(pagename, fulltext=feed_fulltext)
-            content = post.props.excerpt
-            feed.add(post.title,
-                     content=content,
-                     title_type='text',
-                     content_type='text',
-                     # author=', '.join(a.name for a in post.author),
-                     url=post_url,
-                     id=post_url,
-                     updated=post.props.published,
-                     published=post.props.published
-                     )
-
-        with open(feed_filename, 'w') as out:
-            feed_str = feed.to_string()
-            try:
-                out.write(feed_str.encode('utf-8'))
-            except TypeError:
-                out.write(feed_str)
-
-    if 0:
-        yield
+def call_missing_reference(app: Sphinx, env, node, contnode):
+    for callback in EventAction.get_callbacks(kb, 'missing-reference'):
+        return callback(kb, app, env, node, contnode)
 
 
 def kaybee_context(app, pagename, templatename, context, doctree):

@@ -10,9 +10,8 @@ from kaybee.site import Site
 from kaybee.utils import get_rst_title, get_rst_excerpt
 
 
-def doctree_read_resources(app: Sphinx, doctree: document):
-    # Called during the 'doctree-read' Sphinx event
-
+@kb.event('doctree-read', 'resources')
+def doctree_read_resources(kb: kb, app: Sphinx, doctree: document):
     env: BuildEnvironment = app.env
     site: Site = env.site
 
@@ -57,4 +56,3 @@ def doctree_read_resources(app: Sphinx, doctree: document):
         if gp:
             genericpage = gp(docname)
             site.genericpages[docname] = genericpage
-

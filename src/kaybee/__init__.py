@@ -1,15 +1,14 @@
 from kaybee.base_kb import kb
 from kaybee.events import (
     kaybee_context,
-    initialize_site,
     call_purge_doc,
-    validate_references,
-    missing_reference,
-    generate_debug_info,
-    builder_init,
-    register_directives,
-    generate_feeds,
-    call_env_before_read_docs
+    call_env_check_consistency,
+    call_missing_reference,
+    call_builder_init,
+    call_env_before_read_docs,
+    call_doctree_read,
+    call_doctree_resolved,
+    call_html_collect_pages
 )
 from kaybee.siteconfig import SiteConfig
 
@@ -32,22 +31,20 @@ def setup(app):
 
     app.add_config_value('kaybee_config', SiteConfig(), 'html')
 
-    app.connect('builder-inited', builder_init)
+    app.connect('builder-inited', call_builder_init)
 
     app.connect('env-purge-doc', call_purge_doc)
 
-    app.connect('env-before-read-docs', initialize_site)
-
     app.connect('env-before-read-docs', call_env_before_read_docs)
-    app.connect('env-before-read-docs', register_directives)
 
-    app.connect('missing-reference', missing_reference)
+    app.connect('doctree-read', call_doctree_read)
+    app.connect('doctree-resolved', call_doctree_resolved)
 
-    app.connect('env-check-consistency', validate_references)
+    app.connect('missing-reference', call_missing_reference)
 
-    app.connect('env-check-consistency', generate_debug_info)
+    app.connect('env-check-consistency', call_env_check_consistency)
 
-    app.connect('html-collect-pages', generate_feeds)
+    app.connect('html-collect-pages', call_html_collect_pages)
 
     app.connect('html-page-context', kaybee_context)
 
