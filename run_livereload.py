@@ -21,9 +21,9 @@ class CustomWatcher(Watcher):
                 return True
         return False
 
-
-server = Server(watcher=CustomWatcher())
-server.watch('docs/**', shell(sphinx),
-             ignore=lambda s: '_build' in s)
-server.watch('src/kaybee/**.py', shell(sphinx))
-server.serve(root='docs/_build', live_css=False)
+if __name__ == '__main__':
+    server = Server(watcher=CustomWatcher())
+    server.watch('docs/**', shell(sphinx),
+                 ignore=lambda s: '_build' in s)
+    server.watch('src/kaybee/**.py', shell(sphinx))
+    server.serve(root='docs/_build', live_css=False)
