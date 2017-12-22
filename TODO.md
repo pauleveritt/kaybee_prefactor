@@ -1,6 +1,60 @@
+# Rewrite
+
+- Before
+
+    * Commit history to changelog investigation
+    
+    * Semver and extract investigation
+    
+    * pbr investigation
+    
+    * Fixtures for Sphinx env.*
+    
+- New repo, kill version history
+
+- Switch to pbr and humane packaging
+
+- Good commit history changelog plan
+
+- Travis or whoever
+
+- Test coverage regime as part of CI
+
+- Blank docs, write docs before adding back in each thing
+
+- Commit to pipenv
+
+- Update all dependencies
+
+- Replace debug with a builder like sphinxcontrib-needs
+
+- Use logging
+
+# Re-org
+
+- kaybee_resources, kaybee_widgets, kaybee_articles, kaybee_postrender,
+  kaybee_feeds, kaybee_site
+
+- Move all the methods off of Site
+
+- resource loses a lot of the schema
+
+- Make simple example based on built-in resource directive
+
+- Get rid of genericpage, everything is a resource
+
 # Now
 
+- A model with a ReferenceField doesn't fail when the value points at 
+  a non-existent reference
+
+- The TemplateBridge postrender should not apply to widgets
+
 # Next
+
+- RST-rendered field type and excerpt
+
+- Get rid of make_context on widgets
 
 - Have a date format in config like ablog line 280 post.py
 
