@@ -19,7 +19,7 @@ import kaybee.plugins.feeds
 import kaybee.plugins.references
 
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 __title__ = "kaybee"
 __description__ = "Knowledge base system for Sphinx"
